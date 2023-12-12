@@ -1,0 +1,6 @@
+/* editorStyles.css */
+.ck-editor__editable {
+    height: 700px;
+    overflow-y: auto !important;
+    /* Ensure that overflow takes precedence */
+}

@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.App {
+  text-align: center;
+}
+
+/* popup css */
+.popup-container {
+  position: relative;
+  display: inline-block;
+}
+
+.popup-menu {
+  position: fixed;
+  top: 10%;
+  left: 41%;
+  background-color: #debb98d9;
+  color: #fff;
+  border-radius: 10px;
+  z-index: 1000;
+}
+
+.popup-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.popup-menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+}

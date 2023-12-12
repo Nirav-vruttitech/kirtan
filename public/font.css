@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'G_BEJOD_4';
+    src: url("./020_0781.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
+
+/* @font-face {
+    font-family: 'G_BEJOD_4';
+    src: url('fonts/G_BEJOD_4.eot');
+    src: url('fonts/G_BEJOD_4.eot') format('embedded-opentype'),
+        url('fonts/G_BEJOD_4.woff2') format('woff2'),
+        url('fonts/G_BEJOD_4.woff') format('woff'),
+        url('fonts/G_BEJOD_4.ttf') format('truetype'),
+        url('fonts/G_BEJOD_4.svg#G_BEJOD_4') format('svg');
+} */
