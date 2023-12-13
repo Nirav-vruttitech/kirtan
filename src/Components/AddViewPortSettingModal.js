@@ -1,9 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import AddViewPortSketchExample1 from './AddViewPortSketchExample1';
 import AddViewPortSketchExample2 from './AddViewPortSketchExample2';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -33,12 +32,17 @@ const AddViewPortSettingModal = () => {
     const addStepperViewPortFontWeight = useSelector((state) => state.addStepperSlice.addStepperViewPortFontWeight);
     const addStepperViewPortHeight = useSelector((state) => state.addStepperSlice.addStepperViewPortHeight);
 
+    const [portHeight, setPortHeight] = React.useState(addStepperViewPortHeight);
+    const [size, setSize] = React.useState(addStepperFontSize);
+
     const handleChange = (event) => {
-        dispatch(setAddStepperFontSize(event.target.value));
+        setSize(event.target.value);
+        dispatch(setAddStepperFontSize(`${event.target.value}px`));
     };
 
     const handleChange1 = (event) => {
-        dispatch(setAddStepperViewPortHeight(event.target.value));
+        setPortHeight(event.target.value);
+        dispatch(setAddStepperViewPortHeight(`${event.target.value}px`));
     };
 
     const handleAlignment = (event, newAlignment) => {
@@ -73,24 +77,18 @@ const AddViewPortSettingModal = () => {
                         </div>
                         <div>
                             <div className='px-3 pt-3 pb-2'>
-                                <Select
-                                    value={addStepperFontSize}
-                                    onChange={handleChange}
-                                    displayEmpty
-                                    inputProps={{ 'aria-label': 'Without label' }}
-                                    style={{ height: '30px', width: '150px' }}>
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    <MenuItem value="54px">54px</MenuItem>
-                                    <MenuItem value="52px">52px</MenuItem>
-                                    <MenuItem value="50px">50px</MenuItem>
-                                    <MenuItem value="48px">48px</MenuItem>
-                                    <MenuItem value="46px">46px</MenuItem>
-                                    <MenuItem value="44px">44px</MenuItem>
-                                    <MenuItem value="42px">42px</MenuItem>
-                                    <MenuItem value="40px">40px</MenuItem>
-                                    <MenuItem value="38px">38px</MenuItem>
-                                    <MenuItem value="36px">36px</MenuItem>
-                                </Select>
+                                <Box sx={{ width: 200 }}>
+                                    <Slider
+                                        aria-label="Temperature"
+                                        valueLabelDisplay="auto"
+                                        step={2}
+                                        value={size}
+                                        onChange={handleChange}
+                                        marks
+                                        min={30}
+                                        max={130}
+                                    />
+                                </Box>
                             </div>
                             <div className='px-3 pt-3 pb-0.5'>
                                 <AddViewPortSketchExample1 />
@@ -102,12 +100,8 @@ const AddViewPortSettingModal = () => {
                                     sx={{ height: '30px' }}
                                     onChange={handleAlignment}
                                     aria-label="viewPortFontWeight">
-
-                                    <ToggleButton value="100" aria-label="left aligned" sx={{ textTransform: 'none', fontWeight: 500 }}>
+                                    <ToggleButton value="" aria-label="left aligned" sx={{ textTransform: 'none', fontWeight: 500 }}>
                                         Thin
-                                    </ToggleButton>
-                                    <ToggleButton value="600" aria-label="centered" sx={{ textTransform: 'none' }}>
-                                        Normal
                                     </ToggleButton>
                                     <ToggleButton value="900" aria-label="right aligned" sx={{ textTransform: 'none' }}>
                                         Thick
@@ -118,23 +112,18 @@ const AddViewPortSettingModal = () => {
                                 <AddViewPortSketchExample2 />
                             </div>
                             <div className='px-3 pt-3 pb-2'>
-                                <Select
-                                    value={addStepperViewPortHeight}
-                                    onChange={handleChange1}
-                                    displayEmpty
-                                    inputProps={{ 'aria-label': 'Without label' }}
-                                    style={{ height: '30px', width: '150px' }}>
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    <MenuItem value="74px">74px</MenuItem>
-                                    <MenuItem value="72px">72px</MenuItem>
-                                    <MenuItem value="70px">70px</MenuItem>
-                                    <MenuItem value="68px">68px</MenuItem>
-                                    <MenuItem value="66px">66px</MenuItem>
-                                    <MenuItem value="64px">64px</MenuItem>
-                                    <MenuItem value="62px">62px</MenuItem>
-                                    <MenuItem value="60px">60px</MenuItem>
-                                    <MenuItem value="58px">58px</MenuItem>
-                                </Select>
+                                <Box sx={{ width: 200 }}>
+                                    <Slider
+                                        aria-label="Temperature"
+                                        valueLabelDisplay="auto"
+                                        step={2}
+                                        value={portHeight}
+                                        onChange={handleChange1}
+                                        marks
+                                        min={40}
+                                        max={140}
+                                    />
+                                </Box>
                             </div>
                         </div>
                     </Grid >

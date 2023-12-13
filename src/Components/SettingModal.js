@@ -3,8 +3,6 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import SketchExample1 from './SketchExample1';
 import SketchExample2 from './SketchExample2';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -37,13 +35,11 @@ const SettingModal = () => {
 
 
     const handleChange = (event) => {
-        // dispatch(setFontSize(event.target.value));
         setSize(event.target.value);
         dispatch(setFontSize(`${event.target.value}px`));
     };
 
     const handleChange1 = (event) => {
-        // dispatch(setViewPortHeight(event.target.value));
         setPortHeight(event.target.value);
         dispatch(setViewPortHeight(`${event.target.value}px`));
     };
@@ -63,7 +59,6 @@ const SettingModal = () => {
     React.useEffect(() => {
         localStorage.setItem('viewPortHeight', viewPortHeight);
     }, [viewPortHeight]);
-    console.log();
 
     return (
         <>
@@ -95,7 +90,6 @@ const SettingModal = () => {
                                 <Box sx={{ width: 200 }}>
                                     <Slider
                                         aria-label="Temperature"
-                                        // defaultValue={parseInt(fontSize.slice(0, 2))}
                                         valueLabelDisplay="auto"
                                         step={2}
                                         value={size}
@@ -127,47 +121,10 @@ const SettingModal = () => {
                             <div className='px-3 pt-3'>
                                 <SketchExample2 />
                             </div>
-                            {/* <div className='px-3 pt-3 pb-2'>
-                                <Select
-                                    value={viewPortHeight}
-                                    onChange={handleChange1}
-                                    displayEmpty
-                                    inputProps={{ 'aria-label': 'Without label' }}
-                                    style={{ height: '30px', width: '150px' }}>
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    <MenuItem value="108px">108px</MenuItem>
-                                    <MenuItem value="106px">106px</MenuItem>
-                                    <MenuItem value="104px">104px</MenuItem>
-                                    <MenuItem value="102px">102px</MenuItem>
-                                    <MenuItem value="100px">100px</MenuItem>
-                                    <MenuItem value="98px">98px</MenuItem>
-                                    <MenuItem value="96px">96px</MenuItem>
-                                    <MenuItem value="94px">94px</MenuItem>
-                                    <MenuItem value="92px">92px</MenuItem>
-                                    <MenuItem value="90px">90px</MenuItem>
-                                    <MenuItem value="88px">88px</MenuItem>
-                                    <MenuItem value="86px">86px</MenuItem>
-                                    <MenuItem value="84px">84px</MenuItem>
-                                    <MenuItem value="82px">82px</MenuItem>
-                                    <MenuItem value="80px">80px</MenuItem>
-                                    <MenuItem value="78px">78px</MenuItem>
-                                    <MenuItem value="76px">76px</MenuItem>
-                                    <MenuItem value="74px">74px</MenuItem>
-                                    <MenuItem value="72px">72px</MenuItem>
-                                    <MenuItem value="70px">70px</MenuItem>
-                                    <MenuItem value="68px">68px</MenuItem>
-                                    <MenuItem value="66px">66px</MenuItem>
-                                    <MenuItem value="64px">64px</MenuItem>
-                                    <MenuItem value="62px">62px</MenuItem>
-                                    <MenuItem value="60px">60px</MenuItem>
-                                    <MenuItem value="58px">58px</MenuItem>
-                                </Select>
-                            </div> */}
                             <div className='px-3 pt-3 pb-2'>
                                 <Box sx={{ width: 200 }}>
                                     <Slider
                                         aria-label="Temperature"
-                                        // defaultValue={parseInt(viewPortHeight.slice(0, 2))}
                                         valueLabelDisplay="auto"
                                         step={2}
                                         value={portHeight}

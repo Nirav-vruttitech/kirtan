@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     addStepperFontSize: localStorage.getItem('fontSize'),
 
-    addStepperFontColorValue: localStorage.getItem('fontColorValue'),
+    addStepperFontColorValue: localStorage.getItem('fontColorValue') || '#000000',
 
     addStepperViewPortFontWeight: localStorage.getItem('viewPortFontWeight'),
 
-    addStepperViewPortBgColor: localStorage.getItem('ViewPortBgColor'),
+    addStepperViewPortBgColor: localStorage.getItem('ViewPortBgColor') || '#000000',
 
     addStepperViewPortHeight: localStorage.getItem('viewPortHeight'),
 

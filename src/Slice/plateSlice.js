@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     fontSize: localStorage.getItem('fontSize'),
 
-    fontColorValue: localStorage.getItem('fontColorValue'),
+    fontColorValue: localStorage.getItem('fontColorValue') || '#000000',
 
     viewPortFontWeight: localStorage.getItem('viewPortFontWeight'),
 
-    ViewPortBgColor: localStorage.getItem('ViewPortBgColor'),
+    ViewPortBgColor: localStorage.getItem('ViewPortBgColor') || '#000000',
 
     viewPortHeight: localStorage.getItem('viewPortHeight'),
 };
