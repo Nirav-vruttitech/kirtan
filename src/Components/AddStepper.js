@@ -115,7 +115,7 @@ const AddStepper = () => {
                                     Back
                                 </Button></Link>
                                 <Button variant="text" onClick={handleNext} sx={{ mr: 5, backgroundColor: '#0a56d0', color: 'white', ":hover": { backgroundColor: '#3171d6' } }}>
-                                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                    Next
                                 </Button>
                             </Box>
                         </React.Fragment>
@@ -128,11 +128,13 @@ const AddStepper = () => {
                                         <AddViewPortPlate toShowOnDisplay={toShowOnDisplay} />
                                     </div>
                                 </Typography>
-                                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, alignItems: 'center', justifyContent: 'center' }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1, alignItems: 'center', justifyContent: 'center' }}>
                                     <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 2, backgroundColor: 'black', color: 'white', ":hover": { backgroundColor: 'gray', color: 'white' } }} >
                                         Back
                                     </Button>
-                                    <Button onClick={handleSubmitClick} sx={{ mr: 5, backgroundColor: '#0a56d0', color: 'white', ":hover": { backgroundColor: '#3171d6', color: 'white' } }}><Link to="/">Submit</Link></Button>
+                                    <Button onClick={handleSubmitClick} sx={{ mr: 5, backgroundColor: '#0a56d0', color: 'white', ":hover": { backgroundColor: '#3171d6', color: 'white' } }}>
+                                        <Link to="/">Submit</Link>
+                                    </Button>
                                 </Box>
                             </div>
                         </React.Fragment>

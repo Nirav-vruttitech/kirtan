@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
@@ -24,21 +25,27 @@ const style = {
 
 const SettingModal = () => {
     const dispatch = useDispatch();
-
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
     const fontSize = useSelector((state) => state.viewPort.fontSize);
     const viewPortFontWeight = useSelector((state) => state.viewPort.viewPortFontWeight);
     const viewPortHeight = useSelector((state) => state.viewPort.viewPortHeight);
 
+    const [open, setOpen] = React.useState(false);
+    const [portHeight, setPortHeight] = React.useState(viewPortHeight);
+    const [size, setSize] = React.useState(fontSize);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
     const handleChange = (event) => {
-        dispatch(setFontSize(event.target.value));
+        // dispatch(setFontSize(event.target.value));
+        setSize(event.target.value);
+        dispatch(setFontSize(`${event.target.value}px`));
     };
 
     const handleChange1 = (event) => {
-        dispatch(setViewPortHeight(event.target.value));
+        // dispatch(setViewPortHeight(event.target.value));
+        setPortHeight(event.target.value);
+        dispatch(setViewPortHeight(`${event.target.value}px`));
     };
 
     const handleAlignment = (event, newAlignment) => {
@@ -56,8 +63,7 @@ const SettingModal = () => {
     React.useEffect(() => {
         localStorage.setItem('viewPortHeight', viewPortHeight);
     }, [viewPortHeight]);
-
-
+    console.log();
 
     return (
         <>
@@ -85,25 +91,20 @@ const SettingModal = () => {
                             <div className='py-3'>:</div>
                         </div>
                         <div>
-                            <div className='px-3 pt-3 pb-2'>
-                                <Select
-                                    value={fontSize}
-                                    onChange={handleChange}
-                                    displayEmpty
-                                    inputProps={{ 'aria-label': 'Without label' }}
-                                    style={{ height: '30px', width: '150px' }}>
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    <MenuItem value="54px">54px</MenuItem>
-                                    <MenuItem value="52px">52px</MenuItem>
-                                    <MenuItem value="50px">50px</MenuItem>
-                                    <MenuItem value="48px">48px</MenuItem>
-                                    <MenuItem value="46px">46px</MenuItem>
-                                    <MenuItem value="44px">44px</MenuItem>
-                                    <MenuItem value="42px">42px</MenuItem>
-                                    <MenuItem value="40px">40px</MenuItem>
-                                    <MenuItem value="38px">38px</MenuItem>
-                                    <MenuItem value="36px">36px</MenuItem>
-                                </Select>
+                            <div className='px-3 pt-3'>
+                                <Box sx={{ width: 200 }}>
+                                    <Slider
+                                        aria-label="Temperature"
+                                        // defaultValue={parseInt(fontSize.slice(0, 2))}
+                                        valueLabelDisplay="auto"
+                                        step={2}
+                                        value={size}
+                                        onChange={handleChange}
+                                        marks
+                                        min={30}
+                                        max={130}
+                                    />
+                                </Box>
                             </div>
                             <div className='px-3 pt-3 pb-0.5'>
                                 <SketchExample1 />
@@ -115,12 +116,8 @@ const SettingModal = () => {
                                     sx={{ height: '30px' }}
                                     onChange={handleAlignment}
                                     aria-label="viewPortFontWeight">
-
-                                    <ToggleButton value="100" aria-label="left aligned" sx={{ textTransform: 'none', fontWeight: 500 }}>
+                                    <ToggleButton value="" aria-label="left aligned" sx={{ textTransform: 'none', fontWeight: 500 }}>
                                         Thin
-                                    </ToggleButton>
-                                    <ToggleButton value="600" aria-label="centered" sx={{ textTransform: 'none' }}>
-                                        Normal
                                     </ToggleButton>
                                     <ToggleButton value="900" aria-label="right aligned" sx={{ textTransform: 'none' }}>
                                         Thick
@@ -130,7 +127,7 @@ const SettingModal = () => {
                             <div className='px-3 pt-3'>
                                 <SketchExample2 />
                             </div>
-                            <div className='px-3 pt-3 pb-2'>
+                            {/* <div className='px-3 pt-3 pb-2'>
                                 <Select
                                     value={viewPortHeight}
                                     onChange={handleChange1}
@@ -138,6 +135,23 @@ const SettingModal = () => {
                                     inputProps={{ 'aria-label': 'Without label' }}
                                     style={{ height: '30px', width: '150px' }}>
                                     <MenuItem value=""><em>None</em></MenuItem>
+                                    <MenuItem value="108px">108px</MenuItem>
+                                    <MenuItem value="106px">106px</MenuItem>
+                                    <MenuItem value="104px">104px</MenuItem>
+                                    <MenuItem value="102px">102px</MenuItem>
+                                    <MenuItem value="100px">100px</MenuItem>
+                                    <MenuItem value="98px">98px</MenuItem>
+                                    <MenuItem value="96px">96px</MenuItem>
+                                    <MenuItem value="94px">94px</MenuItem>
+                                    <MenuItem value="92px">92px</MenuItem>
+                                    <MenuItem value="90px">90px</MenuItem>
+                                    <MenuItem value="88px">88px</MenuItem>
+                                    <MenuItem value="86px">86px</MenuItem>
+                                    <MenuItem value="84px">84px</MenuItem>
+                                    <MenuItem value="82px">82px</MenuItem>
+                                    <MenuItem value="80px">80px</MenuItem>
+                                    <MenuItem value="78px">78px</MenuItem>
+                                    <MenuItem value="76px">76px</MenuItem>
                                     <MenuItem value="74px">74px</MenuItem>
                                     <MenuItem value="72px">72px</MenuItem>
                                     <MenuItem value="70px">70px</MenuItem>
@@ -148,6 +162,21 @@ const SettingModal = () => {
                                     <MenuItem value="60px">60px</MenuItem>
                                     <MenuItem value="58px">58px</MenuItem>
                                 </Select>
+                            </div> */}
+                            <div className='px-3 pt-3 pb-2'>
+                                <Box sx={{ width: 200 }}>
+                                    <Slider
+                                        aria-label="Temperature"
+                                        // defaultValue={parseInt(viewPortHeight.slice(0, 2))}
+                                        valueLabelDisplay="auto"
+                                        step={2}
+                                        value={portHeight}
+                                        onChange={handleChange1}
+                                        marks
+                                        min={40}
+                                        max={140}
+                                    />
+                                </Box>
                             </div>
                         </div>
                     </Grid >

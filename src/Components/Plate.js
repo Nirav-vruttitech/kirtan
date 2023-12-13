@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Markdown from "react-markdown";
 import { useSelector } from 'react-redux';
 
@@ -20,10 +20,11 @@ const Plate = ({ toShowOnDisplay }) => {
     const ViewPortBgColor = useSelector(state => state.viewPort.ViewPortBgColor);
 
     const viewPortHeight = useSelector(state => state.viewPort.viewPortHeight);
+
     return (
         <>
             <div className='fixed inset-x-0 bottom-1'>
-                <div className="text-center  border-black border flex items-center w-full" style={{ fontFamily: fontFamily, backgroundColor: ViewPortBgColor, height: viewPortHeight, color: fontColorValue, fontSize: fontSize }}>
+                <div className="text-center  border-black border flex items-center w-full" style={{ fontFamily: fontFamily, backgroundColor: ViewPortBgColor, height: viewPortHeight, color: fontColorValue, fontSize: fontSize, fontWeight: viewPortFontWeight }}>
                     <p className="text-center w-full "><Markdown>{toShowOnDisplay ? toShowOnDisplay : ''}</Markdown></p>
                 </div>
             </div>

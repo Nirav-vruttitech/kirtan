@@ -34,9 +34,6 @@ const AddViewPortPage = (props) => {
         setShortCutValue(shortCutArrayValueStore.join(' + '));
     };
 
-    useEffect(() => {
-        console.log(shortCutArrayValueStore);
-    }, [shortCutArrayValueStore]);
 
     const handleData = (index) => {
         if (ShortCutValue === "") dispatch(setAddStepperShortCutsObject([index, null]));
@@ -142,7 +139,7 @@ const AddViewPortPage = (props) => {
 
     return (
         <>
-            <div className="place-self-center overflow-y-scroll bg-white" style={{ height: '650px', fontFamily: 'G_BEJOD_4' }}>
+            <div className="place-self-center overflow-y-scroll bg-white border-collapse" style={{ height: '650px', fontFamily: 'G_BEJOD_4' }}>
                 <div className='container text-center p-4 text-4xl' style={{}}>
                     {lines.map((line, index) => {
                         return <>
