@@ -18,7 +18,8 @@ const Textarea = () => {
 
     const addStepperKirtan = useSelector(state => state.addStepperSlice.addStepperKirtan);
 
-    const ckeditorData = location.pathname === '/edit' ? converter.makeHtml(JSON.parse(localStorage.getItem('originalKirtan'))) : '';
+    const edit = converter.makeHtml(JSON.parse(localStorage.getItem('originalKirtan'))) || '';
+    const ckeditorData = location.pathname === '/edit' ? edit : '';
 
     const [selectFontFamily, setSelectFontFamily] = useState('G_BEJOD_4');
 
@@ -27,7 +28,6 @@ const Textarea = () => {
     };
 
     const fontFamily = useSelector(state => state.addStepperSlice.fontFamily);
-    console.log('fontFamily: ', fontFamily);
     const handleEditorChange = async (event, editor) => {
         const data = editor.getData();
         const markdown = turndownService.turndown(data);
@@ -36,6 +36,7 @@ const Textarea = () => {
     };
 
     useEffect(() => {
+        console.log('ckeditorData: ', ckeditorData);
         dispatch(setAddStepperKirtan(turndownService.turndown(ckeditorData)));
     }, []);
 

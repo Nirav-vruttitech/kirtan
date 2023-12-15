@@ -24,7 +24,7 @@ const Page = (props) => {
 ÔäËâ ÁnÑ ¾Çâ Ñe vÚâÔâ, ÚÊÕâÛä ÈÑë áâ ÕâÓ...ÈÑë0 2
 »Úë ÞâÌ‘ÕÌ Úë ÍýâÇ, ÑâÓâ oeâÖ ÈÇâ áâËâÓñ
 ÈÑë Úí Èí ÚãÓÕÓ Úçï Àçï, ÈÑë áâtÑâ Àí ÚãÓ ÑâÓâ...ÈÑë0 3`);
-    SetShortCuts(shortCutsObject ? shortCutsObject : { 1: null });
+    SetShortCuts(shortCutsObject ? shortCutsObject : {});
   }, []);
 
   useEffect(() => {
@@ -76,6 +76,7 @@ const Page = (props) => {
   }, [props]);
 
   useEffect(() => {
+    console.log('originalKirtan: ', originalKirtan);
     const splitLines = originalKirtan
       .split("\n")
       .filter((line) => line.trim() !== "");
