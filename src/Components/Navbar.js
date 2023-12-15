@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import { Link } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -57,12 +57,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    // Function to toggle the menu display
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
+    const [open, setOpen] = useState(false);
+    const handleModalToggle = (value) => setOpen(value);
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -82,11 +78,12 @@ const Navbar = () => {
                         </SearchIconWrapper>
                         <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
                     </Search>
-                    <Button className="mx-2" size="sm" style={{ backgroundColor: 'white' }}><Link to="/input"><i className="fa-solid fa-plus fa-xl mx-2"></i><strong>Add New</strong></Link></Button>
-                    <Button className="mx-2" size="sm" style={{ backgroundColor: 'white' }}><Link to="/edit"><i class="fa-solid fa-pen-nib fa-xl mx-2"></i><strong>Edit</strong></Link></Button>
-                    <IconButton size="medium" edge="start" color="inherit" aria-label="open drawer">
-                        <SettingModal />
+                    <Button className="mx-2 w-[121px] bg-white" size="sm"><Link to="/input"><i className="fa-solid fa-plus fa-xl mx-2"></i><strong>Add New</strong></Link></Button>
+                    <Button className="mx-2 w-[100px] bg-white" size="sm"><Link to="/edit"><i class="fa-solid fa-pen-nib fa-xl mx-2"></i><strong>Edit</strong></Link></Button>
+                    <IconButton size="medium" edge="start" color="inherit" onClick={() => { handleModalToggle(true); }} aria-label="open drawer">
+                        <i className="fa-solid fa-gear fa-lg mx-3" ></i>
                     </IconButton>
+                    <SettingModal open={open} handleModalToggle={handleModalToggle} />
                 </Toolbar>
             </AppBar>
         </Box >

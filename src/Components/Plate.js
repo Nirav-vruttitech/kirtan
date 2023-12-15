@@ -1,34 +1,31 @@
 import React, { useEffect } from 'react';
 import Markdown from "react-markdown";
-import { useSelector } from 'react-redux';
 
-const Plate = ({ toShowOnDisplay }) => {
+
+const Plate = ({ toShowOnDisplay, backgroundColor, height, color, fontSize, fontWeight }) => {
 
     const [fontFamily, setFontFamily] = React.useState('G_BEJOD_4');
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!toShowOnDisplay) setFontFamily('ROBOTO');
         else setFontFamily('G_BEJOD_4');
     }, [toShowOnDisplay]);
 
-    const fontSize = useSelector(state => state.viewPort.fontSize);
-
-    const fontColorValue = useSelector(state => state.viewPort.fontColorValue);
-
-    const viewPortFontWeight = useSelector(state => state.viewPort.viewPortFontWeight);
-
-    const ViewPortBgColor = useSelector(state => state.viewPort.ViewPortBgColor);
-
-    const viewPortHeight = useSelector(state => state.viewPort.viewPortHeight);
+    const style = {
+        fontFamily: fontFamily,
+        backgroundColor: backgroundColor,
+        height: height,
+        color: color,
+        fontSize: fontSize,
+        fontWeight: fontWeight
+    };
 
     return (
-        <>
-            <div className='fixed inset-x-0 bottom-1'>
-                <div className="text-center  border-black border flex items-center w-full" style={{ fontFamily: fontFamily, backgroundColor: ViewPortBgColor, height: viewPortHeight, color: fontColorValue, fontSize: fontSize, fontWeight: viewPortFontWeight }}>
-                    <p className="text-center w-full "><Markdown>{toShowOnDisplay ? toShowOnDisplay : ''}</Markdown></p>
-                </div>
+        <div className='fixed inset-x-0 bottom-1'>
+            <div className="text-center  border-black border flex items-center w-full" style={style}>
+                <p className="text-center w-full "><Markdown>{toShowOnDisplay ? toShowOnDisplay : ''}</Markdown></p>
             </div>
-        </>
+        </div>
     );
 };
 

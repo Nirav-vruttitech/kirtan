@@ -1,15 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    addStepperFontSize: localStorage.getItem('fontSize'),
+    addStepperFontSize: localStorage.getItem('fontSize') || '70px',
 
-    addStepperFontColorValue: localStorage.getItem('fontColorValue') || '#000000',
+    addStepperFontColorValue: localStorage.getItem('fontColorValue') || '#FFFFFF',
 
     addStepperViewPortFontWeight: localStorage.getItem('viewPortFontWeight'),
 
     addStepperViewPortBgColor: localStorage.getItem('ViewPortBgColor') || '#000000',
 
-    addStepperViewPortHeight: localStorage.getItem('viewPortHeight'),
+    addStepperViewPortHeight: localStorage.getItem('viewPortHeight') || '86px',
+
+    fontFamilt: localStorage.getItem('fontFamily') || 'G_BEJOD_4',
 
     addStepperKirtan: '',
 
@@ -38,6 +40,9 @@ export const addStepperSlice = createSlice({
         setAddStepperKirtan: (state, action) => {
             state.addStepperKirtan = action.payload;
         },
+        setFontFamily: (state, action) => {
+            state.fontFamilt = action.payload;
+        },
         setAddStepperShortCutsObject: (state, action) => {
             let index = action.payload[0];
             let shortCut = action.payload[1];
@@ -54,6 +59,6 @@ export const addStepperSlice = createSlice({
     },
 });
 
-export const { setAddStepperFontSize, setAddStepperFontColorValue, setAddStepperViewPortFontWeight, setAddStepperViewPortBgColor, setAddStepperViewPortHeight, setAddStepperKirtan, setAddStepperShortCutsObject, setAddStepperKirtanSlice, setAddStepperShortCutsNewObject } = addStepperSlice.actions;
+export const { setAddStepperFontSize, setAddStepperFontColorValue, setAddStepperViewPortFontWeight, setAddStepperViewPortBgColor, setFontFamily, setAddStepperViewPortHeight, setAddStepperKirtan, setAddStepperShortCutsObject, setAddStepperKirtanSlice, setAddStepperShortCutsNewObject } = addStepperSlice.actions;
 
 export default addStepperSlice.reducer;

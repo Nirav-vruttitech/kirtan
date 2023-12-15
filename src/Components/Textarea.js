@@ -2,35 +2,34 @@ import React, { useEffect } from 'react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setAddStepperKirtan, setAddStepperShortCutsObject, setAddStepperKirtanSlice } from './../Slice/addStepperSlice';
+import { setAddStepperKirtan, setAddStepperKirtanSlice } from '../Slice/addStepperSlice';
 import TurndownService from 'turndown';
 import Showdown from 'showdown';
-import { Link } from "react-router-dom";
 import CKEditorCss from './../ckeditor.css';
 import { useLocation } from 'react-router-dom';
 
-const AddViewPortTextarea = (props) => {
+const Textarea = () => {
     const turndownService = new TurndownService();
     const converter = new Showdown.Converter();
     const location = useLocation();
     const dispatch = useDispatch();
 
     const addStepperKirtan = useSelector(state => state.addStepperSlice.addStepperKirtan);
-    const addStepperShortCutsObject = useSelector(state => state.addStepperSlice.addStepperShortCutsObject);
 
-    const [ckeditorData, setCkeditorData] = React.useState(location.pathname === '/edit' ? converter.makeHtml(JSON.parse(localStorage.getItem('originalKirtan'))) : '');
+    const ckeditorData = location.pathname === '/edit' ? converter.makeHtml(JSON.parse(localStorage.getItem('originalKirtan'))) : '';
+
+    const handleEditorChange = async (event, editor) => {
+        const data = editor.getData();
+        const markdown = turndownService.turndown(data);
+        const latestData = markdown === '' ? 'fgg' : markdown;
+        dispatch(setAddStepperKirtan(latestData));
+    };
 
     useEffect(() => {
         dispatch(setAddStepperKirtan(turndownService.turndown(ckeditorData)));
     }, []);
 
-    const handleEditorChange = async (event, editor) => {
-        const data = editor.getData();
-        const markdown = turndownService.turndown(data);
-        markdown === '' ? dispatch(setAddStepperKirtan(null)) : dispatch(setAddStepperKirtan(markdown));
-    };
-
-    React.useEffect(() => {
+    useEffect(() => {
         dispatch(setAddStepperKirtanSlice((addStepperKirtan.split('\n').filter(line => line.trim() !== '')).length));
     }, [addStepperKirtan]);
 
@@ -44,7 +43,6 @@ const AddViewPortTextarea = (props) => {
                         data={ckeditorData}
                         onInit={
                             editor => {
-                                console.log('Editor is ready to use!', editor);
                                 editor.editing.view.change(writer => {
                                     writer.setStyle(
                                         'max-height',
@@ -60,14 +58,22 @@ const AddViewPortTextarea = (props) => {
                             }
                         }
                         config={{
-                            toolbar: ['bold', 'italic', 'undo', 'redo', 'fontColor', 'fontBackgroundColor'],
+                            toolbar: {
+                                items: [
+                                    'undo', 'redo',
+                                    '|', 'fontColor', 'fontfamily', 'fontsize', 'fontBackgroundColor',
+                                    '|', 'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code',
+                                    '|', 'blockQuote', 'codeBlock', '|'
+                                ],
+                                shouldNotGroupWhenFull: false
+                            },
                             contentsCss: [CKEditorCss]
                         }}
                         onChange={handleEditorChange} />
                 </div>
-            </div >
+            </div>
         </>
     );
 };
 
-export default AddViewPortTextarea;
+export default Textarea;

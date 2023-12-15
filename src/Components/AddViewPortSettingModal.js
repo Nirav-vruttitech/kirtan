@@ -1,14 +1,13 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAddStepperFontSize, setAddStepperViewPortFontWeight, setAddStepperViewPortHeight, setAddStepperViewPortBgColor, setAddStepperFontColorValue } from './../Slice/addStepperSlice';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
-import AddViewPortSketchExample1 from './AddViewPortSketchExample1';
-import AddViewPortSketchExample2 from './AddViewPortSketchExample2';
+import ColorPicker from './ColorPicker';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { useSelector, useDispatch } from 'react-redux';
-import { setAddStepperFontSize, setAddStepperViewPortFontWeight, setAddStepperViewPortHeight } from './../Slice/addStepperSlice';
 
 const style = {
     position: 'absolute',
@@ -24,17 +23,26 @@ const style = {
 const AddViewPortSettingModal = () => {
     const dispatch = useDispatch();
 
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [open, setOpen] = useState(false);
+    const handleModalDisplay = () => setOpen(!open);
 
     const addStepperFontSize = useSelector((state) => state.addStepperSlice.addStepperFontSize);
     const addStepperViewPortFontWeight = useSelector((state) => state.addStepperSlice.addStepperViewPortFontWeight);
     const addStepperViewPortHeight = useSelector((state) => state.addStepperSlice.addStepperViewPortHeight);
+    const addStepperFontColorValue = useSelector(state => state.addStepperSlice.addStepperFontColorValue);
+    const addStepperViewPortBgColor = useSelector(state => state.addStepperSlice.addStepperViewPortBgColor);
 
-    const [portHeight, setPortHeight] = React.useState(addStepperViewPortHeight);
-    const [size, setSize] = React.useState(addStepperFontSize);
+    const [portHeight, setPortHeight] = useState(addStepperViewPortHeight);
+    const [size, setSize] = useState(addStepperFontSize);
 
+
+    const handleFontColorChange = (color) => {
+        dispatch(setAddStepperFontColorValue(color));
+    };
+
+    const handleViewPortBgColorChange = (color) => {
+        dispatch(setAddStepperViewPortBgColor(color));
+    };
     const handleChange = (event) => {
         setSize(event.target.value);
         dispatch(setAddStepperFontSize(`${event.target.value}px`));
@@ -52,11 +60,11 @@ const AddViewPortSettingModal = () => {
     return (
         <>
             <div className='flex flex-row absolute top-2 right-4'>
-                <i className="fa-solid fa-gear fa-xl" onClick={handleOpen}></i>
+                <i className="fa-solid fa-gear fa-xl" onClick={handleModalDisplay}></i>
             </div>
             <Modal
                 open={open}
-                onClose={handleClose}
+                onClose={handleModalDisplay}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={style}>
@@ -66,7 +74,7 @@ const AddViewPortSettingModal = () => {
                             <div className='py-3 font-semibold' >Font Color</div>
                             <div className='py-3 font-semibold' >Font Bold</div>
                             <div className='py-3 font-semibold' >View Port Color</div>
-                            <div className='py-3 font-semibold' >View Port Size</div>
+                            <div className='py-3 font-semibold' >View Port Height</div>
                         </div>
                         <div className='pr-2'>
                             <div className='py-3'>:</div>
@@ -76,7 +84,7 @@ const AddViewPortSettingModal = () => {
                             <div className='py-3'>:</div>
                         </div>
                         <div>
-                            <div className='px-3 pt-3 pb-2'>
+                            <div className='px-3 pt-3'>
                                 <Box sx={{ width: 200 }}>
                                     <Slider
                                         aria-label="Temperature"
@@ -91,7 +99,7 @@ const AddViewPortSettingModal = () => {
                                 </Box>
                             </div>
                             <div className='px-3 pt-3 pb-0.5'>
-                                <AddViewPortSketchExample1 />
+                                <ColorPicker color={addStepperFontColorValue} handelColor={handleFontColorChange} />
                             </div>
                             <div className='px-3 pt-3 pb-2'>
                                 <ToggleButtonGroup
@@ -109,7 +117,7 @@ const AddViewPortSettingModal = () => {
                                 </ToggleButtonGroup>
                             </div>
                             <div className='px-3 pt-3'>
-                                <AddViewPortSketchExample2 />
+                                <ColorPicker color={addStepperViewPortBgColor} handelColor={handleViewPortBgColorChange} />
                             </div>
                             <div className='px-3 pt-3 pb-2'>
                                 <Box sx={{ width: 200 }}>

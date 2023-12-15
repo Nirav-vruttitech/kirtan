@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
-import { useSelector, useDispatch } from 'react-redux';
-import { setAddStepperFontColorValue } from './../Slice/addStepperSlice';
 
-const AddViewPortSketchExample1 = () => {
-    const dispatch = useDispatch();
-    const color = useSelector(state => state.addStepperSlice.addStepperFontColorValue);
+const ColorPicker = ({ color, handelColor }) => {
+
     const [fontColorState, setFontColorState] = useState({
         displayColorPicker: false,
         color: color
@@ -58,26 +55,20 @@ const AddViewPortSketchExample1 = () => {
             displayColorPicker: true,
             color: color.hex
         });
+        handelColor(color.hex);
     };
-
-    useEffect(() => {
-        if (fontColorState.color) {
-            dispatch(setAddStepperFontColorValue(fontColorState.color));
-        }
-    }, [fontColorState]);
-
 
     return (
         <>
             <div style={styles.swatch} onClick={handleClick}>
                 <div style={styles.color} />
             </div>
-            {fontColorState.displayColorPicker ? <div style={styles.popover}>
+            {fontColorState.displayColorPicker && <div style={styles.popover}>
                 <div style={styles.cover} onClick={handleClose} />
                 <SketchPicker color={fontColorState.color} onChange={handleChange} />
-            </div> : null}
+            </div>}
         </>
     );
 };
 
-export default AddViewPortSketchExample1;
+export default ColorPicker;

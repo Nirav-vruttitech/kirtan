@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    fontSize: localStorage.getItem('fontSize'),
+    fontSize: localStorage.getItem('fontSize') || '70px',
 
-    fontColorValue: localStorage.getItem('fontColorValue') || '#000000',
+    fontColorValue: localStorage.getItem('fontColorValue') || '#FFFFFF',
 
     viewPortFontWeight: localStorage.getItem('viewPortFontWeight'),
 
     ViewPortBgColor: localStorage.getItem('ViewPortBgColor') || '#000000',
 
-    viewPortHeight: localStorage.getItem('viewPortHeight'),
+    viewPortHeight: localStorage.getItem('viewPortHeight') || '86px',
 };
 
 export const viewPortSlice = createSlice({
