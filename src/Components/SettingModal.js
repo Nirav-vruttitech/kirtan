@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { setFontSize, setViewPortFontWeight, setViewPortHeight, setFontColorValue, setViewPortBgColor } from './../Slice/plateSlice';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import Modal from '@mui/material/Modal';
@@ -20,52 +18,28 @@ const style = {
     p: 4,
 };
 
-const SettingModal = ({ open, handleModalToggle }) => {
-    const dispatch = useDispatch();
-    const fontSize = useSelector((state) => state.viewPort.fontSize);
-    const viewPortFontWeight = useSelector((state) => state.viewPort.viewPortFontWeight);
-    const viewPortHeight = useSelector((state) => state.viewPort.viewPortHeight);
-    const fontColorValue = useSelector(state => state.viewPort.fontColorValue);
-    const ViewPortBgColor = useSelector(state => state.viewPort.ViewPortBgColor);
+const SettingModal = (
+    { open, handleModalToggle, fontSize, viewPortFontWeight, viewPortHeight, fontColorValue, ViewPortBgColor,
+        handleSetFontSize, handleSetFontColor, handleSetFontWeight, handelViewPortBgColor, handleSetViewPortHeight }) => {
 
     const [portHeight, setPortHeight] = useState(viewPortHeight);
     const [size, setSize] = useState(fontSize);
 
-    const handleFontColorChange = (color) => {
-        localStorage.setItem('fontColorValue', (color));
-        dispatch(setFontColorValue(color));
-    };
-
-    const handleViewPortBgColorChange = (color) => {
-        localStorage.setItem('ViewPortBgColor', (color));
-        dispatch(setViewPortBgColor(color));
-    };
-
-    const handleChange = (event) => {
+    const handleFontSliderChange = (event) => {
         setSize(event.target.value);
-        dispatch(setFontSize(`${event.target.value}px`));
+        handleSetFontSize(event.target.value);
     };
 
-    const handleChange1 = (event) => {
+    const handleViewPortHeightSliderChange = (event) => {
         setPortHeight(event.target.value);
-        dispatch(setViewPortHeight(`${event.target.value}px`));
+        handleSetViewPortHeight(event.target.value);
     };
 
-    const handleAlignment = (event, newAlignment) => {
-        dispatch(setViewPortFontWeight(newAlignment));
-    };
+    const handleFontColorChange = (color) => handleSetFontColor(color);
 
-    useEffect(() => {
-        localStorage.setItem('fontSize', fontSize);
-    }, [fontSize]);
+    const handleViewPortBgColorChange = (color) => handelViewPortBgColor(color);
 
-    useEffect(() => {
-        localStorage.setItem('viewPortFontWeight', viewPortFontWeight);
-    }, [viewPortFontWeight]);
-
-    useEffect(() => {
-        localStorage.setItem('viewPortHeight', viewPortHeight);
-    }, [viewPortHeight]);
+    const handleFontWeightToggle = (event, value) => handleSetFontWeight(value);
 
     return (
         <Modal
@@ -96,7 +70,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                                     valueLabelDisplay="auto"
                                     step={2}
                                     value={size}
-                                    onChange={handleChange}
+                                    onChange={handleFontSliderChange}
                                     marks
                                     min={30}
                                     max={130}
@@ -111,7 +85,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                                 value={viewPortFontWeight}
                                 exclusive
                                 sx={{ height: '30px' }}
-                                onChange={handleAlignment}
+                                onChange={handleFontWeightToggle}
                                 aria-label="viewPortFontWeight">
                                 <ToggleButton value="" aria-label="left aligned" sx={{ textTransform: 'none', fontWeight: 500 }}>
                                     Thin
@@ -131,7 +105,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                                     valueLabelDisplay="auto"
                                     step={2}
                                     value={portHeight}
-                                    onChange={handleChange1}
+                                    onChange={handleViewPortHeightSliderChange}
                                     marks
                                     min={40}
                                     max={140}

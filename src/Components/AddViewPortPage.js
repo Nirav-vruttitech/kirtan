@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import Markdown from "react-markdown";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Markdown from "react-markdown";
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import Grid from '@mui/material/Grid';
@@ -58,7 +59,7 @@ const AddViewPortPage = (props) => {
             if (pushValue === 'Backspace') {
                 prevShortcuts.splice(prevShortcuts.length - 1, 1);
             } else if (!prevShortcuts.includes(pushValue)) {
-                prevShortcuts.push(pushValue);
+                if (!(pushValue === 'Shift' || pushValue === 'CapsLock' || pushValue === 'ArrowDown' || pushValue === 'ArrowRight' || pushValue === 'ArrowUp' || pushValue === 'ArrowLeft' || pushValue === 'Tab' || pushValue === 'Meta')) { prevShortcuts.push(pushValue); };
             }
 
             setShortCutValueArrayValueStore(prevShortcuts);
@@ -125,32 +126,30 @@ const AddViewPortPage = (props) => {
             <div className="place-self-center overflow-y-scroll border-collapse" style={{ height: '650px', fontFamily: 'G_BEJOD_4' }}>
                 <div className='container text-center p-4 text-4xl' style={{}}>
                     {lines.map((line, index) => {
-                        return <>
-                            <Box sx={{ flexGrow: 1 }}>
-                                <Toolbar>
-                                    <Grid container spacing={1}>
-                                        <Grid item xs={8}>
-                                            <div className="flex-grow">
-                                                <div className='w-3/4'>
-                                                    <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline", fontFamily: 'G_BEJOD_4' }} key={index + 1} onClick={() => { props.showInPlate(line); }} >
-                                                        <Markdown components={{
-                                                            p: ({ node, ...props }) => <p style={{ display: "inline", cursor: 'pointer' }} {...props} />,
-                                                        }}>{line}
-                                                        </Markdown>
-                                                    </p>
-                                                </div>
+                        return <Box sx={{ flexGrow: 1 }}>
+                            <Toolbar>
+                                <Grid container spacing={1}>
+                                    <Grid item xs={8}>
+                                        <div className="flex-grow">
+                                            <div className='w-3/4'>
+                                                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline", fontFamily: 'G_BEJOD_4' }} key={index + 1} onClick={() => { props.showInPlate(line); }} >
+                                                    <Markdown components={{
+                                                        p: ({ node, ...props }) => <p style={{ display: "inline", cursor: 'pointer' }} {...props} />,
+                                                    }}>{line}
+                                                    </Markdown>
+                                                </p>
                                             </div>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            {(addStepperShortCutsObject[index] !== null && addStepperShortCutsObject[index] !== undefined) && !(selectedButton === index) ?
-                                                <Button onClick={() => { handleEditShortcutShowButton(index); }} className="cursor-pointer m-1" style={{ display: "inline", fontFamily: 'ROBOTO', textTransform: 'none' }} variant="contained">{addStepperShortCutsObject[index]}</Button> : (selectedButton === index) ?
-                                                    <div className='flex justify-center'><Input value={shortCutValue} placeholder="Add ShortCut" onChange={handleShortCutInput} /><i onClick={() => { handleShowButton(null); handleData(index); }} className="fa-solid fa-check mx-2 text-[#3675e2]"></i></div> : <IconButton onClick={() => { handleShowButton(index); }} size="small" style={{ backgroundColor: '#1976D2', color: 'white', marginRight: '4px' }}><i className="fa-regular fa-plus"></i></IconButton>
-                                            }
-                                        </Grid>
+                                        </div>
                                     </Grid>
-                                </Toolbar>
-                            </Box>
-                        </>;
+                                    <Grid item xs={4}>
+                                        {(addStepperShortCutsObject[index] !== null && addStepperShortCutsObject[index] !== undefined) && !(selectedButton === index) ?
+                                            <Button className="cursor-pointer m-1 " style={{ display: "inline", fontFamily: 'ROBOTO', textTransform: 'none' }} variant="contained" onClick={() => { handleEditShortcutShowButton(index); }}>{addStepperShortCutsObject[index]}</Button> : (selectedButton === index) ?
+                                                <div className='flex justify-center'><Input value={shortCutValue} placeholder="Add ShortCut" onChange={handleShortCutInput} /><i onClick={() => { handleShowButton(null); handleData(index); }} className="fa-solid fa-check mx-2 text-[#3675e2]"></i></div> : <IconButton onClick={() => { handleShowButton(index); }} size="small" style={{ backgroundColor: '#1976D2', color: 'white', marginRight: '4px' }}><i className="fa-regular fa-plus"></i></IconButton>
+                                        }
+                                    </Grid>
+                                </Grid>
+                            </Toolbar>
+                        </Box>;
                     })}
                 </div>
             </div>

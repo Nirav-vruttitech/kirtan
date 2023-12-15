@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAddStepperKirtan, setAddStepperKirtanSlice } from '../Slice/addStepperSlice';
+import { useLocation } from 'react-router-dom';
+import MenuItem from '@mui/material/MenuItem';
 import TurndownService from 'turndown';
 import Showdown from 'showdown';
 import CKEditorCss from './../ckeditor.css';
-import { useLocation } from 'react-router-dom';
+import Select from '@mui/material/Select';
 
 const Textarea = () => {
     const turndownService = new TurndownService();
@@ -18,6 +20,14 @@ const Textarea = () => {
 
     const ckeditorData = location.pathname === '/edit' ? converter.makeHtml(JSON.parse(localStorage.getItem('originalKirtan'))) : '';
 
+    const [selectFontFamily, setSelectFontFamily] = useState('G_BEJOD_4');
+
+    const handleSelectFontFamilyChange = (event) => {
+        setSelectFontFamily(event.target.value);
+    };
+
+    const fontFamily = useSelector(state => state.addStepperSlice.fontFamily);
+    console.log('fontFamily: ', fontFamily);
     const handleEditorChange = async (event, editor) => {
         const data = editor.getData();
         const markdown = turndownService.turndown(data);
@@ -35,8 +45,20 @@ const Textarea = () => {
 
     return (
         <>
-            <div className='width-full' style={{ minHeight: "400px" }}>
-                <div style={{ fontFamily: 'G_BEJOD_4', fontSize: '40px' }}>
+            <div className='width-full relative' style={{ minHeight: "400px" }}>
+                <div className='z-50 absolute right-0'>
+                    <Select
+                        value={selectFontFamily}
+                        onChange={handleSelectFontFamilyChange}
+
+                        sx={{ height: '40px', width: '200px', fontSize: '15px', fontWeight: '600', ":focus": { outline: 'none' }, outline: 'none' }}
+                    >
+                        <MenuItem value={'G_BEJOD_4'}>G_BEJOD_4</MenuItem>
+                        <MenuItem value={'sulekh'}>sulekh</MenuItem>
+                        <MenuItem value={'unicode'}>unicode</MenuItem>
+                    </Select>
+                </div>
+                <div style={{ fontFamily: selectFontFamily, fontSize: '40px' }}>
                     <CKEditor
                         max-height="500px"
                         editor={ClassicEditor}
@@ -63,7 +85,7 @@ const Textarea = () => {
                                     'undo', 'redo',
                                     '|', 'fontColor', 'fontfamily', 'fontsize', 'fontBackgroundColor',
                                     '|', 'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code',
-                                    '|', 'blockQuote', 'codeBlock', '|'
+                                    '|', 'blockQuote', 'codeBlock', '|',
                                 ],
                                 shouldNotGroupWhenFull: false
                             },

@@ -11,7 +11,7 @@ const initialState = {
 
     addStepperViewPortHeight: localStorage.getItem('viewPortHeight') || '86px',
 
-    fontFamilt: localStorage.getItem('fontFamily') || 'G_BEJOD_4',
+    fontFamily: localStorage.getItem('fontFamily') || 'G_BEJOD_4',
 
     addStepperKirtan: '',
 

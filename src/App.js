@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import AddStepper from "./Components/AddStepper";
+import AddKirtanStepper from "./Components/AddKirtanStepper";
 import Plate from './Components/Plate';
 import Navbar from './Components/Navbar';
 import Page from './Components/Page';
@@ -26,8 +26,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/edit" element={<AddStepper />} />
-          <Route path="/input" element={<AddStepper />} />
+          <Route path="/edit" element={<AddKirtanStepper />} />
+          <Route path="/input" element={<AddKirtanStepper />} />
           <Route path="/" element={
             <>
               <Navbar />

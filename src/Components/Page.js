@@ -9,20 +9,24 @@ const Page = (props) => {
 
   const [originalKirtan, setOriginalKirtan] = useState("");
 
-  const [showingLineState, setShowingLineState] = useState(
-    lines.indexOf(props.toShowOnDisplay)
-  );
+  const [showingLineState, setShowingLineState] = useState(lines.indexOf(props.toShowOnDisplay));
 
   const [shortCuts, SetShortCuts] = useState({});
 
   useEffect(() => {
     const kirtanData = JSON.parse(localStorage.getItem("originalKirtan"));
     const shortCutsObject = JSON.parse(localStorage.getItem("shortCutsObject"));
-    setOriginalKirtan(kirtanData ? kirtanData : "");
+    setOriginalKirtan(kirtanData ? kirtanData : `ÑâÓâ ÖÚ’ÌïÊ ÍýâÇ pÒâÓâ, ÑâÓä áâï¼ÅÔäÌâ ÈâÓâ,
+ÈÑë Óâ‘ ÓÚëjÒí Úë sÕâÑä, ÑâÓä ÐèÔíÌâ ÐèÔÌâÓâ...Ãë»
+ÈÑë ÑLÒâ Èí Öç¼ Àë ÂâÂçï, ÑâÓë ÚìÒë ÚìÒâÌâ ÚâÓñ
+áãÈ ÎâÕä ½Òí Àçï vÚâÔâ, ÑÌë ÑLÒí ÈÑâÓí pÒâÓ...ÈÑë0 1
+ÑÌë ÑíÃâ ÖïÈí áâpÒâ, ÑÚâ ÐkÈ ÈÇí ÌãÚ ÍâÓ,
+ÔäËâ ÁnÑ ¾Çâ Ñe vÚâÔâ, ÚÊÕâÛä ÈÑë áâ ÕâÓ...ÈÑë0 2
+»Úë ÞâÌ‘ÕÌ Úë ÍýâÇ, ÑâÓâ oeâÖ ÈÇâ áâËâÓñ
+ÈÑë Úí Èí ÚãÓÕÓ Úçï Àçï, ÈÑë áâtÑâ Àí ÚãÓ ÑâÓâ...ÈÑë0 3`);
     SetShortCuts(shortCutsObject ? shortCutsObject : { 1: null });
   }, []);
 
-  //handle events of key pressing
   useEffect(() => {
     const handleKeyPress = (event) => {
       event.preventDefault();
@@ -118,33 +122,11 @@ const Page = (props) => {
                     ></i>{" "}
                   </div>
                 )}
-                <p
-                  className="cursor-grab m-1 text-3xl text-center"
-                  style={{
-                    display: "inline-block",
-                    fontFamily: "G_BEJOD_4",
-                    width: "500px",
-                  }}
-                  key={index + 1}
-                  onClick={() => {
-                    props.showInPlate(line);
-                  }}
-                >
-                  <Markdown
-                    components={{
-                      p: ({ node, ...props }) => (
-                        <p
-                          className="w-[600px]"
-                          style={{ display: "inline", cursor: "pointer" }}
-                          {...props}
-                        />
-                      ),
-                    }}
-                  >
+                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline-block", fontFamily: "G_BEJOD_4", width: "600px" }} key={index + 1} onClick={() => { props.showInPlate(line); }}>
+                  <Markdown components={{ p: ({ node, ...props }) => (<p style={{ display: "inline", cursor: "pointer" }}  {...props} />) }}>
                     {line}
                   </Markdown>
                 </p>
-
                 {shortCuts[index] === null || shortCuts[index] === undefined ? (
                   <div className="w-40 h-[42px] inline">
                     <Button
