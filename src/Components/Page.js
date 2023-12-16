@@ -76,7 +76,6 @@ const Page = (props) => {
   }, [props]);
 
   useEffect(() => {
-    console.log('originalKirtan: ', originalKirtan);
     const splitLines = originalKirtan
       .split("\n")
       .filter((line) => line.trim() !== "");

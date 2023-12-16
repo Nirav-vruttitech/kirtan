@@ -36,7 +36,6 @@ const Textarea = () => {
     };
 
     useEffect(() => {
-        console.log('ckeditorData: ', ckeditorData);
         dispatch(setAddStepperKirtan(turndownService.turndown(ckeditorData)));
     }, []);
 
