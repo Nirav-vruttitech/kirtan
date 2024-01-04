@@ -10,7 +10,9 @@ const initialState = {
 »Úë ÞâÌ‘ÕÌ Úë ÍýâÇ, ÑâÓâ oeâÖ ÈÇâ áâËâÓñ  
 ÈÑë Úí Èí ÚãÓÕÓ Úçï Àçï, ÈÑë áâtÑâ Àí ÚãÓ ÑâÓâ...ÈÑë0 3`,
 
-    shortCut: JSON.parse(localStorage.getItem('shortCut')) || { 1: null }
+    shortCut: JSON.parse(localStorage.getItem('shortCut')) || { 1: null },
+
+    fontFamily: localStorage.getItem('fontFamily') || 'Guj_Simple_Normal',
 };
 
 export const kirtanSlice = createSlice({
@@ -22,10 +24,13 @@ export const kirtanSlice = createSlice({
         },
         setShortCut: (state, action) => {
             state.shortCut = action.payload;
-        }
+        },
+        setFontFamily: (state, action) => {
+            state.fontFamily = action.payload;
+        },
     },
 });
 
-export const { setKirtan, setShortCut } = kirtanSlice.actions;
+export const { setKirtan, setShortCut, setFontFamily } = kirtanSlice.actions;
 
 export default kirtanSlice.reducer;

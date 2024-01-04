@@ -15,23 +15,21 @@ const AddViewPortPage = ({ toShowOnDisplay, showInPlate }) => {
     const location = useLocation();
 
     const addStepperKirtan = useSelector(state => state.addStepperSlice.addStepperKirtan);
+
     useEffect(() => {
         if (location.pathname === '/edit') { dispatch(setAddStepperShortCutsNewObject(JSON.parse(localStorage.getItem('shortCutsObject'))) || {}); }
     }, []);
 
     const addStepperShortCutsObject = useSelector(state => state.addStepperSlice.addStepperShortCutsObject) || { 1: null };
+    const fontFamily = useSelector(state => state.kirtan.fontFamily);
 
     const [shortCutValue, setShortCutValue] = useState(null);
     const [selectedButton, setSelectedButton] = useState(null);
     const [shortCutArrayValueStore, setShortCutValueArrayValueStore] = useState([]);
 
-    const handleShowButton = (index) => {
-        setSelectedButton(index);
-    };
+    const handleShowButton = (index) => setSelectedButton(index);
 
-    const handleShortCutInput = (event) => {
-        setShortCutValue(shortCutArrayValueStore.join(' + '));
-    };
+    const handleShortCutInput = (event) => setShortCutValue(shortCutArrayValueStore.join(' + '));
 
     const handleData = (index) => {
         const shortCutStringValue = shortCutValue === "" ? null : shortCutValue;
@@ -40,9 +38,7 @@ const AddViewPortPage = ({ toShowOnDisplay, showInPlate }) => {
         setShortCutValueArrayValueStore([]);
     };
 
-    const handleEditShortcutShowButton = (index) => {
-        setSelectedButton(index);
-    };
+    const handleEditShortcutShowButton = (index) => setSelectedButton(index);
 
     const [lines, setLines] = useState([]);
 
@@ -110,18 +106,14 @@ const AddViewPortPage = ({ toShowOnDisplay, showInPlate }) => {
     }, [toShowOnDisplay, shortCutArrayValueStore, lines, addStepperShortCutsObject]);
 
     //split the kirtan into lines
-    useEffect(() => {
-        addStepperKirtan ? setLines(addStepperKirtan.split('\n').filter(line => line.trim() !== '')) : setLines(['']);
-    }, []);
+    useEffect(() => { addStepperKirtan ? setLines(addStepperKirtan.split('\n').filter(line => line.trim() !== '')) : setLines(['']); }, []);
 
     //that will show the first line of kirtan in plate but not works
-    useEffect(() => {
-        showInPlate(lines[0]);
-    }, [lines]);
+    useEffect(() => { showInPlate(lines[0]); }, [lines]);
 
     return (
         <>
-            <div className="place-self-center overflow-y-scroll border-collapse" style={{ height: '650px', fontFamily: 'G_BEJOD_4' }}>
+            <div className="place-self-center overflow-y-scroll border-collapse" style={{ height: '650px', fontFamily: fontFamily }}>
                 <div className='container text-center p-4 text-4xl' style={{}}>
                     {lines.map((line, index) => {
                         return <Box sx={{ flexGrow: 1 }}>
@@ -130,7 +122,7 @@ const AddViewPortPage = ({ toShowOnDisplay, showInPlate }) => {
                                     <Grid item xs={8}>
                                         <div className="flex-grow">
                                             <div className='w-3/4'>
-                                                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline", fontFamily: 'G_BEJOD_4' }} key={index + 1} onClick={() => { showInPlate(line); }} >
+                                                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline", fontFamily: fontFamily }} key={index + 1} onClick={() => { showInPlate(line); }} >
                                                     <Markdown components={{
                                                         p: ({ node, ...props }) => <p style={{ display: "inline", cursor: 'pointer' }} {...props} />,
                                                     }}>{line}

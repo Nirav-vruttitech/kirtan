@@ -29,6 +29,7 @@ const AddKirtanStepper = () => {
     const viewPortFontWeight = useSelector(state => state.addStepperSlice.addStepperViewPortFontWeight);
     const ViewPortBgColor = useSelector(state => state.addStepperSlice.addStepperViewPortBgColor);
     const viewPortHeight = useSelector(state => state.addStepperSlice.addStepperViewPortHeight);
+    const fontFamily = useSelector(state => state.kirtan.fontFamily);
 
     const addStepperKirtan = useSelector(state => state.addStepperSlice.addStepperKirtan);
     const addStepperShortCutsObject = useSelector(state => state.addStepperSlice.addStepperShortCutsObject);
@@ -136,7 +137,7 @@ const AddKirtanStepper = () => {
                             <div className='mt-2'>
                                 <div className='w-full h-[600px] m-auto'>
                                     <AddViewPortPage toShowOnDisplay={toShowOnDisplay} showInPlate={showInPlate} />
-                                    <Plate toShowOnDisplay={toShowOnDisplay} backgroundColor={ViewPortBgColor} height={viewPortHeight} color={fontColorValue} fontSize={fontSize} fontWeight={viewPortFontWeight} />
+                                    <Plate toShowOnDisplay={toShowOnDisplay} backgroundColor={ViewPortBgColor} height={viewPortHeight} color={fontColorValue} fontSize={fontSize} fontWeight={viewPortFontWeight} fontFamily={fontFamily} />
                                 </div>
                             </div>
                             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1, alignItems: 'center', justifyContent: 'center' }}>

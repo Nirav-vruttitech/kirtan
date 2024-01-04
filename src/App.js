@@ -14,6 +14,7 @@ function App() {
   const fontColorValue = useSelector(state => state.viewPort.fontColorValue);
   const fontSize = useSelector(state => state.viewPort.fontSize);
   const viewPortHeight = useSelector(state => state.viewPort.viewPortHeight);
+  const fontFamily = useSelector(state => state.kirtan.fontFamily);
 
   const [toShowOnDisplay, setToShowOnDisplay] = useState('');
 
@@ -29,7 +30,7 @@ function App() {
             <>
               <Navbar />
               <Page toShowOnDisplay={toShowOnDisplay} showInPlate={showInPlate} />
-              <Plate toShowOnDisplay={toShowOnDisplay} backgroundColor={ViewPortBgColor} height={viewPortHeight} color={fontColorValue} fontSize={fontSize} fontWeight={viewPortFontWeight} />
+              <Plate toShowOnDisplay={toShowOnDisplay} backgroundColor={ViewPortBgColor} height={viewPortHeight} color={fontColorValue} fontSize={fontSize} fontWeight={viewPortFontWeight} fontFamily={fontFamily} />
             </>
           } />
         </Routes>

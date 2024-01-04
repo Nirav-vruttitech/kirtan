@@ -16,6 +16,7 @@ const Page = ({ toShowOnDisplay, showInPlate }) => {
   const [shortCuts, SetShortCuts] = useState({});
 
   const shortcutsData = useSelector(state => state.kirtan.shortCut);
+  const fontFamily = useSelector(state => state.kirtan.fontFamily);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -88,13 +89,10 @@ const Page = ({ toShowOnDisplay, showInPlate }) => {
   }, [shortcutsData]);
 
   return (
-    <div
-      className="p-3 place-self-center bg-gray-100 w-auto"
-      style={{ height: "850px" }}
-    >
+    <div className="p-3 place-self-center bg-gray-100 w-auto h-[850px]">
       <div
-        className="container flex items-center flex-col text-center p-4 text-4xl shadow h-[700px] overflow-y-auto overflow-x-hidden"
-        style={{ fontFamily: "G_BEJOD_4", backgroundColor: "#ede5d4" }}
+        className="container flex items-center flex-col text-center p-4 text-4xl shadow h-[700px] overflow-y-auto overflow-x-hidden bg-[#ede5d4]"
+        style={{ fontFamily: fontFamily }}
       >
 
         {lines.length > 0 && lines.map((line, index) => {
@@ -120,7 +118,7 @@ const Page = ({ toShowOnDisplay, showInPlate }) => {
                     ></i>{" "}
                   </div>
                 )}
-                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline-block", fontFamily: "G_BEJOD_4", width: "600px" }} key={index + 1} onClick={() => { showInPlate(line); }}>
+                <p className="cursor-grab m-1 text-3xl text-center inline-block w-[800px]" style={{ fontFamily: fontFamily }} key={index + 1} onClick={() => { showInPlate(line); }}>
                   <Markdown>
                     {line}
                   </Markdown>

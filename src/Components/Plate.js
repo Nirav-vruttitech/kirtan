@@ -2,14 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Markdown from "react-markdown";
 
 
-const Plate = ({ toShowOnDisplay, backgroundColor, height, color, fontSize, fontWeight }) => {
-
-    const [fontFamily, setFontFamily] = useState('G_BEJOD_4');
-
-    useEffect(() => {
-        if (!toShowOnDisplay) setFontFamily('ROBOTO');
-        else setFontFamily('G_BEJOD_4');
-    }, [toShowOnDisplay]);
+const Plate = ({ toShowOnDisplay, backgroundColor, height, color, fontSize, fontWeight, fontFamily }) => {
 
     const style = {
         fontFamily: fontFamily,
