@@ -1,0 +1,5 @@
+@media (max-width: 900px) and (min-width: 800px) {
+    .ckeditor {
+        height: 300px !important;
+    }
+}
