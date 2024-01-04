@@ -20,8 +20,8 @@ const Textarea = () => {
 
     const addStepperKirtan = useSelector(state => state.addStepperSlice.addStepperKirtan);
 
-    const ckeditorData = converter.makeHtml(kirtan);
-    // const ckeditorData = location.pathname === '/edit' ? converter.makeHtml(kirtan) : '';
+    // const ckeditorData = converter.makeHtml(kirtan);
+    const ckeditorData = location.pathname === '/edit' ? converter.makeHtml(kirtan) : '';
 
     const [selectFontFamily, setSelectFontFamily] = useState('G_BEJOD_4');
 
