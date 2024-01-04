@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Markdown from "react-markdown";
 import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -11,16 +10,16 @@ import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAddStepperShortCutsObject, setAddStepperShortCutsNewObject } from './../Slice/addStepperSlice';
 
-const AddViewPortPage = (props) => {
+const AddViewPortPage = ({ toShowOnDisplay, showInPlate }) => {
     const dispatch = useDispatch();
     const location = useLocation();
 
     const addStepperKirtan = useSelector(state => state.addStepperSlice.addStepperKirtan);
     useEffect(() => {
-        if (location.pathname === '/edit') { dispatch(setAddStepperShortCutsNewObject(JSON.parse(localStorage.getItem('shortCutsObject')))); }
+        if (location.pathname === '/edit') { dispatch(setAddStepperShortCutsNewObject(JSON.parse(localStorage.getItem('shortCutsObject'))) || {}); }
     }, []);
 
-    const addStepperShortCutsObject = useSelector(state => state.addStepperSlice.addStepperShortCutsObject);
+    const addStepperShortCutsObject = useSelector(state => state.addStepperSlice.addStepperShortCutsObject) || { 1: null };
 
     const [shortCutValue, setShortCutValue] = useState(null);
     const [selectedButton, setSelectedButton] = useState(null);
@@ -33,7 +32,6 @@ const AddViewPortPage = (props) => {
     const handleShortCutInput = (event) => {
         setShortCutValue(shortCutArrayValueStore.join(' + '));
     };
-
 
     const handleData = (index) => {
         const shortCutStringValue = shortCutValue === "" ? null : shortCutValue;
@@ -68,7 +66,7 @@ const AddViewPortPage = (props) => {
             if (event.altKey && (event.key)) {
                 for (const key in addStepperShortCutsObject) {
                     if (addStepperShortCutsObject[key] === `Alt+${event.key}`) {
-                        props.showInPlate(lines[key]);
+                        showInPlate(lines[key]);
                     }
                 }
             }
@@ -76,7 +74,7 @@ const AddViewPortPage = (props) => {
             if (event.ctrlKey && (event.key)) {
                 for (const key in addStepperShortCutsObject) {
                     if (addStepperShortCutsObject[key] === `Ctr+${event.key}`) {
-                        props.showInPlate(lines[key]);
+                        showInPlate(lines[key]);
                     }
                 }
             }
@@ -84,22 +82,22 @@ const AddViewPortPage = (props) => {
             if (event.key) {
                 for (const key in addStepperShortCutsObject) {
                     if (addStepperShortCutsObject[key] === `${event.key}`) {
-                        props.showInPlate(lines[key]);
+                        showInPlate(lines[key]);
                     }
                 }
             }
 
             // Arrow key handler
-            let indexOFLine = lines.indexOf(props.toShowOnDisplay);
+            let indexOFLine = lines.indexOf(toShowOnDisplay);
             switch (event.key) {
                 case 'ArrowLeft':
                     if (indexOFLine > 0) {
-                        props.showInPlate(lines[indexOFLine - 1]);
+                        showInPlate(lines[indexOFLine - 1]);
                     }
                     break;
                 case 'ArrowRight':
                     if (indexOFLine < lines.length - 1) {
-                        props.showInPlate(lines[indexOFLine + 1]);
+                        showInPlate(lines[indexOFLine + 1]);
                     }
                     break;
             }
@@ -109,7 +107,7 @@ const AddViewPortPage = (props) => {
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [props, shortCutArrayValueStore, lines, addStepperShortCutsObject]);
+    }, [toShowOnDisplay, shortCutArrayValueStore, lines, addStepperShortCutsObject]);
 
     //split the kirtan into lines
     useEffect(() => {
@@ -118,7 +116,7 @@ const AddViewPortPage = (props) => {
 
     //that will show the first line of kirtan in plate but not works
     useEffect(() => {
-        props.showInPlate(lines[0]);
+        showInPlate(lines[0]);
     }, [lines]);
 
     return (
@@ -132,7 +130,7 @@ const AddViewPortPage = (props) => {
                                     <Grid item xs={8}>
                                         <div className="flex-grow">
                                             <div className='w-3/4'>
-                                                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline", fontFamily: 'G_BEJOD_4' }} key={index + 1} onClick={() => { props.showInPlate(line); }} >
+                                                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline", fontFamily: 'G_BEJOD_4' }} key={index + 1} onClick={() => { showInPlate(line); }} >
                                                     <Markdown components={{
                                                         p: ({ node, ...props }) => <p style={{ display: "inline", cursor: 'pointer' }} {...props} />,
                                                     }}>{line}

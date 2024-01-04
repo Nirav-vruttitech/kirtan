@@ -26,12 +26,12 @@ const SettingModal = (
     const [size, setSize] = useState(fontSize);
 
     const handleFontSliderChange = (event) => {
-        setSize(event.target.value);
+        setSize(`${event.target.value}px`);
         handleSetFontSize(event.target.value);
     };
 
     const handleViewPortHeightSliderChange = (event) => {
-        setPortHeight(event.target.value);
+        setPortHeight(`${event.target.value}px`);
         handleSetViewPortHeight(event.target.value);
     };
 
@@ -69,7 +69,7 @@ const SettingModal = (
                                     aria-label="Temperature"
                                     valueLabelDisplay="auto"
                                     step={2}
-                                    value={size}
+                                    value={+(size.slice(0, -2))}
                                     onChange={handleFontSliderChange}
                                     marks
                                     min={30}
@@ -104,7 +104,7 @@ const SettingModal = (
                                     aria-label="Temperature"
                                     valueLabelDisplay="auto"
                                     step={2}
-                                    value={portHeight}
+                                    value={+(portHeight.slice(0, -2))}
                                     onChange={handleViewPortHeightSliderChange}
                                     marks
                                     min={40}

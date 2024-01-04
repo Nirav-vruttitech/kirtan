@@ -11,6 +11,7 @@ import AddViewPortPage from './AddViewPortPage';
 import IconButton from '@mui/material/IconButton';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
+import { setKirtan, setShortCut } from '../Slice/kirtanSlice';
 import { setAddStepperFontSize, setAddStepperViewPortFontWeight, setAddStepperViewPortHeight, setAddStepperViewPortBgColor, setAddStepperFontColorValue } from '../Slice/addStepperSlice';
 import { setFontSize, setFontColorValue, setViewPortFontWeight, setViewPortBgColor, setViewPortHeight } from '../Slice/plateSlice';
 
@@ -78,9 +79,11 @@ const AddKirtanStepper = () => {
         localStorage.setItem('viewPortHeight', viewPortHeight);
         localStorage.setItem('fontColorValue', fontColorValue);
         localStorage.setItem('ViewPortBgColor', ViewPortBgColor);
-        localStorage.setItem('originalKirtan', JSON.stringify(addStepperKirtan));
+        localStorage.setItem('kirtan', JSON.stringify(addStepperKirtan));
         localStorage.setItem('shortCutsObject', JSON.stringify(addStepperShortCutsObject));
 
+        dispatch(setKirtan(addStepperKirtan));
+        dispatch(setShortCut(addStepperShortCutsObject));
         dispatch(setFontSize(fontSize));
         dispatch(setFontColorValue(fontColorValue));
         dispatch(setViewPortFontWeight(viewPortFontWeight));
@@ -132,7 +135,7 @@ const AddKirtanStepper = () => {
                         <div className='mb-20'>
                             <div className='mt-2'>
                                 <div className='w-full h-[600px] m-auto'>
-                                    <AddViewPortPage showInPlate={showInPlate} toShowOnDisplay={toShowOnDisplay} />
+                                    <AddViewPortPage toShowOnDisplay={toShowOnDisplay} showInPlate={showInPlate} />
                                     <Plate toShowOnDisplay={toShowOnDisplay} backgroundColor={ViewPortBgColor} height={viewPortHeight} color={fontColorValue} fontSize={fontSize} fontWeight={viewPortFontWeight} />
                                 </div>
                             </div>

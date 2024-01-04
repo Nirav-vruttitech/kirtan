@@ -16,10 +16,12 @@ const Textarea = () => {
     const location = useLocation();
     const dispatch = useDispatch();
 
+    const [kirtan, setKirtan] = useState(useSelector(state => state.kirtan.kirtan));
+
     const addStepperKirtan = useSelector(state => state.addStepperSlice.addStepperKirtan);
 
-    const edit = converter.makeHtml(JSON.parse(localStorage.getItem('originalKirtan'))) || '';
-    const ckeditorData = location.pathname === '/edit' ? edit : '';
+    const ckeditorData = converter.makeHtml(kirtan);
+    // const ckeditorData = location.pathname === '/edit' ? converter.makeHtml(kirtan) : '';
 
     const [selectFontFamily, setSelectFontFamily] = useState('G_BEJOD_4');
 
@@ -27,7 +29,6 @@ const Textarea = () => {
         setSelectFontFamily(event.target.value);
     };
 
-    const fontFamily = useSelector(state => state.addStepperSlice.fontFamily);
     const handleEditorChange = async (event, editor) => {
         const data = editor.getData();
         const markdown = turndownService.turndown(data);

@@ -114,7 +114,7 @@ const Navbar = () => {
                         <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
                     </Search>
                     <Button className="mx-2 w-[121px] bg-white" size="sm" onClick={() => { handleAddEditButtonNavigate('/input'); }}><i className="fa-solid fa-plus fa-xl mx-2"></i><strong>Add New</strong></Button>
-                    <Button className="mx-2 w-[100px] bg-white" size="sm" onClick={() => { handleAddEditButtonNavigate('/edit'); }}><i class="fa-solid fa-pen-nib fa-xl mx-2"></i><strong>Edit</strong></Button>
+                    <Button className="mx-2 w-[100px] bg-white" size="sm" onClick={() => { handleAddEditButtonNavigate('/edit'); }}><i className="fa-solid fa-pen-nib fa-xl mx-2"></i><strong>Edit</strong></Button>
                     <IconButton size="medium" edge="start" color="inherit" onClick={() => { handleModalToggle(true); }} aria-label="open drawer">
                         <i className="fa-solid fa-gear fa-lg mx-3" ></i>
                     </IconButton>

@@ -1,69 +1,59 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import Markdown from "react-markdown";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-const Page = (props) => {
+const Page = ({ toShowOnDisplay, showInPlate }) => {
+  const dispatch = useDispatch();
   // array of lines that store in this
   const [lines, setLines] = useState([]);
 
-  const [originalKirtan, setOriginalKirtan] = useState("");
+  const [showingLineState, setShowingLineState] = useState(lines.indexOf(toShowOnDisplay));
 
-  const [showingLineState, setShowingLineState] = useState(lines.indexOf(props.toShowOnDisplay));
+  const [kirtan, setKirtan] = useState((useSelector(state => state.kirtan.kirtan)));
 
   const [shortCuts, SetShortCuts] = useState({});
 
-  useEffect(() => {
-    const kirtanData = JSON.parse(localStorage.getItem("originalKirtan"));
-    const shortCutsObject = JSON.parse(localStorage.getItem("shortCutsObject"));
-    setOriginalKirtan(kirtanData ? kirtanData : `ÑâÓâ ÖÚ’ÌïÊ ÍýâÇ pÒâÓâ, ÑâÓä áâï¼ÅÔäÌâ ÈâÓâ,
-ÈÑë Óâ‘ ÓÚëjÒí Úë sÕâÑä, ÑâÓä ÐèÔíÌâ ÐèÔÌâÓâ...Ãë»
-ÈÑë ÑLÒâ Èí Öç¼ Àë ÂâÂçï, ÑâÓë ÚìÒë ÚìÒâÌâ ÚâÓñ
-áãÈ ÎâÕä ½Òí Àçï vÚâÔâ, ÑÌë ÑLÒí ÈÑâÓí pÒâÓ...ÈÑë0 1
-ÑÌë ÑíÃâ ÖïÈí áâpÒâ, ÑÚâ ÐkÈ ÈÇí ÌãÚ ÍâÓ,
-ÔäËâ ÁnÑ ¾Çâ Ñe vÚâÔâ, ÚÊÕâÛä ÈÑë áâ ÕâÓ...ÈÑë0 2
-»Úë ÞâÌ‘ÕÌ Úë ÍýâÇ, ÑâÓâ oeâÖ ÈÇâ áâËâÓñ
-ÈÑë Úí Èí ÚãÓÕÓ Úçï Àçï, ÈÑë áâtÑâ Àí ÚãÓ ÑâÓâ...ÈÑë0 3`);
-    SetShortCuts(shortCutsObject ? shortCutsObject : {});
-  }, []);
+  const shortcutsData = useSelector(state => state.kirtan.shortCut);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
       event.preventDefault();
-      let indexOFLine = lines.indexOf(props.toShowOnDisplay);
+      let indexOFLine = lines.indexOf(toShowOnDisplay);
 
       if (event.key === "Backspace" || event.key === "Delete") {
-        props.showInPlate(null);
+        showInPlate(null);
       }
 
       if (event.altKey && event.key) {
         for (const key in shortCuts) {
           if (shortCuts[key] === `Alt+${event.key}`)
-            props.showInPlate(lines[key]);
+            showInPlate(lines[key]);
         }
       }
 
       if (event.ctrlKey && event.key) {
         for (const key in shortCuts) {
           if (shortCuts[key] === `Ctr+${event.key}`)
-            props.showInPlate(lines[key]);
+            showInPlate(lines[key]);
         }
       }
 
       if (event.key) {
         for (const key in shortCuts) {
-          if (shortCuts[key] === `${event.key}`) props.showInPlate(lines[key]);
+          if (shortCuts[key] === `${event.key}`) showInPlate(lines[key]);
         }
       }
 
       switch (event.key) {
         case "ArrowLeft":
           if (indexOFLine === 0) break;
-          else props.showInPlate(lines[indexOFLine - 1]);
+          else showInPlate(lines[indexOFLine - 1]);
           break;
         case "ArrowRight":
           if (indexOFLine === lines.length - 1) break;
-          else props.showInPlate(lines[indexOFLine + 1]);
+          else showInPlate(lines[indexOFLine + 1]);
           break;
       }
     };
@@ -73,22 +63,29 @@ const Page = (props) => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [props]);
+  });
 
   useEffect(() => {
-    const splitLines = originalKirtan
+    const splitLines = kirtan
       .split("\n")
       .filter((line) => line.trim() !== "");
     setLines(splitLines);
-  }, [originalKirtan]);
+  }, [kirtan]);
 
   useEffect(() => {
-    props.showInPlate(lines[0]);
+    showInPlate(lines[0]);
   }, [lines]);
 
   useEffect(() => {
-    setShowingLineState(lines.indexOf(props.toShowOnDisplay));
-  }, [props.toShowOnDisplay]);
+    setShowingLineState(lines.indexOf(toShowOnDisplay));
+  }, [toShowOnDisplay]);
+
+  useEffect(() => {
+    if (shortcutsData && Object.keys(shortcutsData).length > 0) {
+
+      SetShortCuts(shortcutsData);
+    }
+  }, [shortcutsData]);
 
   return (
     <div
@@ -99,7 +96,8 @@ const Page = (props) => {
         className="container flex items-center flex-col text-center p-4 text-4xl shadow h-[700px] overflow-y-auto overflow-x-hidden"
         style={{ fontFamily: "G_BEJOD_4", backgroundColor: "#ede5d4" }}
       >
-        {lines.map((line, index) => {
+
+        {lines.length > 0 && lines.map((line, index) => {
           return (
             <Stack
               className="m-1 py-[1px] w-full flex justify-center items-center"
@@ -110,20 +108,20 @@ const Page = (props) => {
                 {showingLineState === index ? (
                   <div className="w-[150px] inline opacity-100">
                     <i
-                      class="fa-solid fa-hand-point-right"
+                      className="fa-solid fa-hand-point-right"
                       style={{ color: "#3170dd" }}
                     ></i>{" "}
                   </div>
                 ) : (
                   <div className="w-[160px] inline opacity-0">
                     <i
-                      class="fa-solid fa-hand-point-right"
+                      className="fa-solid fa-hand-point-right"
                       style={{ color: "#3170dd" }}
                     ></i>{" "}
                   </div>
                 )}
-                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline-block", fontFamily: "G_BEJOD_4", width: "600px" }} key={index + 1} onClick={() => { props.showInPlate(line); }}>
-                  <Markdown components={{ p: ({ node, ...props }) => (<p style={{ display: "inline", cursor: "pointer" }}  {...props} />) }}>
+                <p className="cursor-grab m-1 text-3xl text-center" style={{ display: "inline-block", fontFamily: "G_BEJOD_4", width: "600px" }} key={index + 1} onClick={() => { showInPlate(line); }}>
+                  <Markdown>
                     {line}
                   </Markdown>
                 </p>

@@ -15,12 +15,9 @@ function App() {
   const fontSize = useSelector(state => state.viewPort.fontSize);
   const viewPortHeight = useSelector(state => state.viewPort.viewPortHeight);
 
-  const originalKirtan = JSON.parse(localStorage.getItem('originalKirtan'));
   const [toShowOnDisplay, setToShowOnDisplay] = useState('');
 
-  const showInPlate = (line) => {
-    setToShowOnDisplay(line);
-  };
+  const showInPlate = (line) => { setToShowOnDisplay(line); };
 
   return (
     <>
@@ -31,7 +28,7 @@ function App() {
           <Route path="/" element={
             <>
               <Navbar />
-              <Page showInPlate={showInPlate} toShowOnDisplay={toShowOnDisplay} originalKirtan={originalKirtan} />
+              <Page toShowOnDisplay={toShowOnDisplay} showInPlate={showInPlate} />
               <Plate toShowOnDisplay={toShowOnDisplay} backgroundColor={ViewPortBgColor} height={viewPortHeight} color={fontColorValue} fontSize={fontSize} fontWeight={viewPortFontWeight} />
             </>
           } />

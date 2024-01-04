@@ -41,7 +41,7 @@ export const addStepperSlice = createSlice({
             state.addStepperKirtan = action.payload;
         },
         setFontFamily: (state, action) => {
-            state.fontFamilt = action.payload;
+            state.fontFamily = action.payload;
         },
         setAddStepperShortCutsObject: (state, action) => {
             let index = action.payload[0];
@@ -49,9 +49,14 @@ export const addStepperSlice = createSlice({
             state.addStepperShortCutsObject[index] = shortCut;
         },
         setAddStepperKirtanSlice: (state, action) => {
-            for (let i = 0; i < action.payload; i++) {
-                state.addStepperShortCutsObject[i] = null;
+            let obj = {};
+            if (state.addStepperShortCutsObject) {
+                obj = { ...state.addStepperShortCutsObject };
             }
+            for (let i = 0; i < action.payload; i++) {
+                obj[i] = null;
+            }
+            state.addStepperShortCutsObject = obj;
         },
         setAddStepperShortCutsNewObject: (state, action) => {
             state.addStepperShortCutsObject = action.payload;
