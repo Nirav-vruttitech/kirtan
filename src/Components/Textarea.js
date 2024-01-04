@@ -10,7 +10,6 @@ import Showdown from 'showdown';
 import CKEditorCss from './../ckeditor.css';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import '../CSS/Ckeditor.css';
 
 const Textarea = () => {
     const turndownService = new TurndownService();
