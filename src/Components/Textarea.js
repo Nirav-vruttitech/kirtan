@@ -94,7 +94,6 @@ const Textarea = () => {
                 </div>
                 <div style={{ fontFamily: selectFontFamily, fontSize: '40px' }}>
                     <CKEditor
-                        max-height="500px"
                         editor={ClassicEditor}
                         data={ckeditorData}
                         onInit={

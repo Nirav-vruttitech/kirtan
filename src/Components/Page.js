@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Markdown from "react-markdown";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import '../CSS/Page.css';
 
 const Page = ({ toShowOnDisplay, showInPlate }) => {
   const dispatch = useDispatch();
@@ -89,12 +90,11 @@ const Page = ({ toShowOnDisplay, showInPlate }) => {
   }, [shortcutsData]);
 
   return (
-    <div className="p-3 place-self-center bg-gray-100 w-auto h-[850px]">
+    <div className="p-3 place-self-center bg-gray-100 w-auto h-screen lineBackground">
       <div
-        className="container flex items-center flex-col text-center p-4 text-4xl shadow h-[700px] overflow-y-auto overflow-x-hidden bg-[#ede5d4]"
+        class="container mt-16 flex items-center flex-col text-center p-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4] lineContainer"
         style={{ fontFamily: fontFamily }}
       >
-
         {lines.length > 0 && lines.map((line, index) => {
           return (
             <Stack

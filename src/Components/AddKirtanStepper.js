@@ -9,6 +9,7 @@ import Textarea from './Textarea';
 import Plate from './Plate';
 import AddViewPortPage from './AddViewPortPage';
 import IconButton from '@mui/material/IconButton';
+import '../CSS/Stepper.css';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setKirtan, setShortCut } from '../Slice/kirtanSlice';
@@ -135,12 +136,12 @@ const AddKirtanStepper = () => {
                     ) : (
                         <div className='mb-20'>
                             <div className='mt-2'>
-                                <div className='w-full h-[600px] m-auto'>
+                                <div className='w-full h-[600px] m-auto stepper-page'>
                                     <AddViewPortPage toShowOnDisplay={toShowOnDisplay} showInPlate={showInPlate} />
                                     <Plate toShowOnDisplay={toShowOnDisplay} backgroundColor={ViewPortBgColor} height={viewPortHeight} color={fontColorValue} fontSize={fontSize} fontWeight={viewPortFontWeight} fontFamily={fontFamily} />
                                 </div>
                             </div>
-                            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 5, alignItems: 'center', justifyContent: 'center' }}>
                                 <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 2, mt: 0, backgroundColor: 'black', color: 'white', ":hover": { backgroundColor: 'gray', color: 'white' } }} >
                                     Back
                                 </Button>

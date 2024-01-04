@@ -96,7 +96,7 @@ const Navbar = () => {
     };
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box className="h-16 fixed inset-x-0 top-0" sx={{ flexGrow: 1 }} >
             <AppBar position="static">
                 <Toolbar>
                     <Typography

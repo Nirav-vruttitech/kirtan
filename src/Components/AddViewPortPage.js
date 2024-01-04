@@ -113,7 +113,7 @@ const AddViewPortPage = ({ toShowOnDisplay, showInPlate }) => {
 
     return (
         <>
-            <div className="place-self-center overflow-y-scroll border-collapse" style={{ height: '650px', fontFamily: fontFamily }}>
+            <div class="place-self-center overflow-y-scroll border-collapse h-[600px] stepper-page" style={{ fontFamily: fontFamily }}>
                 <div className='container text-center p-4 text-4xl' style={{}}>
                     {lines.map((line, index) => {
                         return <Box sx={{ flexGrow: 1 }}>
