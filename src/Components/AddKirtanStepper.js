@@ -25,11 +25,11 @@ const AddKirtanStepper = () => {
     const [skipped, setSkipped] = useState(new Set());
     const [open, setOpen] = useState(false);
 
-    const fontSize = useSelector(state => state.addStepperSlice.addStepperFontSize);
-    const fontColorValue = useSelector(state => state.addStepperSlice.addStepperFontColorValue);
-    const viewPortFontWeight = useSelector(state => state.addStepperSlice.addStepperViewPortFontWeight);
-    const ViewPortBgColor = useSelector(state => state.addStepperSlice.addStepperViewPortBgColor);
-    const viewPortHeight = useSelector(state => state.addStepperSlice.addStepperViewPortHeight);
+    const fontSize = useSelector(state => state.viewPort.fontSize);
+    const fontColorValue = useSelector(state => state.viewPort.fontColorValue);
+    const viewPortFontWeight = useSelector(state => state.viewPort.viewPortFontWeight);
+    const ViewPortBgColor = useSelector(state => state.viewPort.ViewPortBgColor);
+    const viewPortHeight = useSelector(state => state.viewPort.viewPortHeight);
     const fontFamily = useSelector(state => state.kirtan.fontFamily);
 
     const addStepperKirtan = useSelector(state => state.addStepperSlice.addStepperKirtan);
@@ -76,21 +76,21 @@ const AddKirtanStepper = () => {
     };
 
     const handleSubmitClick = () => {
-        localStorage.setItem('fontSize', fontSize);
-        localStorage.setItem('viewPortFontWeight', viewPortFontWeight);
-        localStorage.setItem('viewPortHeight', viewPortHeight);
-        localStorage.setItem('fontColorValue', fontColorValue);
-        localStorage.setItem('ViewPortBgColor', ViewPortBgColor);
+        // localStorage.setItem('fontSize', fontSize);
+        // localStorage.setItem('viewPortFontWeight', viewPortFontWeight);
+        // localStorage.setItem('viewPortHeight', viewPortHeight);
+        // localStorage.setItem('fontColorValue', fontColorValue);
+        // localStorage.setItem('ViewPortBgColor', ViewPortBgColor);
         localStorage.setItem('kirtan', JSON.stringify(addStepperKirtan));
         localStorage.setItem('shortCutsObject', JSON.stringify(addStepperShortCutsObject));
 
         dispatch(setKirtan(addStepperKirtan));
         dispatch(setShortCut(addStepperShortCutsObject));
-        dispatch(setFontSize(fontSize));
-        dispatch(setFontColorValue(fontColorValue));
-        dispatch(setViewPortFontWeight(viewPortFontWeight));
-        dispatch(setViewPortBgColor(ViewPortBgColor));
-        dispatch(setViewPortHeight(viewPortHeight));
+        // dispatch(setFontSize(fontSize));
+        // dispatch(setFontColorValue(fontColorValue));
+        // dispatch(setViewPortFontWeight(viewPortFontWeight));
+        // dispatch(setViewPortBgColor(ViewPortBgColor));
+        // dispatch(setViewPortHeight(viewPortHeight));
     };
 
     return (
@@ -115,8 +115,7 @@ const AddKirtanStepper = () => {
                                 <IconButton size="medium" edge="start" color="inherit" onClick={() => { handleModalToggle(true); }} aria-label="open drawer">
                                     <i className="fa-solid fa-gear fa-lg mx-3 absolute left-[153px] top-[8.5px]"></i>
                                 </IconButton>
-                                <SettingModal open={open} handleModalToggle={handleModalToggle} fontSize={fontSize} viewPortFontWeight={viewPortFontWeight} viewPortHeight={viewPortHeight} fontColorValue={fontColorValue} ViewPortBgColor={ViewPortBgColor}
-                                    handleSetFontSize={handleSetFontSize} handleSetFontColor={handleSetFontColor} handleSetFontWeight={handleSetFontWeight} handelViewPortBgColor={handelViewPortBgColor} handleSetViewPortHeight={handleSetViewPortHeight} /></>}
+                            </>}
                         </Stepper>
                     </div>
                     {activeStep === 0 ? (

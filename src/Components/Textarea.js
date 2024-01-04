@@ -10,6 +10,7 @@ import Showdown from 'showdown';
 import CKEditorCss from './../ckeditor.css';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import '../CSS/Ckeditor.css';
 
 const Textarea = () => {
     const turndownService = new TurndownService();
@@ -92,7 +93,7 @@ const Textarea = () => {
                         <MenuItem value="Hin_Vankachuka">Hin_Vankachuka</MenuItem>
                     </Select>
                 </div>
-                <div style={{ fontFamily: selectFontFamily, fontSize: '40px' }}>
+                <div class='ckeditor' style={{ fontFamily: selectFontFamily, fontSize: '40px', }}>
                     <CKEditor
                         editor={ClassicEditor}
                         data={ckeditorData}
@@ -100,8 +101,8 @@ const Textarea = () => {
                             editor => {
                                 editor.editing.view.change(writer => {
                                     writer.setStyle(
-                                        'max-height',
-                                        '500px',  // Set the max-height you desire
+                                        'height',
+                                        '500px',
                                         editor.editing.view.document.getRoot()
                                     );
                                     writer.setStyle(
