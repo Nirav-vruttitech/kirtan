@@ -15,8 +15,8 @@ const Plate = ({ toShowOnDisplay, backgroundColor, height, color, fontSize, font
 
     return (
         <div className='fixed inset-x-0 bottom-1'>
-            <div className="text-center  border-black border flex items-center w-full" style={style}>
-                <p className="text-center w-full "><Markdown>{toShowOnDisplay ? toShowOnDisplay : ''}</Markdown></p>
+            <div className="text-center  border-black border flex items-center w-full">
+                <div className="text-center w-full flex justify-center items-center" style={style}><Markdown className={`h-[${height}]`}>{toShowOnDisplay ? toShowOnDisplay : ''}</Markdown></div>
             </div>
         </div>
     );
