@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -55,6 +56,15 @@ const KirtanArea = ({ showInPlate }) => {
     dispatch(setAddStepperShortCutsObject([index, shortCutStringValue]));
     setShortCutValue(null);
     setShortCutValueArrayValueStore([]);
+    let currKirtanData = { ...kirtanData[selectedIndex] };
+
+    currKirtanData.shortcuts[index] = shortCutStringValue;
+
+    IndexedDBService.updateItem(currKirtanData)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => console.error(error));
   };
 
   const handleEditShortcutShowButton = (index) => setSelectedButton(index);
@@ -90,25 +100,19 @@ const KirtanArea = ({ showInPlate }) => {
       setShortCutValue(prevShortcuts.join("+"));
 
       if (event.altKey && event.key)
-        for (const key in addStepperShortCutsObject)
-          if (addStepperShortCutsObject[key] === `Alt+${event.key}`) {
-            const index = lines.indexOf(lines[key]);
-            handleCurrLineIndex(index);
-          }
+        for (const key in kirtanData[selectedIndex]?.shortcuts)
+          if (kirtanData[selectedIndex]?.shortcuts[key] == `Alt+${event.key}`)
+            handleCurrLineIndex(Number(key));
 
       if (event.ctrlKey && event.key)
-        for (const key in addStepperShortCutsObject)
-          if (addStepperShortCutsObject[key] === `Ctr+${event.key}`) {
-            const index = lines.indexOf(lines[key]);
-            handleCurrLineIndex(index);
-          }
+        for (const key in kirtanData[selectedIndex]?.shortcuts)
+          if (kirtanData[selectedIndex]?.shortcuts[key] == `Ctr+${event.key}`)
+            handleCurrLineIndex(Number(key));
 
       if (event.key)
-        for (const key in addStepperShortCutsObject)
-          if (addStepperShortCutsObject[key] === `${event.key}`) {
-            const index = lines.indexOf(lines[key]);
-            handleCurrLineIndex(index);
-          }
+        for (const key in kirtanData[selectedIndex]?.shortcuts)
+          if (kirtanData[selectedIndex]?.shortcuts[key] == `${event.key}`)
+            handleCurrLineIndex(Number(key));
 
       switch (event.key) {
         case "ArrowUp":
@@ -117,9 +121,11 @@ const KirtanArea = ({ showInPlate }) => {
           }
           break;
         case "ArrowDown":
-          if (currLineIndex < lines.length - 1) {
+          if (currLineIndex < kirtanData[selectedIndex]?.content?.length - 1) {
             handleCurrLineIndex(currLineIndex + 1);
           }
+          break;
+        default:
           break;
       }
     };
@@ -128,7 +134,9 @@ const KirtanArea = ({ showInPlate }) => {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [shortCutArrayValueStore, lines, addStepperShortCutsObject]);
 
-  const getKirtanById = () => kirtanData[selectedIndex];
+  const getKirtanById = () => {
+    return kirtanData[selectedIndex];
+  };
 
   useEffect(() => {
     const splitLines = kirtan.split("\n").filter((line) => line.trim() !== "");
@@ -150,7 +158,6 @@ const KirtanArea = ({ showInPlate }) => {
     <div className="p-3 place-self-center bg-gray-100 w-auto h-screen lineBackground mt-16">
       <Box className="flex w-full overflow-x-auto overflow-y-hidden pb-2 items-center justify-center gap-3">
         {Object.keys(kirtanData).map((key, index) => {
-          console.log("key: ", key, selectedIndex);
           return (
             <Box
               key={index}
@@ -207,8 +214,8 @@ const KirtanArea = ({ showInPlate }) => {
                     <Markdown>{line}</Markdown>
                   </p>
 
-                  {addStepperShortCutsObject[index] !== null &&
-                  addStepperShortCutsObject[index] !== undefined &&
+                  {getKirtanById().shortcuts[index] !== null &&
+                  getKirtanById().shortcuts[index] !== undefined &&
                   selectedButton !== index ? (
                     <Box>
                       <Button
@@ -221,7 +228,7 @@ const KirtanArea = ({ showInPlate }) => {
                         variant="contained"
                         onClick={() => handleEditShortcutShowButton(index)}
                       >
-                        {addStepperShortCutsObject[index]}
+                        {getKirtanById().shortcuts[index]}
                       </Button>
                     </Box>
                   ) : selectedButton === index ? (

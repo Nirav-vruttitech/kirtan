@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -38,9 +39,13 @@ const CkEditorTextArea = ({
 
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
+  const [editorData, setEditorData] = useState("");
+
   // const ckeditorData = converter.makeHtml(kirtan);
-  const ckeditorData =
-    location.pathname === "/edit" ? converter.makeHtml(kirtan) : "";
+  // const ckeditorData =
+  //   location.pathname === "/edit"
+  //     ? converter.makeHtml(kirtanData.content.join("\n"))
+  //     : "";
 
   const [selectFontFamily, setSelectFontFamily] = useState(
     useSelector((state) => state.kirtan.fontFamily)
@@ -61,9 +66,9 @@ const CkEditorTextArea = ({
     getEditorContent(latestData);
   };
 
-  useEffect(() => {
-    dispatch(setAddStepperKirtan(turndownService.turndown(ckeditorData)));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setAddStepperKirtan(turndownService.turndown(ckeditorData)));
+  // }, []);
 
   useEffect(() => {
     dispatch(
@@ -76,6 +81,12 @@ const CkEditorTextArea = ({
   useEffect(() => {
     IndexedDBService.getAllData().then((data) => setKirtanData(data[kirtanId]));
   }, [isDbInitialized, kirtanId]);
+
+  useEffect(() => {
+    if (kirtanData && Object.keys(kirtanData).length > 0) {
+      setEditorData(converter.makeHtml(kirtanData.content.join("\n")));
+    }
+  }, [kirtanData]);
 
   return (
     <>
@@ -137,7 +148,7 @@ const CkEditorTextArea = ({
         >
           <CKEditor
             editor={ClassicEditor}
-            data={ckeditorData}
+            data={editorData}
             onInit={(editor) => {
               editor.editing.view.change((writer) => {
                 writer.setStyle(

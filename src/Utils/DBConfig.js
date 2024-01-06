@@ -41,7 +41,6 @@ const IndexedDBService = {
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction([storeName], "readonly");
       const store = transaction.objectStore(storeName);
-      console.log('store: ', store);
       const request = store.get(key);
 
       request.onsuccess = (event) => {

@@ -1,8 +1,9 @@
+/* eslint-disable */
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../CSS/Stepper.css";
 import IndexedDBService from "../Utils/DBConfig";
@@ -10,13 +11,10 @@ import CkEditorTextArea from "./CkEditorTextArea";
 
 const AddKirtanStepper = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const isEdit = window.location.pathname.split("/")[1] === "edit";
 
-  const [kirtanId, setKirtanId] = useState(
-    window.location.pathname.split("/")[2]
-  );
+  const kirtanId = window.location.pathname.split("/")[2];
 
   const [kirtanTitle, setKirtanTitle] = useState("");
 
@@ -36,12 +34,23 @@ const AddKirtanStepper = () => {
 
   const handleSubmit = async () => {
     const DbData = {
-      id: isEdit ? kirtanId : Object.keys(kirtanData).length + 1,
+      id: isEdit ? Number(kirtanId) : Object.keys(kirtanData).length + 1,
       title: kirtanTitle,
       content: kirtanLines.split("\n").filter((line) => line !== ""),
-      shortcuts: {},
+      shortcuts: kirtanData[kirtanId]?.shortcuts || {
+        0: "1",
+        1: "2",
+        2: "3",
+        3: "4",
+        4: "5",
+        5: "6",
+        6: "7",
+        7: "8",
+        8: "9",
+      },
+
       settings: {
-        fontFamily: fontFamily,
+        fontFamily: kirtanData[kirtanId]?.settings?.fontFamily || fontFamily,
       },
     };
 
@@ -72,6 +81,13 @@ const AddKirtanStepper = () => {
     });
   }, [isDbInitialized]);
 
+  useEffect(() => {
+    if (Object.keys(kirtanData).length > 0) {
+      const currKirtanData = kirtanData[kirtanId];
+      currKirtanData && setKirtanTitle(currKirtanData.title);
+    }
+  }, [kirtanData]);
+
   return (
     <div className="w-full h-screen bg-gray-100">
       <div className="container pt-3">
@@ -81,9 +97,10 @@ const AddKirtanStepper = () => {
               id="outlined-basic"
               variant="filled"
               size="small"
-              label="Title"
+              label={kirtanTitle ? "" : "Title"}
               width="50%"
               autoComplete="off"
+              value={kirtanTitle}
               onChange={(e) => setKirtanTitle(e.target.value)}
             />
             <Box className="flex justify-end item-end gap-3 pb-2">
