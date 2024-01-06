@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -13,8 +14,14 @@ import Showdown from "showdown";
 import CKEditorCss from "./../ckeditor.css";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import IndexedDBService from "../Utils/DBConfig";
 
-const CkEditorTextArea = () => {
+const CkEditorTextArea = ({
+  getEditorContent,
+  getEditorFont,
+  isEdit,
+  kirtanId,
+}) => {
   const turndownService = new TurndownService();
   const converter = new Showdown.Converter();
   const location = useLocation();
@@ -24,13 +31,21 @@ const CkEditorTextArea = () => {
     useSelector((state) => state.kirtan.kirtan)
   );
 
+  const [kirtanData, setKirtanData] = useState({});
+
   const addStepperKirtan = useSelector(
     (state) => state.addStepperSlice.addStepperKirtan
   );
 
+  const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
+
+  const [editorData, setEditorData] = useState("");
+
   // const ckeditorData = converter.makeHtml(kirtan);
-  const ckeditorData =
-    location.pathname === "/edit" ? converter.makeHtml(kirtan) : "";
+  // const ckeditorData =
+  //   location.pathname === "/edit"
+  //     ? converter.makeHtml(kirtanData.content.join("\n"))
+  //     : "";
 
   const [selectFontFamily, setSelectFontFamily] = useState(
     useSelector((state) => state.kirtan.fontFamily)
@@ -40,6 +55,7 @@ const CkEditorTextArea = () => {
     setSelectFontFamily(event.target.value);
     dispatch(setFontFamily(event.target.value));
     localStorage.setItem("fontFamily", event.target.value);
+    getEditorFont(event.target.value);
   };
 
   const handleEditorChange = async (event, editor) => {
@@ -47,11 +63,12 @@ const CkEditorTextArea = () => {
     const markdown = turndownService.turndown(data);
     const latestData = markdown === "" ? "fgg" : markdown;
     dispatch(setAddStepperKirtan(latestData));
+    getEditorContent(latestData);
   };
 
-  useEffect(() => {
-    dispatch(setAddStepperKirtan(turndownService.turndown(ckeditorData)));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setAddStepperKirtan(turndownService.turndown(ckeditorData)));
+  // }, []);
 
   useEffect(() => {
     dispatch(
@@ -60,6 +77,16 @@ const CkEditorTextArea = () => {
       )
     );
   }, [addStepperKirtan]);
+
+  useEffect(() => {
+    IndexedDBService.getAllData().then((data) => setKirtanData(data[kirtanId]));
+  }, [isDbInitialized, kirtanId]);
+
+  useEffect(() => {
+    if (kirtanData && Object.keys(kirtanData).length > 0) {
+      setEditorData(converter.makeHtml(kirtanData.content.join("\n")));
+    }
+  }, [kirtanData]);
 
   return (
     <>
@@ -121,7 +148,7 @@ const CkEditorTextArea = () => {
         >
           <CKEditor
             editor={ClassicEditor}
-            data={ckeditorData}
+            data={editorData}
             onInit={(editor) => {
               editor.editing.view.change((writer) => {
                 writer.setStyle(

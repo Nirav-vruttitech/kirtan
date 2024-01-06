@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AddKirtanStepper from "./Components/AddKirtan";
 import KirtanLinePlate from "./Components/KirtanLinePlate";
 import Navbar from "./Components/Navbar";
 import KirtanArea from "./Components/KirtanArea";
 import "./App.css";
+import IndexedDBService from "./Utils/DBConfig";
+import { setDbStatus } from "./Slice/dbSlice";
 
 function App() {
   const ViewPortBgColor = useSelector(
@@ -15,6 +17,8 @@ function App() {
   const viewPortFontWeight = useSelector(
     (state) => state.viewPort.viewPortFontWeight
   );
+
+  const dispatch = useDispatch();
 
   const fontSize = useSelector((state) => state.viewPort.fontSize);
 
@@ -28,10 +32,16 @@ function App() {
 
   const showInPlate = (line) => setToShowOnDisplay(line);
 
+  useEffect(() => {
+    IndexedDBService.initDB()
+      .then(() => dispatch(setDbStatus(true)))
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/edit" element={<AddKirtanStepper />} />
+        <Route path="/edit/:id" element={<AddKirtanStepper />} />
         <Route path="/input" element={<AddKirtanStepper />} />
         <Route
           path="/"
@@ -42,7 +52,6 @@ function App() {
                 toShowOnDisplay={toShowOnDisplay}
                 showInPlate={showInPlate}
               />
-              {/* <AddViewPortPage /> */}
               <KirtanLinePlate
                 toShowOnDisplay={toShowOnDisplay}
                 backgroundColor={ViewPortBgColor}
