@@ -13,8 +13,14 @@ import Showdown from "showdown";
 import CKEditorCss from "./../ckeditor.css";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import IndexedDBService from "../Utils/DBConfig";
 
-const CkEditorTextArea = () => {
+const CkEditorTextArea = ({
+  getEditorContent,
+  getEditorFont,
+  isEdit,
+  kirtanId,
+}) => {
   const turndownService = new TurndownService();
   const converter = new Showdown.Converter();
   const location = useLocation();
@@ -24,9 +30,13 @@ const CkEditorTextArea = () => {
     useSelector((state) => state.kirtan.kirtan)
   );
 
+  const [kirtanData, setKirtanData] = useState({});
+
   const addStepperKirtan = useSelector(
     (state) => state.addStepperSlice.addStepperKirtan
   );
+
+  const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
   // const ckeditorData = converter.makeHtml(kirtan);
   const ckeditorData =
@@ -40,6 +50,7 @@ const CkEditorTextArea = () => {
     setSelectFontFamily(event.target.value);
     dispatch(setFontFamily(event.target.value));
     localStorage.setItem("fontFamily", event.target.value);
+    getEditorFont(event.target.value);
   };
 
   const handleEditorChange = async (event, editor) => {
@@ -47,6 +58,7 @@ const CkEditorTextArea = () => {
     const markdown = turndownService.turndown(data);
     const latestData = markdown === "" ? "fgg" : markdown;
     dispatch(setAddStepperKirtan(latestData));
+    getEditorContent(latestData);
   };
 
   useEffect(() => {
@@ -60,6 +72,10 @@ const CkEditorTextArea = () => {
       )
     );
   }, [addStepperKirtan]);
+
+  useEffect(() => {
+    IndexedDBService.getAllData().then((data) => setKirtanData(data[kirtanId]));
+  }, [isDbInitialized, kirtanId]);
 
   return (
     <>
