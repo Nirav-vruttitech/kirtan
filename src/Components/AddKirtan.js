@@ -48,7 +48,7 @@ const AddKirtanStepper = () => {
         7: "8",
         8: "9",
       },
-
+      originalContent: kirtanLines,
       settings: {
         fontFamily: kirtanData[kirtanId]?.settings?.fontFamily || fontFamily,
       },

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "../CSS/Page.css";
 import { setAddStepperShortCutsObject } from "./../Slice/addStepperSlice";
 import IndexedDBService from "../Utils/DBConfig";
-import { setCurrKirtanIndex } from "../Slice/KirtanIndexSlice";
+import { setCurrKirtanIndex, setKirtanIndex } from "../Slice/KirtanIndexSlice";
 
 const KirtanArea = ({ showInPlate }) => {
   const dispatch = useDispatch();
@@ -168,7 +168,7 @@ const KirtanArea = ({ showInPlate }) => {
               className="flex justify-center items-center text-2xl cursor-pointer px-6 py-1.5 rounded-lg shadow-md select-none font-semibold capitalize transition-all duration-300 ease-in-out"
               onClick={() => {
                 setSelectedIndex(key);
-                dispatch(setCurrKirtanIndex(key));
+                dispatch(setKirtanIndex(key));
               }}
             >
               {kirtanData[key].title}

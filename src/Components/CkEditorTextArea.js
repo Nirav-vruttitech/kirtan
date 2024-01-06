@@ -8,7 +8,6 @@ import {
   setAddStepperKirtanSlice,
 } from "../Slice/addStepperSlice";
 import { setFontFamily } from "../Slice/kirtanSlice";
-import { useLocation } from "react-router-dom";
 import TurndownService from "turndown";
 import Showdown from "showdown";
 import CKEditorCss from "./../ckeditor.css";
@@ -16,20 +15,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import IndexedDBService from "../Utils/DBConfig";
 
-const CkEditorTextArea = ({
-  getEditorContent,
-  getEditorFont,
-  isEdit,
-  kirtanId,
-}) => {
+const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
   const turndownService = new TurndownService();
-  const converter = new Showdown.Converter();
-  const location = useLocation();
-  const dispatch = useDispatch();
 
-  const [kirtan, setKirtan] = useState(
-    useSelector((state) => state.kirtan.kirtan)
-  );
+  const converter = new Showdown.Converter();
+
+  const dispatch = useDispatch();
 
   const [kirtanData, setKirtanData] = useState({});
 
@@ -40,12 +31,6 @@ const CkEditorTextArea = ({
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
   const [editorData, setEditorData] = useState("");
-
-  // const ckeditorData = converter.makeHtml(kirtan);
-  // const ckeditorData =
-  //   location.pathname === "/edit"
-  //     ? converter.makeHtml(kirtanData.content.join("\n"))
-  //     : "";
 
   const [selectFontFamily, setSelectFontFamily] = useState(
     useSelector((state) => state.kirtan.fontFamily)
@@ -66,10 +51,6 @@ const CkEditorTextArea = ({
     getEditorContent(latestData);
   };
 
-  // useEffect(() => {
-  //   dispatch(setAddStepperKirtan(turndownService.turndown(ckeditorData)));
-  // }, []);
-
   useEffect(() => {
     dispatch(
       setAddStepperKirtanSlice(
@@ -84,7 +65,7 @@ const CkEditorTextArea = ({
 
   useEffect(() => {
     if (kirtanData && Object.keys(kirtanData).length > 0) {
-      setEditorData(converter.makeHtml(kirtanData.content.join("\n")));
+      setEditorData(converter.makeHtml(kirtanData.originalContent));
     }
   }, [kirtanData]);
 
