@@ -8,15 +8,14 @@ import Markdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 import "../CSS/Page.css";
 import { setAddStepperShortCutsObject } from "./../Slice/addStepperSlice";
+import { setCurrIndex } from "../Slice/kirtanLineSlice";
 
-const KirtanArea = ({ toShowOnDisplay, showInPlate }) => {
+const KirtanArea = () => {
   const dispatch = useDispatch();
 
   const [lines, setLines] = useState([]);
 
-  const [showingLineState, setShowingLineState] = useState(
-    lines.indexOf(toShowOnDisplay)
-  );
+  const [currLineIndex, setCurrLineIndex] = useState(0);
 
   const [shortCutValue, setShortCutValue] = useState(null);
 
@@ -26,54 +25,28 @@ const KirtanArea = ({ toShowOnDisplay, showInPlate }) => {
     []
   );
 
-  const [shortCuts, SetShortCuts] = useState({});
+  const [kirtanWithShortcuts, setKirtanWithShortcuts] = useState([]);
+
+  const handleCurrLineIndex = (index) => {
+    setCurrLineIndex(index);
+    dispatch(setCurrIndex(index));
+  };
 
   const kirtan = useSelector((state) => state.kirtan.kirtan);
 
-  const shortcutsData = useSelector((state) => state.kirtan.shortCut);
+  const kirtanWithPredefinedShortCuts = useSelector(
+    (state) => state.kirtan.kirtanWithPredefinedShortCuts
+  );
+
+  useEffect(() => {
+    setKirtanWithShortcuts(kirtanWithPredefinedShortCuts);
+  }, [kirtanWithPredefinedShortCuts]);
 
   const fontFamily = useSelector((state) => state.kirtan.fontFamily);
 
   const addStepperShortCutsObject = useSelector(
     (state) => state.addStepperSlice.addStepperShortCutsObject
   ) || { 1: null };
-
-  useEffect(() => {
-    const handleKeyPress = (event) => {
-      event.preventDefault();
-      let indexOFLine = lines.indexOf(toShowOnDisplay);
-
-      if (event.key === "Backspace" || event.key === "Delete")
-        showInPlate(null);
-
-      if (event.altKey && event.key)
-        for (const key in shortCuts)
-          if (shortCuts[key] === `Alt+${event.key}`) showInPlate(lines[key]);
-
-      if (event.ctrlKey && event.key)
-        for (const key in shortCuts)
-          if (shortCuts[key] === `Ctr+${event.key}`) showInPlate(lines[key]);
-
-      if (event.key)
-        for (const key in shortCuts)
-          if (shortCuts[key] === `${event.key}`) showInPlate(lines[key]);
-
-      switch (event.key) {
-        case "ArrowLeft":
-          if (indexOFLine === 0) break;
-          else showInPlate(lines[indexOFLine - 1]);
-          break;
-        case "ArrowRight":
-          if (indexOFLine === lines.length - 1) break;
-          else showInPlate(lines[indexOFLine + 1]);
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  });
 
   const handleShowButton = (index) => setSelectedButton(index);
 
@@ -82,6 +55,17 @@ const KirtanArea = ({ toShowOnDisplay, showInPlate }) => {
 
   const handleData = (index) => {
     const shortCutStringValue = shortCutValue === "" ? null : shortCutValue;
+
+    let newKirtanWithShortcut = [...kirtanWithShortcuts];
+    console.log('newKirtanWithShortcut: ', newKirtanWithShortcut);
+
+    newKirtanWithShortcut[index].shortCut = shortCutStringValue;
+
+    localStorage.setItem(
+      "addKirtanWithPredefinedShortCuts",
+      JSON.stringify(newKirtanWithShortcut)
+    );
+
     dispatch(setAddStepperShortCutsObject([index, shortCutStringValue]));
     setShortCutValue(null);
     setShortCutValueArrayValueStore([]);
@@ -121,59 +105,51 @@ const KirtanArea = ({ toShowOnDisplay, showInPlate }) => {
 
       if (event.altKey && event.key)
         for (const key in addStepperShortCutsObject)
-          if (addStepperShortCutsObject[key] === `Alt+${event.key}`)
-            showInPlate(lines[key]);
+          if (addStepperShortCutsObject[key] === `Alt+${event.key}`) {
+            const index = lines.indexOf(lines[key]);
+            handleCurrLineIndex(index);
+          }
 
       if (event.ctrlKey && event.key)
         for (const key in addStepperShortCutsObject)
-          if (addStepperShortCutsObject[key] === `Ctr+${event.key}`)
-            showInPlate(lines[key]);
+          if (addStepperShortCutsObject[key] === `Ctr+${event.key}`) {
+            const index = lines.indexOf(lines[key]);
+            handleCurrLineIndex(index);
+          }
 
       if (event.key)
         for (const key in addStepperShortCutsObject)
-          if (addStepperShortCutsObject[key] === `${event.key}`)
-            showInPlate(lines[key]);
+          if (addStepperShortCutsObject[key] === `${event.key}`) {
+            const index = lines.indexOf(lines[key]);
+            handleCurrLineIndex(index);
+          }
 
-      // Arrow key handler
-      let indexOFLine = lines.indexOf(toShowOnDisplay);
       switch (event.key) {
         case "ArrowUp":
-          if (indexOFLine > 0) showInPlate(lines[indexOFLine - 1]);
+          if (currLineIndex > 0) {
+            handleCurrLineIndex(currLineIndex - 1);
+          }
           break;
         case "ArrowDown":
-          if (indexOFLine < lines.length - 1)
-            showInPlate(lines[indexOFLine + 1]);
+          if (currLineIndex < lines.length - 1) {
+            handleCurrLineIndex(currLineIndex + 1);
+          }
           break;
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [
-    toShowOnDisplay,
-    shortCutArrayValueStore,
-    lines,
-    addStepperShortCutsObject,
-  ]);
+  }, [shortCutArrayValueStore, lines, addStepperShortCutsObject]);
+
+  // useEffect(() => {
+  //   const splitLines = kirtan.split("\n").filter((line) => line.trim() !== "");
+  //   setLines(splitLines);
+  // }, [kirtan]);
 
   useEffect(() => {
-    const splitLines = kirtan.split("\n").filter((line) => line.trim() !== "");
-    setLines(splitLines);
-  }, [kirtan]);
-
-  useEffect(() => {
-    showInPlate(lines[0]);
-  }, [lines]);
-
-  useEffect(() => {
-    setShowingLineState(lines.indexOf(toShowOnDisplay));
-  }, [toShowOnDisplay]);
-
-  useEffect(() => {
-    if (shortcutsData && Object.keys(shortcutsData).length > 0) {
-      SetShortCuts(shortcutsData);
-    }
-  }, [shortcutsData]);
+    setLines(kirtanWithPredefinedShortCuts);
+  }, [kirtanWithPredefinedShortCuts]);
 
   return (
     <div className="p-3 place-self-center bg-gray-100 w-auto h-screen lineBackground">
@@ -182,7 +158,8 @@ const KirtanArea = ({ toShowOnDisplay, showInPlate }) => {
         style={{ fontFamily: fontFamily }}
       >
         {lines.length > 0 &&
-          lines.map((line, index) => {
+          lines.map((kirtanLineData, index) => {
+            if (kirtanLineData.line === "") return null;
             return (
               <Stack
                 className="m-1 py-[1px] w-full flex justify-center items-center"
@@ -196,7 +173,7 @@ const KirtanArea = ({ toShowOnDisplay, showInPlate }) => {
                 >
                   <div
                     className={`inline ${
-                      showingLineState === index ? "opacity-100" : "opacity-0"
+                      currLineIndex === index ? "opacity-100" : "opacity-0"
                     } `}
                   >
                     <i
@@ -205,12 +182,13 @@ const KirtanArea = ({ toShowOnDisplay, showInPlate }) => {
                     ></i>{" "}
                   </div>
                   <p
-                    className="cursor-grab m-1 text-3xl text-center"
+                    className="cursor-pointer m-1 text-3xl text-center"
                     style={{ fontFamily: fontFamily }}
                     key={index + 1}
-                    onClick={() => showInPlate(line)}
+                    onClick={() => handleCurrLineIndex(index)}
                   >
-                    <Markdown>{line}</Markdown>
+                    <Markdown>{kirtanLineData.line}</Markdown>
+                    {/* <Markdown>{kirtanLineData}</Markdown> */}
                   </p>
 
                   {addStepperShortCutsObject[index] !== null &&

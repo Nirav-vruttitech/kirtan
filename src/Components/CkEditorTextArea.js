@@ -6,7 +6,10 @@ import {
   setAddStepperKirtan,
   setAddStepperKirtanSlice,
 } from "../Slice/addStepperSlice";
-import { setFontFamily } from "../Slice/kirtanSlice";
+import {
+  setAddKirtanWithPredefinedShortCuts,
+  setFontFamily,
+} from "../Slice/kirtanSlice";
 import { useLocation } from "react-router-dom";
 import TurndownService from "turndown";
 import Showdown from "showdown";
@@ -24,13 +27,20 @@ const CkEditorTextArea = () => {
     useSelector((state) => state.kirtan.kirtan)
   );
 
+  const [kirtanData, setKirtanData] = useState(
+    useSelector((state) => state.kirtan.kirtanWithPredefinedShortCuts)
+      .map((item) => item.line)
+      .join("\n")
+  );
+
   const addStepperKirtan = useSelector(
     (state) => state.addStepperSlice.addStepperKirtan
   );
 
-  // const ckeditorData = converter.makeHtml(kirtan);
   const ckeditorData =
     location.pathname === "/edit" ? converter.makeHtml(kirtan) : "";
+
+  const ckeditorKirtanData = converter.makeHtml(kirtanData);
 
   const [selectFontFamily, setSelectFontFamily] = useState(
     useSelector((state) => state.kirtan.fontFamily)
@@ -46,6 +56,28 @@ const CkEditorTextArea = () => {
     const data = editor.getData();
     const markdown = turndownService.turndown(data);
     const latestData = markdown === "" ? "fgg" : markdown;
+
+    if (latestData !== "fgg") {
+      let arrayData = latestData.split("\n");
+      arrayData = arrayData.filter((line) => line.trim() !== "");
+      const newObj = arrayData.map((item, index) => {
+        let returnObj = {};
+        if (index < 9) {
+          returnObj = {
+            line: item,
+            shortCut: index + 1,
+          };
+        } else {
+          returnObj = {
+            line: item,
+            shortCut: null,
+          };
+        }
+        return returnObj;
+      });
+      dispatch(setAddKirtanWithPredefinedShortCuts(newObj));
+    }
+
     dispatch(setAddStepperKirtan(latestData));
   };
 
@@ -121,7 +153,7 @@ const CkEditorTextArea = () => {
         >
           <CKEditor
             editor={ClassicEditor}
-            data={ckeditorData}
+            data={ckeditorKirtanData}
             onInit={(editor) => {
               editor.editing.view.change((writer) => {
                 writer.setStyle(
