@@ -1,36 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 import AddKirtanStepper from "./Components/AddKirtan";
+import KirtanArea from "./Components/KirtanArea";
 import KirtanLinePlate from "./Components/KirtanLinePlate";
 import Navbar from "./Components/Navbar";
-import KirtanArea from "./Components/KirtanArea";
-import "./App.css";
-import IndexedDBService from "./Utils/DBConfig";
 import { setDbStatus } from "./Slice/dbSlice";
+import IndexedDBService from "./Utils/DBConfig";
 
 function App() {
   const dispatch = useDispatch();
-
-  const ViewPortBgColor = useSelector(
-    (state) => state.viewPort.ViewPortBgColor
-  );
-
-  const viewPortFontWeight = useSelector(
-    (state) => state.viewPort.viewPortFontWeight
-  );
-
-  const fontSize = useSelector((state) => state.viewPort.fontSize);
-
-  const fontFamily = useSelector((state) => state.kirtan.fontFamily);
-
-  const viewPortHeight = useSelector((state) => state.viewPort.viewPortHeight);
-
-  const fontColorValue = useSelector((state) => state.viewPort.fontColorValue);
-
-  const [toShowOnDisplay, setToShowOnDisplay] = useState("");
-
-  const showInPlate = (line) => setToShowOnDisplay(line);
 
   useEffect(() => {
     IndexedDBService.initDB()
@@ -48,19 +28,8 @@ function App() {
           element={
             <React.Fragment>
               <Navbar />
-              <KirtanArea
-                toShowOnDisplay={toShowOnDisplay}
-                showInPlate={showInPlate}
-              />
-              <KirtanLinePlate
-                toShowOnDisplay={toShowOnDisplay}
-                backgroundColor={ViewPortBgColor}
-                height={viewPortHeight}
-                color={fontColorValue}
-                fontSize={fontSize}
-                fontWeight={viewPortFontWeight}
-                fontFamily={fontFamily}
-              />
+              <KirtanArea />
+              <KirtanLinePlate />
             </React.Fragment>
           }
         />

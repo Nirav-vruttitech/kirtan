@@ -7,7 +7,7 @@ import {
   setAddStepperKirtan,
   setAddStepperKirtanSlice,
 } from "../Slice/addStepperSlice";
-import { setFontFamily } from "../Slice/kirtanSlice";
+import { setKirtanFontFamily } from "../Slice/kirtanSlice";
 import TurndownService from "turndown";
 import Showdown from "showdown";
 import CKEditorCss from "./../ckeditor.css";
@@ -38,7 +38,7 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
 
   const handleSelectFontFamilyChange = (event) => {
     setSelectFontFamily(event.target.value);
-    dispatch(setFontFamily(event.target.value));
+    dispatch(setKirtanFontFamily(event.target.value));
     localStorage.setItem("fontFamily", event.target.value);
     getEditorFont(event.target.value);
   };

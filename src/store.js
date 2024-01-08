@@ -4,6 +4,7 @@ import addStepperSlice from "./Slice/addStepperSlice";
 import kirtan from "./Slice/kirtanSlice";
 import KirtanIndex from "./Slice/KirtanIndexSlice";
 import DBConfig from "./Slice/dbSlice";
+import settings from "./Slice/settingsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     kirtan: kirtan,
     kirtanIndex: KirtanIndex,
     db: DBConfig,
+    settings: settings,
   },
 });

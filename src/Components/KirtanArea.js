@@ -12,7 +12,7 @@ import { setAddStepperShortCutsObject } from "./../Slice/addStepperSlice";
 import IndexedDBService from "../Utils/DBConfig";
 import { setCurrKirtanIndex, setKirtanIndex } from "../Slice/KirtanIndexSlice";
 
-const KirtanArea = ({ showInPlate }) => {
+const KirtanArea = () => {
   const dispatch = useDispatch();
 
   const [lines, setLines] = useState([]);
@@ -151,10 +151,6 @@ const KirtanArea = ({ showInPlate }) => {
     const splitLines = kirtan.split("\n").filter((line) => line.trim() !== "");
     setLines(splitLines);
   }, [kirtan]);
-
-  useEffect(() => {
-    showInPlate(lines[0]);
-  }, [lines]);
 
   useEffect(() => {
     isDbInitialized &&

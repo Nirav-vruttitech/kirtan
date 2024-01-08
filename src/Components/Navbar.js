@@ -1,23 +1,16 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { styled, alpha } from "@mui/material/styles";
 import { Button } from "@mui/material";
+import { alpha, styled } from "@mui/material/styles";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  setFontSize,
-  setViewPortFontWeight,
-  setViewPortHeight,
-  setFontColorValue,
-  setViewPortBgColor,
-} from "./../Slice/plateSlice";
-import SettingModal from "./SettingModal";
+import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import SearchIcon from "@mui/icons-material/Search";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import SettingModal from "./SettingModal";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -63,51 +56,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
 
-  const fontSize = useSelector((state) => state.viewPort.fontSize);
-  const viewPortFontWeight = useSelector(
-    (state) => state.viewPort.viewPortFontWeight
-  );
-  const viewPortHeight = useSelector((state) => state.viewPort.viewPortHeight);
-  const fontColorValue = useSelector((state) => state.viewPort.fontColorValue);
-  const ViewPortBgColor = useSelector(
-    (state) => state.viewPort.ViewPortBgColor
-  );
+  const [open, setOpen] = useState(false);
 
   const handleModalToggle = (value) => setOpen(value);
 
-  const handleAddEditButtonNavigate = (value) => {
-    navigate(value);
-  };
+  const handleAddEditButtonNavigate = (value) => navigate(value);
 
   const kirtanId = useSelector((state) => state.kirtanIndex.kirtanId);
-
-  const handleSetFontWeight = (value) => {
-    localStorage.setItem("viewPortFontWeight", viewPortFontWeight);
-    dispatch(setViewPortFontWeight(value));
-  };
-
-  const handleSetFontSize = (value) => {
-    localStorage.setItem("fontSize", fontSize);
-    dispatch(setFontSize(`${value}px`));
-  };
-
-  const handleSetFontColor = (value) => {
-    localStorage.setItem("fontColorValue", value);
-    dispatch(setFontColorValue(value));
-  };
-
-  const handelViewPortBgColor = (value) => {
-    localStorage.setItem("ViewPortBgColor", value);
-    dispatch(setViewPortBgColor(value));
-  };
-
-  const handleSetViewPortHeight = (value) => {
-    localStorage.setItem("viewPortHeight", viewPortHeight);
-    dispatch(setViewPortHeight(`${value}px`));
-  };
 
   return (
     <Box className="h-16 fixed inset-x-0 top-0" sx={{ flexGrow: 1 }}>
@@ -161,20 +117,7 @@ const Navbar = () => {
           >
             <i className="fa-solid fa-gear fa-lg mx-3"></i>
           </IconButton>
-          <SettingModal
-            open={open}
-            handleModalToggle={handleModalToggle}
-            fontSize={fontSize}
-            viewPortFontWeight={viewPortFontWeight}
-            viewPortHeight={viewPortHeight}
-            fontColorValue={fontColorValue}
-            ViewPortBgColor={ViewPortBgColor}
-            handleSetFontSize={handleSetFontSize}
-            handleSetFontColor={handleSetFontColor}
-            handleSetFontWeight={handleSetFontWeight}
-            handelViewPortBgColor={handelViewPortBgColor}
-            handleSetViewPortHeight={handleSetViewPortHeight}
-          />
+          <SettingModal open={open} handleModalToggle={handleModalToggle} />
         </Toolbar>
       </AppBar>
     </Box>

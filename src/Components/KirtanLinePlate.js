@@ -4,23 +4,7 @@ import { useSelector } from "react-redux";
 import IndexedDBService from "../Utils/DBConfig";
 import "../CSS/MarkDown.css";
 
-const KirtanLinePlate = ({
-  backgroundColor,
-  height,
-  color,
-  fontSize,
-  fontWeight,
-  fontFamily,
-}) => {
-  const style = {
-    fontFamily,
-    backgroundColor,
-    height,
-    color,
-    fontSize,
-    fontWeight,
-  };
-
+const KirtanLinePlate = () => {
   const [kirtanData, setKirtanData] = useState({});
 
   const currIndex = useSelector((state) => state.kirtanIndex.currIndex);
@@ -31,16 +15,32 @@ const KirtanLinePlate = ({
 
   const [currLine, setCurrLine] = useState("");
 
-  // function isColorLight(color) {
-  //   // Assuming color is in HEX format like "#RRGGBB"
-  //   const hex = color.replace("#", "");
-  //   const r = parseInt(hex.substring(0, 2), 16);
-  //   const g = parseInt(hex.substring(2, 4), 16);
-  //   const b = parseInt(hex.substring(4, 6), 16);
+  const [styles, setStyles] = useState({});
 
-  //   const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-  //   return luminance > 128; // You can adjust the threshold here
-  // }
+  const backgroundColor = useSelector(
+    (state) => state.settings.backgroundColor
+  );
+
+  const color = useSelector((state) => state.settings.color);
+
+  const fontFamily = useSelector((state) => state.settings.fontFamily);
+
+  const fontSize = useSelector((state) => state.settings.fontSize);
+
+  const fontWeight = useSelector((state) => state.settings.fontWeight);
+
+  const height = useSelector((state) => state.settings.height);
+
+  useEffect(() => {
+    setStyles({
+      backgroundColor,
+      color,
+      fontFamily,
+      fontSize,
+      fontWeight,
+      height,
+    });
+  }, [backgroundColor, color, fontFamily, fontSize, fontWeight, height]);
 
   useEffect(() => {
     const currLine = kirtanData[kirtanId]?.content[currIndex];
@@ -64,9 +64,9 @@ const KirtanLinePlate = ({
       <div className="text-center  border-black border flex items-center w-full">
         <div
           className="text-center w-full flex justify-center items-center"
-          style={style}
+          style={styles}
         >
-          <Markdown className={`h-[${height}]`}>{currLine}</Markdown>
+          <Markdown className={`h-[${styles.height}]`}>{currLine}</Markdown>
         </div>
       </div>
     </div>
