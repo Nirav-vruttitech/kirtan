@@ -60,7 +60,11 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
   }, [addStepperKirtan]);
 
   useEffect(() => {
-    IndexedDBService.getAllData().then((data) => setKirtanData(data[kirtanId]));
+    IndexedDBService.getAllData().then((data) =>
+      setKirtanData(
+        Object.values(data).find((kirtan) => kirtan.id === Number(kirtanId))
+      )
+    );
   }, [isDbInitialized, kirtanId]);
 
   useEffect(() => {
@@ -124,7 +128,7 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
           </Select>
         </div>
         <div
-          class="ckeditor"
+          className="ckeditor"
           style={{ fontFamily: selectFontFamily, fontSize: "40px" }}
         >
           <CKEditor

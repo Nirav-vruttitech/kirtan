@@ -99,31 +99,40 @@ const KirtanArea = ({ showInPlate }) => {
       setShortCutValueArrayValueStore(prevShortcuts);
       setShortCutValue(prevShortcuts.join("+"));
 
-      if (event.altKey && event.key)
-        for (const key in kirtanData[selectedIndex]?.shortcuts)
-          if (kirtanData[selectedIndex]?.shortcuts[key] == `Alt+${event.key}`)
+      if (event.altKey && event.key) {
+        for (const key in kirtanData[selectedIndex]?.shortcuts) {
+          if (kirtanData[selectedIndex]?.shortcuts[key] == `Alt+${event.key}`) {
             handleCurrLineIndex(Number(key));
+            return;
+          }
+        }
+      }
 
-      if (event.ctrlKey && event.key)
-        for (const key in kirtanData[selectedIndex]?.shortcuts)
-          if (kirtanData[selectedIndex]?.shortcuts[key] == `Ctr+${event.key}`)
+      if (event.ctrlKey && event.key) {
+        for (const key in kirtanData[selectedIndex]?.shortcuts) {
+          if (kirtanData[selectedIndex]?.shortcuts[key] == `Ctr+${event.key}`) {
             handleCurrLineIndex(Number(key));
+            return;
+          }
+        }
+      }
 
-      if (event.key)
-        for (const key in kirtanData[selectedIndex]?.shortcuts)
-          if (kirtanData[selectedIndex]?.shortcuts[key] == `${event.key}`)
+      if (event.key) {
+        for (const key in kirtanData[selectedIndex]?.shortcuts) {
+          if (kirtanData[selectedIndex]?.shortcuts[key] == `${event.key}`) {
             handleCurrLineIndex(Number(key));
+            return;
+          }
+        }
+      }
 
       switch (event.key) {
         case "ArrowUp":
-          if (currLineIndex > 0) {
-            handleCurrLineIndex(currLineIndex - 1);
-          }
+          if (currLineIndex > 0) handleCurrLineIndex(currLineIndex - 1);
           break;
         case "ArrowDown":
-          if (currLineIndex < kirtanData[selectedIndex]?.content?.length - 1) {
+          if (currLineIndex < kirtanData[selectedIndex]?.content?.length - 1)
             handleCurrLineIndex(currLineIndex + 1);
-          }
           break;
         default:
           break;
@@ -162,13 +171,13 @@ const KirtanArea = ({ showInPlate }) => {
             <Box
               key={index}
               style={{
-                backgroundColor: selectedIndex == key ? "#1976D2" : "#ffffff",
+                backgroundColor: selectedIndex == key ? "#2196f3" : "#ffffff",
                 color: selectedIndex == key ? "#ffffff" : "#000000",
               }}
-              className="flex justify-center items-center text-2xl cursor-pointer px-6 py-1.5 rounded-lg shadow-md select-none font-semibold capitalize transition-all duration-300 ease-in-out"
+              className="flex justify-center items-center text-xl cursor-pointer px-6 py-1.5 rounded-md shadow-md select-none font-medium capitalize transition-all duration-300 ease-in-out"
               onClick={() => {
                 setSelectedIndex(key);
-                dispatch(setKirtanIndex(key));
+                dispatch(setKirtanIndex(kirtanData[key].id));
               }}
             >
               {kirtanData[key].title}

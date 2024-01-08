@@ -1,40 +1,41 @@
-/* eslint-disable */
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "../CSS/Stepper.css";
 import IndexedDBService from "../Utils/DBConfig";
 import CkEditorTextArea from "./CkEditorTextArea";
+import { setKirtanIndex } from "../Slice/KirtanIndexSlice";
 
 const AddKirtanStepper = () => {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const isEdit = window.location.pathname.split("/")[1] === "edit";
 
   const kirtanId = window.location.pathname.split("/")[2];
 
-  const [kirtanTitle, setKirtanTitle] = useState("");
+  const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
   const [isValid, setIsValid] = useState(false);
+
+  const [kirtanData, setKirtanData] = useState({});
+
+  const [kirtanTitle, setKirtanTitle] = useState("");
 
   const [kirtanLines, setKirtanLines] = useState("");
 
   const [fontFamily, setFontFamily] = useState("Guj_Simple_Normal");
 
-  const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
-
   const getEditorContent = (kirtan) => setKirtanLines(kirtan);
 
   const getEditorFont = (font) => setFontFamily(font);
 
-  const [kirtanData, setKirtanData] = useState({});
-
   const handleSubmit = async () => {
     const DbData = {
-      id: isEdit ? Number(kirtanId) : Object.keys(kirtanData).length + 1,
+      id: isEdit ? Number(kirtanId) : Object.keys(kirtanData).length,
       title: kirtanTitle,
       content: kirtanLines.split("\n").filter((line) => line !== ""),
       shortcuts: kirtanData[kirtanId]?.shortcuts || {
@@ -51,22 +52,30 @@ const AddKirtanStepper = () => {
       originalContent: kirtanLines,
       settings: {
         fontFamily: kirtanData[kirtanId]?.settings?.fontFamily || fontFamily,
+        fontSize: kirtanData[kirtanId]?.settings?.fontSize || "50px",
+        fontWeight: kirtanData[kirtanId]?.settings?.fontWeight || "500",
+        color: kirtanData[kirtanId]?.settings?.color || "#ffffff",
+        backgroundColor:
+          kirtanData[kirtanId]?.settings?.backgroundColor || "#000000",
+        height: kirtanData[kirtanId]?.settings?.height || "100px",
       },
     };
 
     if (!isEdit) {
       IndexedDBService.addItem(DbData)
-        .then(() => {
-          navigate("/");
-        })
+        .then(() => navigate("/"))
         .catch((error) => console.error(error));
     } else {
       IndexedDBService.updateItem(DbData)
-        .then(() => {
-          navigate("/");
-        })
+        .then(() => navigate("/"))
         .catch((error) => console.error(error));
     }
+  };
+
+  const handleDelete = () => {
+    IndexedDBService.deleteItem(kirtanId)
+      .then(() => {})
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -76,17 +85,24 @@ const AddKirtanStepper = () => {
   }, [kirtanLines, kirtanTitle]);
 
   useEffect(() => {
-    IndexedDBService.getAllData().then((data) => {
-      setKirtanData(data);
-    });
+    IndexedDBService.getAllData().then((data) => setKirtanData(data));
   }, [isDbInitialized]);
 
   useEffect(() => {
     if (Object.keys(kirtanData).length > 0) {
-      const currKirtanData = kirtanData[kirtanId];
+      const currKirtanData = Object.values(kirtanData).find(
+        (kirtan) => kirtan.id === Number(kirtanId)
+      );
       currKirtanData && setKirtanTitle(currKirtanData.title);
     }
   }, [kirtanData]);
+
+  useEffect(() => {
+    if (isEdit)
+      if (kirtanData[kirtanId]?.originalContent === kirtanLines)
+        setIsValid(false);
+      else setIsValid(true);
+  }, [isEdit, kirtanLines, kirtanData]);
 
   return (
     <div className="w-full h-screen bg-gray-100">
@@ -104,10 +120,22 @@ const AddKirtanStepper = () => {
               onChange={(e) => setKirtanTitle(e.target.value)}
             />
             <Box className="flex justify-end item-end gap-3 pb-2">
+              {isEdit && (
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              )}
               <Button
                 variant="outlined"
                 color="inherit"
-                onClick={() => navigate("/")}
+                onClick={() => {
+                  dispatch(setKirtanIndex(0));
+                  navigate("/");
+                }}
               >
                 Cancel
               </Button>
@@ -117,7 +145,7 @@ const AddKirtanStepper = () => {
                 color="primary"
                 disabled={!isValid}
               >
-                Submit
+                {isEdit ? "Update" : "Save"}
               </Button>
             </Box>
           </Box>

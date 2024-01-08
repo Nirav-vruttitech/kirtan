@@ -10,6 +10,8 @@ import IndexedDBService from "./Utils/DBConfig";
 import { setDbStatus } from "./Slice/dbSlice";
 
 function App() {
+  const dispatch = useDispatch();
+
   const ViewPortBgColor = useSelector(
     (state) => state.viewPort.ViewPortBgColor
   );
@@ -17,8 +19,6 @@ function App() {
   const viewPortFontWeight = useSelector(
     (state) => state.viewPort.viewPortFontWeight
   );
-
-  const dispatch = useDispatch();
 
   const fontSize = useSelector((state) => state.viewPort.fontSize);
 
