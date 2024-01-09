@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import IndexedDBService from "../Utils/DBConfig";
 import CkEditorTextArea from "./CkEditorTextArea";
 import { setKirtanIndex } from "../Slice/KirtanIndexSlice";
+import ConfirmBox from "./ConfirmBox";
 
 const AddKirtanStepper = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const AddKirtanStepper = () => {
 
   const [isValid, setIsValid] = useState(false);
 
-  const [kirtanData, setKirtanData] = useState({});
+  const [kirtanData, setKirtanData] = useState([]);
 
   const [kirtanTitle, setKirtanTitle] = useState("");
 
@@ -29,16 +30,27 @@ const AddKirtanStepper = () => {
 
   const [fontFamily, setFontFamily] = useState("Guj_Simple_Normal");
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   const getEditorContent = (kirtan) => setKirtanLines(kirtan);
 
   const getEditorFont = (font) => setFontFamily(font);
 
+  const handleShowDeleteConfirm = (x) => setShowDeleteConfirm(x);
+
+  const getKirtanById = () =>
+    kirtanData.find((kirtan) => kirtan.id === kirtanId);
+
   const handleSubmit = async () => {
     const DbData = {
-      id: isEdit ? Number(kirtanId) : Object.keys(kirtanData).length,
+      id: isEdit
+        ? Number(kirtanId)
+        : kirtanData.length > 0
+        ? kirtanData[kirtanData.length - 1]?.id + 1
+        : 0,
       title: kirtanTitle,
       content: kirtanLines.split("\n").filter((line) => line !== ""),
-      shortcuts: kirtanData[kirtanId]?.shortcuts || {
+      shortcuts: getKirtanById()?.shortcuts || {
         0: "1",
         1: "2",
         2: "3",
@@ -51,36 +63,75 @@ const AddKirtanStepper = () => {
       },
       originalContent: kirtanLines,
       settings: {
-        fontFamily: kirtanData[kirtanId]?.settings?.fontFamily || fontFamily,
-        fontSize: kirtanData[kirtanId]?.settings?.fontSize || "50px",
-        fontWeight: kirtanData[kirtanId]?.settings?.fontWeight || "500",
-        color: kirtanData[kirtanId]?.settings?.color || "#ffffff",
+        fontFamily: getKirtanById()?.settings?.fontFamily || fontFamily,
+        fontSize: getKirtanById()?.settings?.fontSize || "50px",
+        fontWeight: getKirtanById()?.settings?.fontWeight || "500",
+        color: getKirtanById()?.settings?.color || "#ffffff",
         backgroundColor:
-          kirtanData[kirtanId]?.settings?.backgroundColor || "#000000",
-        height: kirtanData[kirtanId]?.settings?.height || "100px",
+          getKirtanById()?.settings?.backgroundColor || "#000000",
+        height: getKirtanById()?.settings?.height || "100px",
         textShadowColor:
-          kirtanData[kirtanId]?.settings?.textShadowColor || "#ffffff",
-        textShadowWidth:
-          kirtanData[kirtanId]?.settings?.textShadowWidth || "0px",
+          getKirtanById()?.settings?.textShadowColor || "#ffffff",
+        textShadowWidth: getKirtanById()?.settings?.textShadowWidth || "0px",
       },
     };
 
     if (!isEdit) {
-      IndexedDBService.addItem(DbData)
-        .then(() => navigate("/"))
-        .catch((error) => console.error(error));
+      isDbInitialized &&
+        IndexedDBService.addItem(DbData)
+          .then(() => {
+            dispatch(setKirtanIndex(DbData.id));
+            navigate("/");
+          })
+          .catch((error) => console.error(error));
     } else {
-      IndexedDBService.updateItem(DbData)
-        .then(() => navigate("/"))
-        .catch((error) => console.error(error));
+      isDbInitialized &&
+        IndexedDBService.updateItem(DbData)
+          .then(() => {
+            dispatch(setKirtanIndex(kirtanId));
+            navigate("/");
+          })
+          .catch((error) => console.error(error));
     }
   };
 
   const handleDelete = () => {
-    IndexedDBService.deleteItem(kirtanId)
-      .then(() => {})
-      .catch((error) => console.error(error));
+    const newId =
+      kirtanData.length > 0 ? kirtanData[kirtanData.length - 1].id : 0;
+
+    isDbInitialized &&
+      IndexedDBService.deleteItem(Number(kirtanId))
+        .then(() => {
+          IndexedDBService.getAllData().then((data) => {
+            dispatch(setKirtanIndex(data[0]?.id || 0));
+            navigate("/");
+          });
+        })
+        .catch((error) => console.error(error));
   };
+
+  // Function to handle key press
+  const handleKeyPress = (event) => {
+    if (event.key === "Delete") {
+      handleShowDeleteConfirm(true);
+    } else if (event.key === "Enter") {
+      if (showDeleteConfirm) {
+        handleShowDeleteConfirm(false);
+        handleDelete();
+      }
+      // Perform action for Enter key
+    }
+  };
+
+  // useEffect to set up the event listener
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
 
   useEffect(() => {
     setIsValid(
@@ -129,7 +180,7 @@ const AddKirtanStepper = () => {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={handleDelete}
+                  onClick={() => handleShowDeleteConfirm(true)}
                 >
                   Delete
                 </Button>
@@ -138,7 +189,7 @@ const AddKirtanStepper = () => {
                 variant="outlined"
                 color="inherit"
                 onClick={() => {
-                  dispatch(setKirtanIndex(0));
+                  dispatch(setKirtanIndex(isEdit ? kirtanId : 0));
                   navigate("/");
                 }}
               >
@@ -163,6 +214,11 @@ const AddKirtanStepper = () => {
             />
           </div>
         </Box>
+        <ConfirmBox
+          open={showDeleteConfirm}
+          handleClose={handleShowDeleteConfirm}
+          handleConfirm={handleDelete}
+        />
       </div>
     </div>
   );

@@ -151,26 +151,7 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
             }}
             config={{
               toolbar: {
-                items: [
-                  "undo",
-                  "redo",
-                  "|",
-                  "fontColor",
-                  "fontfamily",
-                  "fontsize",
-                  "fontBackgroundColor",
-                  "|",
-                  "bold",
-                  "italic",
-                  "strikethrough",
-                  "subscript",
-                  "superscript",
-                  "code",
-                  "|",
-                  "blockQuote",
-                  "codeBlock",
-                  "|",
-                ],
+                items: ["undo", "redo", "|", "bold", "italic", "blockQuote"],
                 shouldNotGroupWhenFull: false,
               },
               contentsCss: [CKEditorCss],

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { useSelector } from "react-redux";
 import IndexedDBService from "../Utils/DBConfig";
-import "../CSS/MarkDown.css";
 
 const KirtanLinePlate = () => {
   const [kirtanData, setKirtanData] = useState({});
@@ -47,18 +46,7 @@ const KirtanLinePlate = () => {
       fontSize,
       fontWeight,
       height,
-      textShadow: `-${textShadowWidth} -${textShadowWidth} 0 ${textShadowColor}, 
-      ${textShadowWidth} -${textShadowWidth} 0 ${textShadowColor}, 
-      -${textShadowWidth} ${textShadowWidth} 0 ${textShadowColor},
-      ${textShadowWidth} ${textShadowWidth} 0 ${textShadowColor}, 
-      -1px -${textShadowWidth} 0 ${textShadowColor}, 
-      1px -${textShadowWidth} 0 ${textShadowColor}, 
-      -${textShadowWidth} -1px 0 ${textShadowColor},
-      ${textShadowWidth} -1px 0 ${textShadowColor}, 
-      -${textShadowWidth} 1px 0 ${textShadowColor}, 
-      ${textShadowWidth} 1px 0 ${textShadowColor}, 
-      -1px ${textShadowWidth} 0 ${textShadowColor},
-      1px ${textShadowWidth} 0 ${textShadowColor}`,
+      WebkitTextStroke: `${textShadowWidth} ${textShadowColor}`,
     });
   }, [
     backgroundColor,
@@ -72,7 +60,9 @@ const KirtanLinePlate = () => {
   ]);
 
   useEffect(() => {
-    const currLine = kirtanData[kirtanId]?.content[currIndex];
+    const currLine =
+      kirtanData.length > 0 &&
+      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[currIndex];
 
     if (currLine) {
       setCurrLine(currLine);

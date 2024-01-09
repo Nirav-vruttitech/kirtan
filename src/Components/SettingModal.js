@@ -8,6 +8,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import IconButton from "@mui/material/IconButton";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setBgColor,
@@ -23,13 +24,12 @@ import IndexedDBService from "../Utils/DBConfig";
 
 const style = {
   position: "absolute",
-  top: "30%",
+  top: "40%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 600,
   bgcolor: "background.paper",
   boxShadow: 24,
-  p: 4,
 };
 
 const SettingModal = ({ open, handleModalToggle }) => {
@@ -183,7 +183,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
   };
 
   const handleTextShadowWidthChange = (event) => {
-    dispatch(setTextShadowWidth(event.target.value));
+    dispatch(setTextShadowWidth(`${event.target.value}px`));
 
     setInitialSettings({
       ...initialSettings,
@@ -200,15 +200,25 @@ const SettingModal = ({ open, handleModalToggle }) => {
   };
 
   const updateSettings = (obj) => {
-    IndexedDBService.updateItem(obj)
-      .then((data) => {})
-      .catch((error) => {});
+    isDbInitialized &&
+      IndexedDBService.updateItem(obj)
+        .then((data) => {})
+        .catch((error) => {});
   };
 
   return (
     <Modal open={open} onClose={() => handleModalToggle(false)}>
-      <Box sx={style}>
-        <Grid sx={{ flexGrow: 1 }} container spacing={2}>
+      <Box sx={style} className="rounded-2xl">
+        <Box className="flex items-center justify-between w-full bg-blue-500 px-4 py-3 rounded-t-xl">
+          <p className="text-white font-medium text-xl">Setting</p>
+          <IconButton
+            className="text-white"
+            onClick={() => handleModalToggle(false)}
+          >
+            <i className="fa-solid fa-circle-xmark"></i>
+          </IconButton>
+        </Box>
+        <Grid sx={{ flexGrow: 1 }} container spacing={2} className="p-4">
           <div className="px-3">
             <div className="py-3 font-semibold">Font Size</div>
             <div className="py-3 font-semibold">Font Color</div>
@@ -237,8 +247,9 @@ const SettingModal = ({ open, handleModalToggle }) => {
                   valueLabelDisplay="auto"
                   step={2}
                   value={
-                    Object.keys(initialSettings).length > 0 &&
-                    +initialSettings.fontSize.slice(0, -2)
+                    Object.keys(initialSettings).length > 0
+                      ? +initialSettings.fontSize.slice(0, -2)
+                      : 30
                   }
                   onChange={handleFontSliderChange}
                   marks
@@ -299,8 +310,9 @@ const SettingModal = ({ open, handleModalToggle }) => {
                   valueLabelDisplay="auto"
                   step={2}
                   value={
-                    Object.keys(initialSettings).length > 0 &&
-                    +initialSettings.height.slice(0, -2)
+                    Object.keys(initialSettings).length > 0
+                      ? +initialSettings.height.slice(0, -2)
+                      : 40
                   }
                   onChange={handleViewPortHeightSliderChange}
                   marks
@@ -375,8 +387,9 @@ const SettingModal = ({ open, handleModalToggle }) => {
                   valueLabelDisplay="auto"
                   step={1}
                   value={
-                    Object.keys(initialSettings).length > 0 &&
-                    +initialSettings.textShadowWidth.slice(0, -2)
+                    Object.keys(initialSettings).length > 0
+                      ? +initialSettings.textShadowWidth.slice(0, -2)
+                      : 0
                   }
                   onChange={handleTextShadowWidthChange}
                   marks

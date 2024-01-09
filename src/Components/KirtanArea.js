@@ -42,6 +42,10 @@ const KirtanArea = () => {
 
   const fontFamily = useSelector((state) => state.settings.fontFamily);
 
+  const kirtanId = useSelector((state) => state.kirtanIndex.kirtanId);
+
+  const kirtanLineId = useSelector((state) => state.kirtanIndex.currIndex);
+
   const addStepperShortCutsObject = useSelector(
     (state) => state.addStepperSlice.addStepperShortCutsObject
   ) || { 1: null };
@@ -60,14 +64,27 @@ const KirtanArea = () => {
 
     currKirtanData.shortcuts[index] = shortCutStringValue;
 
-    IndexedDBService.updateItem(currKirtanData)
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => console.error(error));
+    isDbInitialized &&
+      IndexedDBService.updateItem(currKirtanData)
+        .then(() => {
+          navigate("/");
+        })
+        .catch((error) => console.error(error));
   };
 
   const handleEditShortcutShowButton = (index) => setSelectedButton(index);
+
+  useEffect(() => {
+    if (kirtanId) {
+      setSelectedIndex(Number(kirtanId));
+    }
+  }, [kirtanId]);
+
+  useEffect(() => {
+    if (kirtanLineId) {
+      handleCurrLineIndex(kirtanLineId);
+    }
+  }, [kirtanLineId]);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -100,8 +117,8 @@ const KirtanArea = () => {
       setShortCutValue(prevShortcuts.join("+"));
 
       if (event.altKey && event.key) {
-        for (const key in kirtanData[selectedIndex]?.shortcuts) {
-          if (kirtanData[selectedIndex]?.shortcuts[key] == `Alt+${event.key}`) {
+        for (const key in getKirtanById()?.shortcuts) {
+          if (getKirtanById()?.shortcuts[key] == `Alt+${event.key}`) {
             handleCurrLineIndex(Number(key));
             return;
           }
@@ -109,8 +126,8 @@ const KirtanArea = () => {
       }
 
       if (event.ctrlKey && event.key) {
-        for (const key in kirtanData[selectedIndex]?.shortcuts) {
-          if (kirtanData[selectedIndex]?.shortcuts[key] == `Ctr+${event.key}`) {
+        for (const key in getKirtanById()?.shortcuts) {
+          if (getKirtanById()?.shortcuts[key] == `Ctr+${event.key}`) {
             handleCurrLineIndex(Number(key));
             return;
           }
@@ -118,8 +135,8 @@ const KirtanArea = () => {
       }
 
       if (event.key) {
-        for (const key in kirtanData[selectedIndex]?.shortcuts) {
-          if (kirtanData[selectedIndex]?.shortcuts[key] == `${event.key}`) {
+        for (const key in getKirtanById()?.shortcuts) {
+          if (getKirtanById()?.shortcuts[key] == `${event.key}`) {
             handleCurrLineIndex(Number(key));
             return;
           }
@@ -131,7 +148,7 @@ const KirtanArea = () => {
           if (currLineIndex > 0) handleCurrLineIndex(currLineIndex - 1);
           break;
         case "ArrowDown":
-          if (currLineIndex < kirtanData[selectedIndex]?.content?.length - 1)
+          if (currLineIndex < getKirtanById()?.content?.length - 1)
             handleCurrLineIndex(currLineIndex + 1);
           break;
         default:
@@ -144,7 +161,10 @@ const KirtanArea = () => {
   }, [shortCutArrayValueStore, lines, addStepperShortCutsObject]);
 
   const getKirtanById = () => {
-    return kirtanData[selectedIndex];
+    return (
+      kirtanData.length > 0 &&
+      kirtanData.find((kirtan) => kirtan.id === selectedIndex)
+    );
   };
 
   useEffect(() => {
@@ -163,17 +183,18 @@ const KirtanArea = () => {
     <div className="p-3 place-self-center bg-gray-100 w-auto h-screen lineBackground mt-16">
       <Box className="flex w-full overflow-x-auto overflow-y-hidden pb-2 items-center justify-center gap-3">
         {Object.keys(kirtanData).map((key, index) => {
+          const id = kirtanData[key].id;
           return (
             <Box
               key={index}
               style={{
-                backgroundColor: selectedIndex == key ? "#2196f3" : "#ffffff",
-                color: selectedIndex == key ? "#ffffff" : "#000000",
+                backgroundColor: selectedIndex == id ? "#2196f3" : "#ffffff",
+                color: selectedIndex == id ? "#ffffff" : "#000000",
               }}
               className="flex justify-center items-center text-xl cursor-pointer px-6 py-1.5 rounded-md shadow-md select-none font-medium capitalize transition-all duration-300 ease-in-out"
               onClick={() => {
-                setSelectedIndex(key);
-                dispatch(setKirtanIndex(kirtanData[key].id));
+                setSelectedIndex(id);
+                dispatch(setKirtanIndex(id));
               }}
             >
               {kirtanData[key].title}
@@ -210,14 +231,14 @@ const KirtanArea = () => {
                       style={{ color: "#3170dd" }}
                     ></i>{" "}
                   </div>
-                  <p
+                  <div
                     className="cursor-grab m-1 text-3xl text-center"
                     style={{ fontFamily: fontFamily }}
                     key={index + 1}
                     onClick={() => handleCurrLineIndex(index)}
                   >
                     <Markdown>{line}</Markdown>
-                  </p>
+                  </div>
 
                   {getKirtanById().shortcuts[index] !== null &&
                   getKirtanById().shortcuts[index] !== undefined &&

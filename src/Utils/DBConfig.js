@@ -119,7 +119,6 @@ const IndexedDBService = {
 
       const transaction = this.db.transaction([storeName], "readwrite");
       const store = transaction.objectStore(storeName);
-      console.log("store: ", store);
       const request = store.delete(id);
 
       request.onsuccess = () => {
