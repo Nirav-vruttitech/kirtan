@@ -119,7 +119,7 @@ const IndexedDBService = {
 
       const transaction = this.db.transaction([storeName], "readwrite");
       const store = transaction.objectStore(storeName);
-      console.log('store: ', store);
+      console.log("store: ", store);
       const request = store.delete(id);
 
       request.onsuccess = () => {
@@ -128,6 +128,29 @@ const IndexedDBService = {
 
       request.onerror = (event) => {
         reject("Error deleting item: ", event.target.error);
+      };
+    });
+  },
+
+  clearObjectStore() {
+    return new Promise((resolve, reject) => {
+      if (!this.db) {
+        reject("Database not initialized");
+        return;
+      }
+
+      const transaction = this.db.transaction([storeName], "readwrite");
+      const store = transaction.objectStore(storeName);
+      const request = store.clear();
+
+      request.onsuccess = () => {
+        console.log(`Object store ${storeName} cleared`);
+        resolve();
+      };
+
+      request.onerror = (event) => {
+        console.error("Error clearing object store:", event.target.error);
+        reject("Error clearing object store: ", event.target.error);
       };
     });
   },

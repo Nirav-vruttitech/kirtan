@@ -59,7 +59,10 @@ const SettingModal = ({ open, handleModalToggle }) => {
   }, [kirtanData, kirtanId]);
 
   useEffect(() => {
-    IndexedDBService.getAllData().then((data) => setKirtanData(data[kirtanId]));
+    isDbInitialized &&
+      IndexedDBService.getAllData().then((data) =>
+        setKirtanData(data[kirtanId])
+      );
   }, [isDbInitialized, kirtanId]);
 
   const handleFontSliderChange = (event) => {

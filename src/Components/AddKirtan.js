@@ -89,7 +89,8 @@ const AddKirtanStepper = () => {
   }, [kirtanLines, kirtanTitle]);
 
   useEffect(() => {
-    IndexedDBService.getAllData().then((data) => setKirtanData(data));
+    isDbInitialized &&
+      IndexedDBService.getAllData().then((data) => setKirtanData(data));
   }, [isDbInitialized]);
 
   useEffect(() => {

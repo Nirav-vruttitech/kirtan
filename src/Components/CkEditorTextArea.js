@@ -60,11 +60,12 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
   }, [addStepperKirtan]);
 
   useEffect(() => {
-    IndexedDBService.getAllData().then((data) =>
-      setKirtanData(
-        Object.values(data).find((kirtan) => kirtan.id === Number(kirtanId))
-      )
-    );
+    isDbInitialized &&
+      IndexedDBService.getAllData().then((data) =>
+        setKirtanData(
+          Object.values(data).find((kirtan) => kirtan.id === Number(kirtanId))
+        )
+      );
   }, [isDbInitialized, kirtanId]);
 
   useEffect(() => {
