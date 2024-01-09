@@ -59,7 +59,7 @@ const AddKirtanStepper = () => {
           kirtanData[kirtanId]?.settings?.backgroundColor || "#000000",
         height: kirtanData[kirtanId]?.settings?.height || "100px",
         textShadowColor:
-          kirtanData[kirtanId]?.settings?.textShadowColor || "#000000",
+          kirtanData[kirtanId]?.settings?.textShadowColor || "#ffffff",
         textShadowWidth:
           kirtanData[kirtanId]?.settings?.textShadowWidth || "0px",
       },

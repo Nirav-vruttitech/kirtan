@@ -7,8 +7,8 @@ const initialState = {
   fontSize: "40px",
   fontWeight: "500",
   height: "80px",
-  textShadowColor: "",
-  textShadowWidth: "",
+  textShadowColor: "#FFF",
+  textShadowWidth: "0px",
 };
 
 export const settingsSlice = createSlice({

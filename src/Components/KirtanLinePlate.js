@@ -47,12 +47,29 @@ const KirtanLinePlate = () => {
       fontSize,
       fontWeight,
       height,
-      textShadow: `-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
-      2px 2px 0 #000, -1px -2px 0 #000, 1px -2px 0 #000, -2px -1px 0 #000,
-      2px -1px 0 #000, -2px 1px 0 #000, 2px 1px 0 #000, -1px 2px 0 #000,
-      1px 2px 0 #000;`,
+      textShadow: `-${textShadowWidth} -${textShadowWidth} 0 ${textShadowColor}, 
+      ${textShadowWidth} -${textShadowWidth} 0 ${textShadowColor}, 
+      -${textShadowWidth} ${textShadowWidth} 0 ${textShadowColor},
+      ${textShadowWidth} ${textShadowWidth} 0 ${textShadowColor}, 
+      -1px -${textShadowWidth} 0 ${textShadowColor}, 
+      1px -${textShadowWidth} 0 ${textShadowColor}, 
+      -${textShadowWidth} -1px 0 ${textShadowColor},
+      ${textShadowWidth} -1px 0 ${textShadowColor}, 
+      -${textShadowWidth} 1px 0 ${textShadowColor}, 
+      ${textShadowWidth} 1px 0 ${textShadowColor}, 
+      -1px ${textShadowWidth} 0 ${textShadowColor},
+      1px ${textShadowWidth} 0 ${textShadowColor}`,
     });
-  }, [backgroundColor, color, fontFamily, fontSize, fontWeight, height]);
+  }, [
+    backgroundColor,
+    color,
+    fontFamily,
+    fontSize,
+    fontWeight,
+    height,
+    textShadowWidth,
+    textShadowColor,
+  ]);
 
   useEffect(() => {
     const currLine = kirtanData[kirtanId]?.content[currIndex];
@@ -72,16 +89,12 @@ const KirtanLinePlate = () => {
   }, [isDbInitialized]);
 
   return (
-    <div className="fixed inset-x-0 bottom-1">
+    <div className="fixed inset-x-0 bottom-0">
       <div className="text-center  border-black border flex items-center w-full">
         <div
           className="text-center w-full flex justify-center items-center"
           style={{
             ...styles,
-            textShadow: `-${textShadowWidth}px -${textShadowWidth}px 0 ${textShadowColor}, ${textShadowWidth}px -${textShadowWidth}px 0 ${textShadowColor}, -${textShadowWidth}px ${textShadowWidth}px 0 ${textShadowColor},
-          ${textShadowWidth}px ${textShadowWidth}px 0 ${textShadowColor}, -1px -${textShadowWidth}px 0 ${textShadowColor}, 1px -${textShadowWidth}px 0 ${textShadowColor}, -${textShadowWidth}px -1px 0 ${textShadowColor},
-          ${textShadowWidth}px -1px 0 ${textShadowColor}, -${textShadowWidth}px 1px 0 ${textShadowColor}, ${textShadowWidth}px 1px 0 ${textShadowColor}, -1px ${textShadowWidth}px 0 ${textShadowColor},
-          1px ${textShadowWidth}px 0 ${textShadowColor}`,
           }}
         >
           <Markdown className={`h-[${styles.height}]`}>{currLine}</Markdown>

@@ -44,7 +44,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
   const [initialSettings, setInitialSettings] = useState({});
 
   useEffect(() => {
-    const styles = kirtanData && kirtanData.settings;
+    let styles = kirtanData && kirtanData.settings;
 
     if (styles && Object.keys(styles).length > 0) {
       dispatch(setColor(styles.color));
@@ -53,6 +53,8 @@ const SettingModal = ({ open, handleModalToggle }) => {
       dispatch(setFontSize(styles.fontSize));
       dispatch(setHeight(styles.height));
       dispatch(setFontFamily(styles.fontFamily));
+      dispatch(setTextShadowColor(styles.textShadowColor));
+      dispatch(setTextShadowWidth(styles.textShadowWidth));
 
       setInitialSettings(styles);
     }
