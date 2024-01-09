@@ -385,7 +385,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                 <Slider
                   aria-label="Temperature"
                   valueLabelDisplay="auto"
-                  step={1}
+                  step={0.1}
                   value={
                     Object.keys(initialSettings).length > 0
                       ? +initialSettings.textShadowWidth.slice(0, -2)

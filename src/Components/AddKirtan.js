@@ -74,6 +74,7 @@ const AddKirtanStepper = () => {
           getKirtanById()?.settings?.textShadowColor || "#ffffff",
         textShadowWidth: getKirtanById()?.settings?.textShadowWidth || "0px",
       },
+      favLines: getKirtanById()?.favLines || [],
     };
 
     if (!isEdit) {
