@@ -40,7 +40,7 @@ const KirtanArea = () => {
 
   const kirtan = useSelector((state) => state.kirtan.kirtan);
 
-  const fontFamily = useSelector((state) => state.kirtan.fontFamily);
+  const fontFamily = useSelector((state) => state.settings.fontFamily);
 
   const addStepperShortCutsObject = useSelector(
     (state) => state.addStepperSlice.addStepperShortCutsObject

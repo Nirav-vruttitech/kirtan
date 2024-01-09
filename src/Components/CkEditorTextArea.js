@@ -33,7 +33,7 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
   const [editorData, setEditorData] = useState("");
 
   const [selectFontFamily, setSelectFontFamily] = useState(
-    useSelector((state) => state.kirtan.fontFamily)
+    useSelector((state) => state.settings.fontFamily)
   );
 
   const handleSelectFontFamilyChange = (event) => {
