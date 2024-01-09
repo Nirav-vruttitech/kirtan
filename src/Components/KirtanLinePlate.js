@@ -31,6 +31,14 @@ const KirtanLinePlate = () => {
 
   const height = useSelector((state) => state.settings.height);
 
+  const textShadowColor = useSelector(
+    (state) => state.settings.textShadowColor
+  );
+
+  const textShadowWidth = useSelector(
+    (state) => state.settings.textShadowWidth
+  );
+
   useEffect(() => {
     setStyles({
       backgroundColor,
@@ -39,6 +47,10 @@ const KirtanLinePlate = () => {
       fontSize,
       fontWeight,
       height,
+      textShadow: `-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+      2px 2px 0 #000, -1px -2px 0 #000, 1px -2px 0 #000, -2px -1px 0 #000,
+      2px -1px 0 #000, -2px 1px 0 #000, 2px 1px 0 #000, -1px 2px 0 #000,
+      1px 2px 0 #000;`,
     });
   }, [backgroundColor, color, fontFamily, fontSize, fontWeight, height]);
 
@@ -64,7 +76,13 @@ const KirtanLinePlate = () => {
       <div className="text-center  border-black border flex items-center w-full">
         <div
           className="text-center w-full flex justify-center items-center"
-          style={styles}
+          style={{
+            ...styles,
+            textShadow: `-${textShadowWidth}px -${textShadowWidth}px 0 ${textShadowColor}, ${textShadowWidth}px -${textShadowWidth}px 0 ${textShadowColor}, -${textShadowWidth}px ${textShadowWidth}px 0 ${textShadowColor},
+          ${textShadowWidth}px ${textShadowWidth}px 0 ${textShadowColor}, -1px -${textShadowWidth}px 0 ${textShadowColor}, 1px -${textShadowWidth}px 0 ${textShadowColor}, -${textShadowWidth}px -1px 0 ${textShadowColor},
+          ${textShadowWidth}px -1px 0 ${textShadowColor}, -${textShadowWidth}px 1px 0 ${textShadowColor}, ${textShadowWidth}px 1px 0 ${textShadowColor}, -1px ${textShadowWidth}px 0 ${textShadowColor},
+          1px ${textShadowWidth}px 0 ${textShadowColor}`,
+          }}
         >
           <Markdown className={`h-[${styles.height}]`}>{currLine}</Markdown>
         </div>

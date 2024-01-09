@@ -7,6 +7,8 @@ const initialState = {
   fontSize: "40px",
   fontWeight: "500",
   height: "80px",
+  textShadowColor: "",
+  textShadowWidth: "",
 };
 
 export const settingsSlice = createSlice({
@@ -31,6 +33,12 @@ export const settingsSlice = createSlice({
     setHeight: (state, action) => {
       state.height = action.payload;
     },
+    setTextShadowColor: (state, action) => {
+      state.textShadowColor = action.payload;
+    },
+    setTextShadowWidth: (state, action) => {
+      state.textShadowWidth = action.payload;
+    },
   },
 });
 
@@ -41,6 +49,8 @@ export const {
   setFontSize,
   setFontWeight,
   setHeight,
+  setTextShadowColor,
+  setTextShadowWidth,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

@@ -16,6 +16,8 @@ import {
   setFontSize,
   setFontWeight,
   setHeight,
+  setTextShadowColor,
+  setTextShadowWidth,
 } from "../Slice/settingsSlice";
 import IndexedDBService from "../Utils/DBConfig";
 
@@ -149,12 +151,44 @@ const SettingModal = ({ open, handleModalToggle }) => {
       fontFamily: event.target.value,
     });
 
-    localStorage.setItem("fontFamily", event.target.value);
-
     let obj = { ...kirtanData };
 
     if (kirtanData.settings) {
       obj.settings.fontFamily = event.target.value;
+    }
+
+    updateSettings(obj);
+  };
+
+  const handleTextShadowColorChange = (color) => {
+    dispatch(setTextShadowColor(color));
+
+    setInitialSettings({
+      ...initialSettings,
+      textShadowColor: color,
+    });
+
+    let obj = { ...kirtanData };
+
+    if (kirtanData.settings) {
+      obj.settings.textShadowColor = color;
+    }
+
+    updateSettings(obj);
+  };
+
+  const handleTextShadowWidthChange = (event) => {
+    dispatch(setTextShadowWidth(event.target.value));
+
+    setInitialSettings({
+      ...initialSettings,
+      textShadowWidth: `${event.target.value}px`,
+    });
+
+    let obj = { ...kirtanData };
+
+    if (kirtanData.settings) {
+      obj.settings.textShadowWidth = `${event.target.value}px`;
     }
 
     updateSettings(obj);
@@ -177,8 +211,12 @@ const SettingModal = ({ open, handleModalToggle }) => {
             <div className="py-3 font-semibold">View Port Color</div>
             <div className="py-3 font-semibold">View Port Size</div>
             <div className="py-3 font-semibold">Font Family</div>
+            <div className="py-3 font-semibold">Font Shadow Color</div>
+            <div className="py-3 font-semibold">Font Shadow Width</div>
           </div>
           <div className="pr-2">
+            <div className="py-3">:</div>
+            <div className="py-3">:</div>
             <div className="py-3">:</div>
             <div className="py-3">:</div>
             <div className="py-3">:</div>
@@ -315,6 +353,32 @@ const SettingModal = ({ open, handleModalToggle }) => {
                 <MenuItem value="Hin_Vaidik">Hin_Vaidik</MenuItem>
                 <MenuItem value="Hin_Vankachuka">Hin_Vankachuka</MenuItem>
               </Select>
+            </div>
+            <div className="px-3 pt-3 pb-0.5">
+              <ColorPicker
+                color={
+                  Object.keys(initialSettings).length > 0 &&
+                  initialSettings.textShadowColor
+                }
+                handelColor={handleTextShadowColorChange}
+              />
+            </div>
+            <div className="px-3 pt-3 pb-2">
+              <Box sx={{ width: 200 }}>
+                <Slider
+                  aria-label="Temperature"
+                  valueLabelDisplay="auto"
+                  step={1}
+                  value={
+                    Object.keys(initialSettings).length > 0 &&
+                    +initialSettings.textShadowWidth.slice(0, -2)
+                  }
+                  onChange={handleTextShadowWidthChange}
+                  marks
+                  min={0}
+                  max={5}
+                />
+              </Box>
             </div>
           </div>
         </Grid>
