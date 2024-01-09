@@ -32,9 +32,9 @@ const AddKirtanStepper = () => {
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const getEditorContent = (kirtan) => setKirtanLines(kirtan);
-
   const getEditorFont = (font) => setFontFamily(font);
+
+  const getEditorContent = (kirtan) => setKirtanLines(kirtan);
 
   const handleShowDeleteConfirm = (x) => setShowDeleteConfirm(x);
 
@@ -77,29 +77,25 @@ const AddKirtanStepper = () => {
       favLines: getKirtanById()?.favLines || [],
     };
 
-    if (!isEdit) {
-      isDbInitialized &&
+    if (isDbInitialized)
+      if (!isEdit) {
         IndexedDBService.addItem(DbData)
           .then(() => {
             dispatch(setKirtanIndex(DbData.id));
             navigate("/");
           })
           .catch((error) => console.error(error));
-    } else {
-      isDbInitialized &&
+      } else {
         IndexedDBService.updateItem(DbData)
           .then(() => {
             dispatch(setKirtanIndex(kirtanId));
             navigate("/");
           })
           .catch((error) => console.error(error));
-    }
+      }
   };
 
   const handleDelete = () => {
-    const newId =
-      kirtanData.length > 0 ? kirtanData[kirtanData.length - 1].id : 0;
-
     isDbInitialized &&
       IndexedDBService.deleteItem(Number(kirtanId))
         .then(() => {
@@ -111,27 +107,19 @@ const AddKirtanStepper = () => {
         .catch((error) => console.error(error));
   };
 
-  // Function to handle key press
   const handleKeyPress = (event) => {
-    if (event.key === "Delete") {
-      handleShowDeleteConfirm(true);
-    } else if (event.key === "Enter") {
+    if (event.key === "Delete") handleShowDeleteConfirm(true);
+    else if (event.key === "Enter")
       if (showDeleteConfirm) {
         handleShowDeleteConfirm(false);
         handleDelete();
       }
-      // Perform action for Enter key
-    }
   };
 
-  // useEffect to set up the event listener
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
 
-    // Cleanup function
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
 
   useEffect(() => {

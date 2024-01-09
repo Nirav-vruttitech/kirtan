@@ -21,14 +21,10 @@ const ConfirmBox = ({ open, handleClose, handleConfirm }) => {
     }
   };
 
-  // useEffect to set up the event listener
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
 
-    // Cleanup function
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
 
   return (

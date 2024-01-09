@@ -4,31 +4,31 @@ import { useSelector } from "react-redux";
 import IndexedDBService from "../Utils/DBConfig";
 
 const KirtanLinePlate = () => {
-  const [kirtanData, setKirtanData] = useState({});
-
-  const currIndex = useSelector((state) => state.kirtanIndex.currIndex);
-
-  const kirtanId = useSelector((state) => state.kirtanIndex.kirtanId);
-
-  const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
+  const [styles, setStyles] = useState({});
 
   const [currLine, setCurrLine] = useState("");
 
-  const [styles, setStyles] = useState({});
+  const [kirtanData, setKirtanData] = useState({});
+
+  const color = useSelector((state) => state.settings.color);
+
+  const height = useSelector((state) => state.settings.height);
+
+  const fontSize = useSelector((state) => state.settings.fontSize);
+
+  const kirtanId = useSelector((state) => state.kirtanIndex.kirtanId);
+
+  const fontFamily = useSelector((state) => state.settings.fontFamily);
+
+  const fontWeight = useSelector((state) => state.settings.fontWeight);
+
+  const currIndex = useSelector((state) => state.kirtanIndex.currIndex);
+
+  const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
   const backgroundColor = useSelector(
     (state) => state.settings.backgroundColor
   );
-
-  const color = useSelector((state) => state.settings.color);
-
-  const fontFamily = useSelector((state) => state.settings.fontFamily);
-
-  const fontSize = useSelector((state) => state.settings.fontSize);
-
-  const fontWeight = useSelector((state) => state.settings.fontWeight);
-
-  const height = useSelector((state) => state.settings.height);
 
   const textShadowColor = useSelector(
     (state) => state.settings.textShadowColor
@@ -62,20 +62,17 @@ const KirtanLinePlate = () => {
   useEffect(() => {
     const currLine =
       kirtanData.length > 0 &&
-      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[currIndex];
+      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[
+        currIndex
+      ];
 
-    if (currLine) {
-      setCurrLine(currLine);
-    } else {
-      setCurrLine("");
-    }
+    if (currLine) setCurrLine(currLine);
+    else setCurrLine("");
   }, [currIndex, kirtanId, kirtanData]);
 
   useEffect(() => {
     isDbInitialized &&
-      IndexedDBService.getAllData().then((data) => {
-        setKirtanData(data);
-      });
+      IndexedDBService.getAllData().then((data) => setKirtanData(data));
   }, [isDbInitialized]);
 
   return (

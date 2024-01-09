@@ -35,11 +35,11 @@ const style = {
 const SettingModal = ({ open, handleModalToggle }) => {
   const dispatch = useDispatch();
 
-  const [kirtanData, setKirtanData] = useState({});
-
   const kirtanId = useSelector((state) => state.kirtanIndex.kirtanId);
 
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
+
+  const [kirtanData, setKirtanData] = useState({});
 
   const [initialSettings, setInitialSettings] = useState({});
 
@@ -77,9 +77,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings) {
-      obj.settings.fontSize = `${event.target.value}px`;
-    }
+    if (kirtanData.settings) obj.settings.fontSize = `${event.target.value}px`;
 
     updateSettings(obj);
   };
@@ -94,9 +92,8 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings) {
-      obj.settings.height = `${event.target.value}px`;
-    }
+    if (kirtanData.settings) obj.settings.height = `${event.target.value}px`;
+
     updateSettings(obj);
   };
 
@@ -110,9 +107,8 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings) {
-      obj.settings.color = color;
-    }
+    if (kirtanData.settings) obj.settings.color = color;
+
     updateSettings(obj);
   };
 
@@ -126,9 +122,8 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings) {
-      obj.settings.backgroundColor = color;
-    }
+    if (kirtanData.settings) obj.settings.backgroundColor = color;
+
     updateSettings(obj);
   };
 
@@ -142,9 +137,8 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings) {
-      obj.settings.fontWeight = value;
-    }
+    if (kirtanData.settings) obj.settings.fontWeight = value;
+
     updateSettings(obj);
   };
 
@@ -158,9 +152,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings) {
-      obj.settings.fontFamily = event.target.value;
-    }
+    if (kirtanData.settings) obj.settings.fontFamily = event.target.value;
 
     updateSettings(obj);
   };
@@ -175,9 +167,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings) {
-      obj.settings.textShadowColor = color;
-    }
+    if (kirtanData.settings) obj.settings.textShadowColor = color;
 
     updateSettings(obj);
   };
@@ -192,9 +182,8 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings) {
+    if (kirtanData.settings)
       obj.settings.textShadowWidth = `${event.target.value}px`;
-    }
 
     updateSettings(obj);
   };
