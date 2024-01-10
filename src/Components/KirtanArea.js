@@ -56,9 +56,7 @@ const KirtanArea = () => {
 
     isDbInitialized &&
       IndexedDBService.updateItem(currKirtanData)
-        .then(() => {
-          console.log("favLines updated");
-        })
+        .then(() => {})
         .catch((error) => console.error(error));
   };
 
@@ -68,7 +66,6 @@ const KirtanArea = () => {
 
       if (event.key) {
         const favId = favLines[Number(event.key) - 1];
-        console.log("favId: ", favId);
         if (favId !== undefined) handleCurrLineIndex(favId);
         return;
       }
