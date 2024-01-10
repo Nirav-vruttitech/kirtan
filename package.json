@@ -13,6 +13,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.5",
     "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
@@ -21,7 +22,9 @@
     "react-redux": "^9.0.0",
     "react-router-dom": "^6.20.0",
     "react-scripts": "5.0.1",
+    "react-sortablejs": "^6.1.4",
     "showdown": "^2.1.0",
+    "sortablejs": "^1.15.1",
     "styled-components": "^6.1.1",
     "turndown": "^7.1.2",
     "web-vitals": "^2.1.4"
@@ -52,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/sortablejs": "^1.15.7",
     "tailwindcss": "^3.3.5"
   }
 }

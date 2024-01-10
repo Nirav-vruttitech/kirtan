@@ -110,7 +110,49 @@ const IndexedDBService = {
     });
   },
 
-  // ... Other CRUD methods ...
+  deleteItem(id) {
+    return new Promise((resolve, reject) => {
+      if (!this.db) {
+        reject("Database not initialized");
+        return;
+      }
+
+      const transaction = this.db.transaction([storeName], "readwrite");
+      const store = transaction.objectStore(storeName);
+      const request = store.delete(id);
+
+      request.onsuccess = () => {
+        resolve();
+      };
+
+      request.onerror = (event) => {
+        reject("Error deleting item: ", event.target.error);
+      };
+    });
+  },
+
+  clearObjectStore() {
+    return new Promise((resolve, reject) => {
+      if (!this.db) {
+        reject("Database not initialized");
+        return;
+      }
+
+      const transaction = this.db.transaction([storeName], "readwrite");
+      const store = transaction.objectStore(storeName);
+      const request = store.clear();
+
+      request.onsuccess = () => {
+        console.log(`Object store ${storeName} cleared`);
+        resolve();
+      };
+
+      request.onerror = (event) => {
+        console.error("Error clearing object store:", event.target.error);
+        reject("Error clearing object store: ", event.target.error);
+      };
+    });
+  },
 };
 
 export default IndexedDBService;
