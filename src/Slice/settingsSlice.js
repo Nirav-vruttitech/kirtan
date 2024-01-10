@@ -9,6 +9,7 @@ const initialState = {
   height: "80px",
   textShadowColor: "#FFF",
   textShadowWidth: "0px",
+  open: false,
 };
 
 export const settingsSlice = createSlice({
@@ -39,6 +40,10 @@ export const settingsSlice = createSlice({
     setTextShadowWidth: (state, action) => {
       state.textShadowWidth = action.payload;
     },
+
+    setSettingsOpen: (state, action) => {
+      state.open = action.payload;
+    },
   },
 });
 
@@ -51,6 +56,7 @@ export const {
   setHeight,
   setTextShadowColor,
   setTextShadowWidth,
+  setSettingsOpen,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

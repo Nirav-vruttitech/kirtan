@@ -15,17 +15,18 @@ const style = {
 
 const ConfirmBox = ({ open, handleClose, handleConfirm }) => {
   const handleKeyPress = (event) => {
-    if (event.key === "Enter" && open) {
+    console.log("event: ", event);
+    if (open && event.key === "Enter") {
       handleConfirm();
       handleClose(false);
     }
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
+    open && window.addEventListener("keydown", handleKeyPress);
 
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
+  }, [open]);
 
   return (
     <Modal open={open} onClose={() => handleClose(false)}>

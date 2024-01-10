@@ -34,6 +34,8 @@ const KirtanArea = () => {
 
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
+  const isSettingsOpen = useSelector((state) => state.settings.open);
+
   const handleRegularLineHover = (index) => setHoveredRegularLineIndex(index);
 
   const handleFavLineHover = (index) => setHoveredFavLineIndex(index);
@@ -61,38 +63,33 @@ const KirtanArea = () => {
         .catch((error) => console.error(error));
   };
 
-  const handleDrop = (item, monitor) => {
-    console.log("monitor: ", monitor);
-    console.log("item: ", item);
-    // Logic for handling drop
-  };
-
   useEffect(() => {
     const handleKeyPress = (event) => {
-      event.preventDefault();
+      if (!isSettingsOpen) {
+        event.preventDefault();
 
-      if (event.key) {
-        const favId = favLines[Number(event.key) - 1];
-        if (favId !== undefined) handleCurrLineIndex(favId);
-        return;
-      }
-
-      switch (event.key) {
-        case "ArrowUp":
-          if (currLineIndex > 0) handleCurrLineIndex(currLineIndex - 1);
-          break;
-        case "ArrowDown":
-          if (currLineIndex < getKirtanById()?.content?.length - 1)
-            handleCurrLineIndex(currLineIndex + 1);
-          break;
-        default:
-          break;
+        if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
+          const favId = favLines[Number(event.key) - 1];
+          if (favId !== undefined) handleCurrLineIndex(favId);
+          return;
+        }
+        switch (event.key) {
+          case "ArrowUp":
+            if (currLineIndex > 0) handleCurrLineIndex(currLineIndex - 1);
+            break;
+          case "ArrowDown":
+            if (currLineIndex < getKirtanById()?.content?.length - 1)
+              handleCurrLineIndex(currLineIndex + 1);
+            break;
+          default:
+            break;
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [favLines]);
+  }, [favLines, isSettingsOpen, currLineIndex]);
 
   const getKirtanById = () => {
     return (
@@ -138,7 +135,7 @@ const KirtanArea = () => {
   }, [kirtanId, kirtanData]);
 
   return (
-    <div className="p-3 flex flex-col bg-gray-100 w-full h-screen lineBackground mt-16">
+    <div className="py-3 flex flex-col bg-gray-100 w-full h-screen lineBackground mt-16">
       <Box className="flex w-full overflow-x-auto overflow-y-hidden pb-2 items-center justify-center gap-3">
         {Object.keys(kirtanData).map((key, index) => {
           const id = kirtanData[key].id;
@@ -161,7 +158,7 @@ const KirtanArea = () => {
         })}
       </Box>
 
-      <Box className="flex w-full justify-between gap-10">
+      <Box className="flex w-full justify-between gap-10 px-3">
         <div
           className="container flex items-center flex-col text-center p-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4] h-[75vh] w-1/2"
           style={{ fontFamily: fontFamily }}
@@ -231,7 +228,11 @@ const KirtanArea = () => {
           style={{ fontFamily: fontFamily }}
         >
           {favLines && favLines.length > 0 && (
-            <ReactSortable list={favLines} setList={getUpdatedList}>
+            <ReactSortable
+              list={favLines}
+              setList={getUpdatedList}
+              className="w-full"
+            >
               {favLines.map((line, index) => {
                 return (
                   <Stack
@@ -249,12 +250,11 @@ const KirtanArea = () => {
                       className={`${index < 9 ? "opacity-100" : "opacity-0"}`}
                     >
                       <Button
-                        className="m-1"
-                        style={{
-                          display: "inline",
-                          fontFamily: "ROBOTO",
-                          textTransform: "none",
+                        sx={{
+                          height: "30px",
+                          minWidth: "40px",
                         }}
+                        size="small"
                         variant="contained"
                       >
                         {index + 1}

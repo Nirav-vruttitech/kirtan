@@ -39,7 +39,7 @@ const AddKirtanStepper = () => {
   const handleShowDeleteConfirm = (x) => setShowDeleteConfirm(x);
 
   const getKirtanById = () =>
-    kirtanData.find((kirtan) => kirtan.id === kirtanId);
+    kirtanData.find((kirtan) => kirtan.id == kirtanId);
 
   const handleSubmit = async () => {
     const DbData = {
@@ -108,12 +108,14 @@ const AddKirtanStepper = () => {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === "Delete") handleShowDeleteConfirm(true);
-    else if (event.key === "Enter")
-      if (showDeleteConfirm) {
-        handleShowDeleteConfirm(false);
-        handleDelete();
-      }
+    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
+      if (event.key === "Delete") handleShowDeleteConfirm(true);
+    }
+    // else if (event.key === "Enter")
+    //   if (showDeleteConfirm) {
+    //     handleShowDeleteConfirm(false);
+    //     handleDelete();
+    //   }
   };
 
   useEffect(() => {
