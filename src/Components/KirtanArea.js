@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "../CSS/Page.css";
 import { setCurrKirtanIndex, setKirtanIndex } from "../Slice/KirtanIndexSlice";
 import IndexedDBService from "../Utils/DBConfig";
+import { ReactSortable } from "react-sortablejs";
 
 const KirtanArea = () => {
   const dispatch = useDispatch();
@@ -60,6 +61,12 @@ const KirtanArea = () => {
         .catch((error) => console.error(error));
   };
 
+  const handleDrop = (item, monitor) => {
+    console.log("monitor: ", monitor);
+    console.log("item: ", item);
+    // Logic for handling drop
+  };
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       event.preventDefault();
@@ -94,6 +101,23 @@ const KirtanArea = () => {
     );
   };
 
+  const getUpdatedList = (data) => {
+    const filteredIds = data.map((ele) => {
+      delete ele.chosen;
+      return Number(ele);
+    });
+    setFavLines(filteredIds);
+
+    let currKirtanData = { ...getKirtanById() };
+
+    currKirtanData.favLines = filteredIds;
+
+    isDbInitialized &&
+      IndexedDBService.updateItem(currKirtanData)
+        .then(() => {})
+        .catch((error) => console.error(error));
+  };
+
   useEffect(() => {
     if (kirtanId) setSelectedIndex(Number(kirtanId));
   }, [kirtanId]);
@@ -114,7 +138,7 @@ const KirtanArea = () => {
   }, [kirtanId, kirtanData]);
 
   return (
-    <div className="p-3 flex flex-col bg-gray-100 w-auto h-screen lineBackground mt-16">
+    <div className="p-3 flex flex-col bg-gray-100 w-full h-screen lineBackground mt-16">
       <Box className="flex w-full overflow-x-auto overflow-y-hidden pb-2 items-center justify-center gap-3">
         {Object.keys(kirtanData).map((key, index) => {
           const id = kirtanData[key].id;
@@ -207,7 +231,7 @@ const KirtanArea = () => {
           style={{ fontFamily: fontFamily }}
         >
           {favLines && favLines.length > 0 && (
-            <>
+            <ReactSortable list={favLines} setList={getUpdatedList}>
               {favLines.map((line, index) => {
                 return (
                   <Stack
@@ -263,7 +287,7 @@ const KirtanArea = () => {
                   </Stack>
                 );
               })}
-            </>
+            </ReactSortable>
           )}
         </div>
       </Box>

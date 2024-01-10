@@ -21,7 +21,9 @@
     "react-redux": "^9.0.0",
     "react-router-dom": "^6.20.0",
     "react-scripts": "5.0.1",
+    "react-sortablejs": "^6.1.4",
     "showdown": "^2.1.0",
+    "sortablejs": "^1.15.1",
     "styled-components": "^6.1.1",
     "turndown": "^7.1.2",
     "web-vitals": "^2.1.4"
@@ -52,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/sortablejs": "^1.15.7",
     "tailwindcss": "^3.3.5"
   }
 }
