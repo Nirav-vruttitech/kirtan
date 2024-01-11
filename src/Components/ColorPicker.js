@@ -10,8 +10,7 @@ const ColorPicker = ({ color, handelColor }) => {
   const styles = {
     color: {
       width: "100px",
-      height: "25px",
-      borderRadius: "2px",
+      height: "16px",
       backgroundColor: fontColorState.color,
     },
     swatch: {
