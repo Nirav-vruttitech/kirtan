@@ -64,6 +64,8 @@ const Navbar = () => {
 
   const isHome = window.location.pathname.split("/")[1] === "";
 
+  const isSettingsOpen = useSelector((state) => state.settings.open);
+
   const [open, setOpen] = useState(false);
 
   const [isLive, setIsLive] = useState(false);
@@ -103,31 +105,35 @@ const Navbar = () => {
   };
 
   const handleKeyPress = async (event) => {
-    let flag = isLive;
-    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
-      if (event.key === "Escape") {
-        flag = false;
-      } else if (event.key === "Enter") {
-        flag = true;
-      } else if (event.key === " ") {
-        flag = !flag;
-      } else {
-        event.preventDefault();
+    if (!isSettingsOpen) {
+      let flag = isLive;
+      if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
+        if (event.key === "Escape") {
+          flag = false;
+        } else if (event.key === "Enter") {
+          flag = true;
+        } else if (event.key === " ") {
+          flag = !flag;
+        } else {
+          event.preventDefault();
+        }
+
+        const res = await handleVMixInput(flag);
+
+        localStorage.setItem("isLive", JSON.stringify(flag));
+
+        res && setIsLive(flag);
       }
-
-      const res = await handleVMixInput(flag);
-
-      localStorage.setItem("isLive", JSON.stringify(flag));
-
-      res && setIsLive(flag);
     }
   };
 
   useEffect(() => {
-    isHome && window.addEventListener("keydown", handleKeyPress);
+    isHome &&
+      !isSettingsOpen &&
+      window.addEventListener("keydown", handleKeyPress);
 
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [isHome, isLive]);
+  }, [isHome, isLive, isSettingsOpen]);
 
   useEffect(() => {
     const isLive = localStorage.getItem("isLive");
@@ -154,7 +160,7 @@ const Navbar = () => {
             handleChange={handleChange}
             label="Caption Live"
           />
-          <Search className="mx-2">
+          {/* <Search className="mx-2">
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -162,7 +168,8 @@ const Navbar = () => {
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
-          </Search>
+          </Search> */}
+          <Box className="w-5"/>
           <Button
             className="mx-2 w-[121px] bg-white"
             size="sm"
