@@ -88,7 +88,6 @@ const AddKirtanStepper = () => {
       } else {
         IndexedDBService.updateItem(DbData)
           .then(() => {
-            dispatch(setKirtanIndex(kirtanId));
             navigate("/");
           })
           .catch((error) => console.error(error));
@@ -180,7 +179,7 @@ const AddKirtanStepper = () => {
                 variant="outlined"
                 color="inherit"
                 onClick={() => {
-                  dispatch(setKirtanIndex(isEdit ? kirtanId : 0));
+                  // dispatch(setKirtanIndex(isEdit ? kirtanId : 0));
                   navigate("/");
                 }}
               >
