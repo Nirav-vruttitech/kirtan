@@ -21,7 +21,7 @@
     font-style: normal;
 }
 
- 
+
 @font-face {
     font-family: 'Guj_Diamond';
     src: url("./fonts/Guj_Diamond.TTF") format('truetype');
@@ -269,7 +269,86 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Hin_Dev_3';
+    src: url("./fonts/H-dev_3-.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
 
+@font-face {
+    font-family: 'Hin_DevB_1';
+    src: url("./fonts/H-devb_1.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
 
+@font-face {
+    font-family: 'Hin_SimplB_0';
+    src: url("./fonts/H-simplb_0.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
 
+@font-face {
+    font-family: 'GHH-BOLD_0';
+    src: url("./fonts/GHH-BOLD_0.TTF") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
 
+@font-face {
+    font-family: 'GJJ-XBOL';
+    src: url("./fonts/GJJ-XBOL.TTF") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Guj_Gopika_Two_Bold';
+    src: url("./fonts/Guj_Gopika_Two_Bold.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Guj_Gopika_Two';
+    src: url("./fonts/Guj_Gopika_Two.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Guj_074_1123';
+    src: url("./fonts/074_1123.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Guj_260_3315';
+    src: url("./fonts/260_3315.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Guj_294_3349';
+    src: url("./fonts/294_3349.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Guj_427_BADARSHB';
+    src: url("./fonts/427_BADARSHB.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Guj_442_BMAB';
+    src: url("./fonts/442_BMAB.ttf") format('truetype');
+    font-weight: 15;
+    font-style: normal;
+}

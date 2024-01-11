@@ -21,6 +21,15 @@
   { "value": "Guj_Squarish", "text": "Guj_Squarish" },
   { "value": "Guj_Sulikhit", "text": "Guj_Sulikhit" },
   { "value": "Guj_Unique", "text": "Guj_Unique" },
+  { "value": "GHH-BOLD_0", "text": "GHH-BOLD_0" },
+  { "value": "GJJ-XBOL", "text": "GJJ-XBOL" },
+  { "value": "Guj_Gopika_Two_Bold", "text": "Guj_Gopika_Two_Bold" },
+  { "value": "Guj_Gopika_Two", "text": "Guj_Gopika_Two" },
+  { "value": "Guj_074_1123", "text": "Guj_074_1123" },
+  { "value": "Guj_260_3315", "text": "Guj_260_3315" },
+  { "value": "Guj_294_3349", "text": "Guj_294_3349" },
+  { "value": "Guj_427_BADARSHB", "text": "Guj_427_BADARSHB" },
+  { "value": "Guj_442_BMAB", "text": "Guj_442_BMAB" },
   { "value": "Hin_Devnagari_Bold", "text": "Hin_Devnagari_Bold" },
   { "value": "Hin_Devnagari_Normal", "text": "Hin_Devnagari_Normal" },
   { "value": "Hin_Hastalikhit", "text": "Hin_Hastalikhit" },
@@ -32,5 +41,8 @@
   { "value": "Hin_Sundar", "text": "Hin_Sundar" },
   { "value": "Hin_Tital", "text": "Hin_Tital" },
   { "value": "Hin_Vaidik", "text": "Hin_Vaidik" },
-  { "value": "Hin_Vankachuka", "text": "Hin_Vankachuka" }
+  { "value": "Hin_Vankachuka", "text": "Hin_Vankachuka" },
+  { "value": "Hin_Dev_3", "text": "Hin_Dev_3" },
+  { "value": "Hin_DevB_1", "text": "Hin_DevB_1" },
+  { "value": "Hin_SimplB_0", "text": "Hin_SimplB_0" }
 ]
