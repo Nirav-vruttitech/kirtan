@@ -27,11 +27,10 @@ import Tab from "@mui/material/Tab";
 
 const style = {
   position: "absolute",
-  top: "40%",
+  top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 600,
-  height: 620,
   overflowY: "auto",
   bgcolor: "background.paper",
   boxShadow: 24,
@@ -237,7 +236,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
   return (
     <Modal open={open} onClose={() => handleModalToggle(false)}>
-      <Box sx={style} className="rounded-2xl">
+      <Box sx={style} className="rounded-2xl overflow-y-auto max-h-screen min-h-[680px]">
         <Box className="flex items-center justify-between w-full bg-blue-500 px-4 py-3 rounded-t-xl">
           <p className="text-white font-medium text-xl">Setting</p>
           <IconButton
