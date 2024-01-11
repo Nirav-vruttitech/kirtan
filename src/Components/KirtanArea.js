@@ -65,9 +65,8 @@ const KirtanArea = () => {
 
   useEffect(() => {
     const handleKeyPress = (event) => {
+      event.preventDefault();
       if (!isSettingsOpen) {
-        event.preventDefault();
-
         if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
           const favId = favLines[Number(event.key) - 1];
           if (favId !== undefined) handleCurrLineIndex(favId);
@@ -87,7 +86,7 @@ const KirtanArea = () => {
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
+    !isSettingsOpen && window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [favLines, isSettingsOpen, currLineIndex]);
 
@@ -160,7 +159,7 @@ const KirtanArea = () => {
 
       <Box className="flex w-full justify-between gap-10 px-3">
         <div
-          className="container flex items-center flex-col text-center p-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4] h-[75vh] w-1/2"
+          className="container flex items-center flex-col text-center py-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4] h-[75vh] w-1/2"
           style={{ fontFamily: fontFamily }}
         >
           {getKirtanById() &&
@@ -168,7 +167,9 @@ const KirtanArea = () => {
             getKirtanById().content.map((line, index) => {
               return (
                 <Stack
-                  className="m-1 py-[1px] w-full flex justify-center items-center"
+                  className={`m-1 py-[1px] px-4 w-full flex justify-center items-center transition-all duration-300 ease-in-out ${
+                    currLineIndex === index ? "bg-slate-50 bg-opacity-70" : "bg-inherit"
+                  }`}
                   direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   key={index}
@@ -180,12 +181,12 @@ const KirtanArea = () => {
                     style={{ gridTemplateColumns: "1fr 35fr 1fr" }}
                   >
                     <div
-                      className={`inline ${
+                      className={`inline transition-all duration-300 ease-in-out ${
                         currLineIndex === index ? "opacity-100" : "opacity-0"
                       } `}
                     >
                       <i
-                        className="fa-solid fa-hand-point-right"
+                        className="fa-solid fa-hand-point-right text-3xl"
                         style={{ color: "#3170dd" }}
                       ></i>{" "}
                     </div>
