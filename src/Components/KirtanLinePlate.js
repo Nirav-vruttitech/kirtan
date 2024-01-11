@@ -24,6 +24,8 @@ const KirtanLinePlate = () => {
 
   const currIndex = useSelector((state) => state.kirtanIndex.currIndex);
 
+  const shortcutIndex = useSelector((state) => state.kirtanIndex.shortcutIndex);
+
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
   const backgroundColor = useSelector(
@@ -60,15 +62,19 @@ const KirtanLinePlate = () => {
   ]);
 
   useEffect(() => {
+    let index = currIndex;
+
+    if (shortcutIndex !== null) index = shortcutIndex;
+
     const currLine =
       kirtanData.length > 0 &&
       kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[
-        currIndex
+        index
       ];
 
     if (currLine) setCurrLine(currLine);
     else setCurrLine("");
-  }, [currIndex, kirtanId, kirtanData]);
+  }, [currIndex, kirtanId, kirtanData, shortcutIndex]);
 
   useEffect(() => {
     isDbInitialized &&

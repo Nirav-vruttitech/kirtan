@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   currIndex: 0,
   kirtanId: 0,
+  shortcutIndex: null,
 };
 
 export const KirtanIndexSlice = createSlice({
@@ -15,9 +16,13 @@ export const KirtanIndexSlice = createSlice({
     setKirtanIndex: (state, action) => {
       state.kirtanId = action.payload;
     },
+    setShortcutIndex: (state, action) => {
+      state.shortcutIndex = action.payload;
+    },
   },
 });
 
-export const { setCurrKirtanIndex, setKirtanIndex } = KirtanIndexSlice.actions;
+export const { setCurrKirtanIndex, setKirtanIndex, setShortcutIndex } =
+  KirtanIndexSlice.actions;
 
 export default KirtanIndexSlice.reducer;

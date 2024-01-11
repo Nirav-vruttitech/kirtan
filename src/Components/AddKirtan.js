@@ -75,6 +75,7 @@ const AddKirtanStepper = () => {
         textShadowWidth: getKirtanById()?.settings?.textShadowWidth || "0px",
       },
       favLines: getKirtanById()?.favLines || [],
+      lineHistory: getKirtanById()?.lineHistory || [],
     };
 
     if (isDbInitialized)
@@ -107,7 +108,13 @@ const AddKirtanStepper = () => {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
+    if (
+      event.key !== "ArrowUp" &&
+      event.key !== "ArrowDown" &&
+      event.key !== "ArrowLeft" &&
+      event.key !== "ArrowRight" &&
+      event.key !== "q"
+    ) {
       if (event.key === "Delete") handleShowDeleteConfirm(true);
     }
     // else if (event.key === "Enter")

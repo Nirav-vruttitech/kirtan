@@ -7,7 +7,11 @@ import React, { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 import "../CSS/Page.css";
-import { setCurrKirtanIndex, setKirtanIndex } from "../Slice/KirtanIndexSlice";
+import {
+  setCurrKirtanIndex,
+  setKirtanIndex,
+  setShortcutIndex,
+} from "../Slice/KirtanIndexSlice";
 import IndexedDBService from "../Utils/DBConfig";
 import { ReactSortable } from "react-sortablejs";
 
@@ -16,11 +20,15 @@ const KirtanArea = () => {
 
   const [favLines, setFavLines] = useState([]);
 
+  const [lineHistory, setLineHistory] = useState([]);
+
   const [kirtanData, setKirtanData] = useState({});
 
   const [currLineIndex, setCurrLineIndex] = useState(0);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const [usedShortcut, setUsedShortcut] = useState(null);
 
   const [hoveredFavLineIndex, setHoveredFavLineIndex] = useState(null);
 
@@ -36,6 +44,8 @@ const KirtanArea = () => {
 
   const isSettingsOpen = useSelector((state) => state.settings.open);
 
+  const shortcutIndex = useSelector((state) => state.kirtanIndex.shortcutIndex);
+
   const handleRegularLineHover = (index) => setHoveredRegularLineIndex(index);
 
   const handleFavLineHover = (index) => setHoveredFavLineIndex(index);
@@ -43,6 +53,31 @@ const KirtanArea = () => {
   const handleCurrLineIndex = (index) => {
     setCurrLineIndex(index);
     dispatch(setCurrKirtanIndex(index));
+  };
+
+  const handleLineHistory = (line) => {
+    let history = lineHistory.length > 0 ? [...lineHistory] : [];
+
+    // Remove the existing entry if the line is already in the history
+    const existingIndex = history.indexOf(line);
+    if (existingIndex !== -1) {
+      history.splice(existingIndex, 1);
+    }
+
+    if (history.length > 9) history.shift();
+
+    history.push(line);
+
+    let kirtanData = { ...getKirtanById() };
+    kirtanData.lineHistory = history;
+
+    setLineHistory(history);
+
+    if (isDbInitialized) {
+      IndexedDBService.updateItem(kirtanData)
+        .then(() => {})
+        .catch((error) => console.error(error));
+    }
   };
 
   const handleFavLines = (id) => {
@@ -87,30 +122,102 @@ const KirtanArea = () => {
         .catch((error) => console.error(error));
   };
 
+  const handleClearHistory = () => {
+    setLineHistory([]);
+    let kirtanData = { ...getKirtanById() };
+    kirtanData.lineHistory = [];
+    isDbInitialized &&
+      IndexedDBService.updateItem(kirtanData)
+        .then(() => {})
+        .catch((error) => console.error(error));
+  };
+
+  const handleHistorySwitch = (isForward) => {
+    const index = lineHistory.findIndex((line) => line === currLineIndex);
+
+    if (index === -1) return;
+
+    const nextLine = lineHistory[isForward ? index + 1 : index - 1];
+
+    if (nextLine === undefined) return;
+    handleCurrLineIndex(nextLine);
+  };
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       event.preventDefault();
+
+      // enable this if shortcut assigned line have to be highlighted in the main lines
+      // if (
+      //   event.key !== "ArrowUp" &&
+      //   event.key !== "ArrowDown" &&
+      //   event.key !== "ArrowLeft" &&
+      //   event.key !== "ArrowRight" &&
+      //   event.key !== "q" &&
+      //   event.key !== "1" &&
+      //   event.key !== "2" &&
+      //   event.key !== "3" &&
+      //   event.key !== "4" &&
+      //   event.key !== "5" &&
+      //   event.key !== "6" &&
+      //   event.key !== "7" &&
+      //   event.key !== "8" &&
+      //   event.key !== "9"
+      // ) {
+      // const favId = favLines[Number(event.key) - 1];
+      // if (favId !== undefined) handleCurrLineIndex(favId);
+      //   return;
+      // }
+
       if (!isSettingsOpen) {
-        if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
-          const favId = favLines[Number(event.key) - 1];
-          if (favId !== undefined) handleCurrLineIndex(favId);
-          return;
+        const isShortcutPressed = !isNaN(Number(event.key));
+
+        if (isShortcutPressed && favLines.length >= Number(event.key)) {
+          setUsedShortcut(Number(event.key));
+          dispatch(setShortcutIndex(favLines[Number(event.key) - 1]));
         }
+
         switch (event.key) {
           case "ArrowUp":
-            if (currLineIndex > 0) handleCurrLineIndex(currLineIndex - 1);
+            if (currLineIndex > 0) {
+              handleLineHistory(currLineIndex);
+              handleCurrLineIndex(currLineIndex - 1);
+              setUsedShortcut(null);
+              dispatch(setShortcutIndex(null));
+            }
             break;
           case "ArrowDown":
-            if (currLineIndex < getKirtanById()?.content?.length - 1)
+            if (currLineIndex < getKirtanById()?.content?.length - 1) {
+              handleLineHistory(currLineIndex);
               handleCurrLineIndex(currLineIndex + 1);
+              setUsedShortcut(null);
+              dispatch(setShortcutIndex(null));
+            }
             break;
+
+          case "ArrowLeft":
+            handleHistorySwitch(false);
+            setUsedShortcut(null);
+            dispatch(setShortcutIndex(null));
+            break;
+
+          case "ArrowRight":
+            handleHistorySwitch(true);
+            setUsedShortcut(null);
+            dispatch(setShortcutIndex(null));
+            break;
+
+          case "q":
+            handleClearHistory();
+            break;
+
           default:
             break;
         }
       }
     };
 
-    !isSettingsOpen && window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [favLines, isSettingsOpen, currLineIndex]);
 
@@ -132,6 +239,7 @@ const KirtanArea = () => {
     isDbInitialized &&
       IndexedDBService.getData(Number(selectedIndex)).then((data) => {
         setFavLines(data.favLines);
+        setLineHistory(data.lineHistory);
       });
   }, [selectedIndex, isDbInitialized]);
 
@@ -198,7 +306,12 @@ const KirtanArea = () => {
                       className="cursor-grab m-1 text-3xl text-center"
                       style={{ fontFamily: fontFamily }}
                       key={index + 1}
-                      onClick={() => handleCurrLineIndex(index)}
+                      onClick={() => {
+                        handleLineHistory(currLineIndex);
+                        handleCurrLineIndex(index);
+                        setUsedShortcut(null);
+                        dispatch(setShortcutIndex(null));
+                      }}
                     >
                       <Markdown>{line}</Markdown>
                     </div>
@@ -241,7 +354,11 @@ const KirtanArea = () => {
             {favLines.map((line, index) => {
               return (
                 <Stack
-                  className="m-1 py-[1px] w-full grid grid-cols-3 justify-between items-center"
+                  className={`m-1 py-[1px] w-full grid grid-cols-3 justify-between items-center transition-all duration-300 ease-in-out ${
+                    usedShortcut - 1 === index
+                      ? "bg-slate-50 bg-opacity-70"
+                      : "bg-inherit"
+                  }`}
                   style={{
                     gridTemplateColumns: "1fr 1fr 1fr",
                   }}
@@ -249,7 +366,11 @@ const KirtanArea = () => {
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   onMouseEnter={() => handleFavLineHover(line)}
                   onMouseLeave={() => handleFavLineHover(null)}
-                  onClick={() => handleCurrLineIndex(line)}
+                  onClick={() => {
+                    // handleCurrLineIndex(line);
+                    setUsedShortcut(index + 1);
+                    dispatch(setShortcutIndex(line));
+                  }}
                   key={index}
                 >
                   <Box className="flex items-center justify-center">

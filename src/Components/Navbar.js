@@ -107,7 +107,13 @@ const Navbar = () => {
   const handleKeyPress = async (event) => {
     if (!isSettingsOpen) {
       let flag = isLive;
-      if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
+      if (
+        event.key !== "ArrowUp" &&
+        event.key !== "ArrowDown" &&
+        event.key !== "ArrowLeft" &&
+        event.key !== "ArrowRight" &&
+        event.key !== "q"
+      ) {
         if (event.key === "Escape") {
           flag = false;
         } else if (event.key === "Enter") {
