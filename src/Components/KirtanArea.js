@@ -270,18 +270,18 @@ const KirtanArea = () => {
                       </Button>
                     </Box>
 
-                    <IconButton
-                      className={` drag-handle text-base cursor-move ${
+                    <Box
+                      className={`text-sm drag-handle cursor-grab bg-inherit hover:bg-inherit ${
                         hoveredFavLineIndex === line
                           ? "opacity-100"
                           : "opacity-0"
                       }`}
                     >
-                      <i className="fa-solid fa-grip-vertical"></i>
-                    </IconButton>
+                      <i className="fa-solid fa-grip-vertical text-base"></i>
+                    </Box>
                   </Box>
                   <div
-                    className="cursor-grab m-1 text-3xl text-center"
+                    className="m-1 text-3xl text-center"
                     style={{ fontFamily: fontFamily }}
                   >
                     <Markdown>{getKirtanById()?.content?.[line]}</Markdown>
