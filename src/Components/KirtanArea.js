@@ -281,7 +281,7 @@ const KirtanArea = () => {
                     </Box>
                   </Box>
                   <div
-                    className="m-1 text-3xl text-center"
+                    className="m-1 text-3xl text-center cursor-pointer"
                     style={{ fontFamily: fontFamily }}
                   >
                     <Markdown>{getKirtanById()?.content?.[line]}</Markdown>

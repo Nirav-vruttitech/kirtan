@@ -3,12 +3,12 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Showdown from "showdown";
 import TurndownService from "turndown";
 import IndexedDBService from "../Utils/DBConfig";
-import CKEditorCss from "./../ckeditor.css";
 import FontList from "../Utils/FontsList.json";
+import CKEditorCss from "./../ckeditor.css";
 
 const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
   const converter = new Showdown.Converter();

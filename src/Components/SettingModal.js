@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
+import IconButton from "@mui/material/IconButton";
+import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/material/Modal";
-import Grid from "@mui/material/Grid";
-import ColorPicker from "./ColorPicker";
+import Select from "@mui/material/Select";
+import Slider from "@mui/material/Slider";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import IconButton from "@mui/material/IconButton";
-import { useSelector, useDispatch } from "react-redux";
-import TextField from "@mui/material/TextField";
-import FontList from "../Utils/FontsList.json";
+import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setBgColor,
   setColor,
@@ -23,9 +23,8 @@ import {
   setTextShadowWidth,
 } from "../Slice/settingsSlice";
 import IndexedDBService from "../Utils/DBConfig";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
+import FontList from "../Utils/FontsList.json";
+import ColorPicker from "./ColorPicker";
 
 const style = {
   position: "absolute",
