@@ -243,6 +243,16 @@ const KirtanArea = () => {
       });
   }, [selectedIndex, isDbInitialized]);
 
+  useEffect(() => {
+    // get the body element and add add overflow hidden
+
+    const body = document.querySelector("body");
+
+    body.style.overflow = "hidden";
+
+    return () => (body.style.overflow = "auto");
+  }, []);
+
   return (
     <div className="py-3 flex flex-col bg-gray-100 w-full h-screen lineBackground mt-16">
       <Box className="flex w-full overflow-x-auto overflow-y-hidden pb-2 items-center justify-center gap-3">

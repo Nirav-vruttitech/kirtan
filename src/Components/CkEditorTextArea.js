@@ -53,7 +53,7 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
   }, [kirtanData]);
 
   return (
-    <div className="width-full relative overflow-y-auto max-h-screen">
+    <div className="width-full relative overflow-y-auto max-h-[845px]">
       <div className="z-50 absolute right-0">
         <Select
           value={selectFontFamily}

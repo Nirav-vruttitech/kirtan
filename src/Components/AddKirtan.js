@@ -158,10 +158,10 @@ const AddKirtanStepper = () => {
   }, [isEdit, kirtanLines, kirtanData]);
 
   return (
-    <div className="w-full h-screen bg-gray-100">
+    <div className="w-full h-full bg-gray-50 overflow-hidden">
       <div className="container pt-3">
-        <Box sx={{ width: "100%" }}>
-          <Box className="flex justify-between item-center w-full gap-3 pb-2">
+        <Box sx={{ width: "100%" }} className="relative">
+          <Box className="flex justify-between item-center w-full gap-3 pb-2 absolute top-0 z-50">
             <TextField
               id="outlined-basic"
               variant="filled"
@@ -202,7 +202,7 @@ const AddKirtanStepper = () => {
               </Button>
             </Box>
           </Box>
-          <div className="mt-2 mb-1">
+          <div className="pt-16">
             <CkEditorTextArea
               getEditorContent={getEditorContent}
               getEditorFont={getEditorFont}
