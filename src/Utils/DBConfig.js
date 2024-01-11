@@ -46,8 +46,6 @@ const IndexedDBService = {
       request.onsuccess = (event) => {
         if (event.target.result) {
           resolve(event.target.result);
-        } else {
-          reject("No data found with the given key");
         }
       };
 

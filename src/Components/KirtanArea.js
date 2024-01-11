@@ -63,6 +63,30 @@ const KirtanArea = () => {
         .catch((error) => console.error(error));
   };
 
+  const getKirtanById = () => {
+    return (
+      kirtanData.length > 0 &&
+      kirtanData.find((kirtan) => kirtan.id === kirtanId)
+    );
+  };
+
+  const getUpdatedList = (data) => {
+    const filteredIds = data.map((ele) => {
+      delete ele.chosen;
+      return Number(ele);
+    });
+    setFavLines(filteredIds);
+
+    let currKirtanData = { ...getKirtanById() };
+
+    currKirtanData.favLines = filteredIds;
+
+    isDbInitialized &&
+      IndexedDBService.updateItem(currKirtanData)
+        .then(() => {})
+        .catch((error) => console.error(error));
+  };
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       event.preventDefault();
@@ -90,32 +114,9 @@ const KirtanArea = () => {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [favLines, isSettingsOpen, currLineIndex]);
 
-  const getKirtanById = () => {
-    return (
-      kirtanData.length > 0 &&
-      kirtanData.find((kirtan) => kirtan.id === selectedIndex)
-    );
-  };
-
-  const getUpdatedList = (data) => {
-    const filteredIds = data.map((ele) => {
-      delete ele.chosen;
-      return Number(ele);
-    });
-    setFavLines(filteredIds);
-
-    let currKirtanData = { ...getKirtanById() };
-
-    currKirtanData.favLines = filteredIds;
-
-    isDbInitialized &&
-      IndexedDBService.updateItem(currKirtanData)
-        .then(() => {})
-        .catch((error) => console.error(error));
-  };
-
   useEffect(() => {
-    if (kirtanId) setSelectedIndex(Number(kirtanId));
+    if (kirtanId && kirtanId != selectedIndex)
+      setSelectedIndex(Number(kirtanId));
   }, [kirtanId]);
 
   useEffect(() => {
@@ -128,10 +129,11 @@ const KirtanArea = () => {
   }, [isDbInitialized]);
 
   useEffect(() => {
-    const currKirtanData = getKirtanById();
-    if (currKirtanData && currKirtanData.favLines)
-      setFavLines(currKirtanData.favLines);
-  }, [kirtanId, kirtanData]);
+    isDbInitialized &&
+      IndexedDBService.getData(Number(selectedIndex)).then((data) => {
+        setFavLines(data.favLines);
+      });
+  }, [selectedIndex, isDbInitialized]);
 
   return (
     <div className="py-3 flex flex-col bg-gray-100 w-full h-screen lineBackground mt-16">
@@ -168,7 +170,9 @@ const KirtanArea = () => {
               return (
                 <Stack
                   className={`m-1 py-[1px] px-4 w-full flex justify-center items-center transition-all duration-300 ease-in-out ${
-                    currLineIndex === index ? "bg-slate-50 bg-opacity-70" : "bg-inherit"
+                    currLineIndex === index
+                      ? "bg-slate-50 bg-opacity-70"
+                      : "bg-inherit"
                   }`}
                   direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -228,68 +232,62 @@ const KirtanArea = () => {
           className="container flex items-center flex-col text-center p-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4] h-[75vh] w-1/2"
           style={{ fontFamily: fontFamily }}
         >
-          {favLines && favLines.length > 0 && (
-            <ReactSortable
-              list={favLines}
-              setList={getUpdatedList}
-              className="w-full"
-            >
-              {favLines.map((line, index) => {
-                return (
-                  <Stack
-                    className="m-1 py-[1px] w-full grid grid-cols-3 justify-between items-center"
-                    style={{
-                      gridTemplateColumns: "1fr 1fr 1fr",
-                    }}
-                    direction={{ xs: "column", sm: "row" }}
-                    spacing={{ xs: 1, sm: 2, md: 4 }}
-                    onMouseEnter={() => handleFavLineHover(line)}
-                    onMouseLeave={() => handleFavLineHover(null)}
-                    key={index}
+          <ReactSortable
+            list={favLines}
+            setList={getUpdatedList}
+            className="w-full"
+          >
+            {favLines.map((line, index) => {
+              return (
+                <Stack
+                  className="m-1 py-[1px] w-full grid grid-cols-3 justify-between items-center"
+                  style={{
+                    gridTemplateColumns: "1fr 1fr 1fr",
+                  }}
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={{ xs: 1, sm: 2, md: 4 }}
+                  onMouseEnter={() => handleFavLineHover(line)}
+                  onMouseLeave={() => handleFavLineHover(null)}
+                  key={index}
+                >
+                  <Box className={`${index < 9 ? "opacity-100" : "opacity-0"}`}>
+                    <Button
+                      sx={{
+                        height: "30px",
+                        minWidth: "40px",
+                      }}
+                      size="small"
+                      variant="contained"
+                    >
+                      {index + 1}
+                    </Button>
+                  </Box>
+                  <div
+                    className="cursor-grab m-1 text-3xl text-center"
+                    style={{ fontFamily: fontFamily }}
                   >
-                    <Box
-                      className={`${index < 9 ? "opacity-100" : "opacity-0"}`}
-                    >
-                      <Button
-                        sx={{
-                          height: "30px",
-                          minWidth: "40px",
-                        }}
-                        size="small"
-                        variant="contained"
-                      >
-                        {index + 1}
-                      </Button>
-                    </Box>
-                    <div
-                      className="cursor-grab m-1 text-3xl text-center"
-                      style={{ fontFamily: fontFamily }}
-                    >
-                      <Markdown>{getKirtanById().content[line]}</Markdown>
-                    </div>
-                    <div
-                      className={`text-xl font-semibold ${
-                        hoveredFavLineIndex === line
-                          ? "opacity-100"
-                          : "opacity-0"
-                      }`}
-                    >
-                      {hoveredFavLineIndex === line &&
-                      !favLines.includes(line) ? (
-                        <IconButton onClick={() => handleFavLines(line)}>
-                          <i className="fa-solid fa-plus"></i>
-                        </IconButton>
-                      ) : (
-                        <IconButton onClick={() => handleFavLines(line)}>
-                          <i className="fa-solid fa-minus"></i>
-                        </IconButton>
-                      )}
-                    </div>
-                  </Stack>
-                );
-              })}
-            </ReactSortable>
-          )}
+                    <Markdown>{getKirtanById()?.content?.[line]}</Markdown>
+                  </div>
+                  <div
+                    className={`text-xl font-semibold ${
+                      hoveredFavLineIndex === line ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    {hoveredFavLineIndex === line &&
+                    !favLines.includes(line) ? (
+                      <IconButton onClick={() => handleFavLines(line)}>
+                        <i className="fa-solid fa-plus"></i>
+                      </IconButton>
+                    ) : (
+                      <IconButton onClick={() => handleFavLines(line)}>
+                        <i className="fa-solid fa-minus"></i>
+                      </IconButton>
+                    )}
+                  </div>
+                </Stack>
+              );
+            })}
+          </ReactSortable>
         </div>
       </Box>
     </div>
