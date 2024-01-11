@@ -236,6 +236,7 @@ const KirtanArea = () => {
             list={favLines}
             setList={getUpdatedList}
             className="w-full"
+            handle=".drag-handle"
           >
             {favLines.map((line, index) => {
               return (
@@ -248,19 +249,36 @@ const KirtanArea = () => {
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   onMouseEnter={() => handleFavLineHover(line)}
                   onMouseLeave={() => handleFavLineHover(null)}
+                  onClick={() => handleCurrLineIndex(line)}
                   key={index}
                 >
-                  <Box className={`${index < 9 ? "opacity-100" : "opacity-0"}`}>
-                    <Button
-                      sx={{
-                        height: "30px",
-                        minWidth: "40px",
-                      }}
-                      size="small"
-                      variant="contained"
+                  <Box className="flex items-center justify-center">
+                    <Box
+                      className={`${
+                        index < 9 ? "opacity-100" : "opacity-0"
+                      } w-20`}
                     >
-                      {index + 1}
-                    </Button>
+                      <Button
+                        sx={{
+                          height: "30px",
+                          minWidth: "40px",
+                        }}
+                        size="small"
+                        variant="contained"
+                      >
+                        {index + 1}
+                      </Button>
+                    </Box>
+
+                    <IconButton
+                      className={` drag-handle text-base cursor-move ${
+                        hoveredFavLineIndex === line
+                          ? "opacity-100"
+                          : "opacity-0"
+                      }`}
+                    >
+                      <i className="fa-solid fa-grip-vertical"></i>
+                    </IconButton>
                   </Box>
                   <div
                     className="cursor-grab m-1 text-3xl text-center"
@@ -268,6 +286,7 @@ const KirtanArea = () => {
                   >
                     <Markdown>{getKirtanById()?.content?.[line]}</Markdown>
                   </div>
+
                   <div
                     className={`text-xl font-semibold ${
                       hoveredFavLineIndex === line ? "opacity-100" : "opacity-0"
