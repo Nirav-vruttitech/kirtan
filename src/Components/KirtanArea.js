@@ -72,7 +72,6 @@ const KirtanArea = () => {
   };
 
   const handleChange = async (x) => {
-    console.log(x);
     const res = await handleVMixInput(x);
     res && setIsLive(x);
     res && localStorage.setItem("isLive", JSON.stringify(x));
@@ -269,6 +268,8 @@ const KirtanArea = () => {
     return () => (body.style.overflow = "auto");
   }, []);
 
+  const kirtanHeight = getKirtanById()?.settings?.height || "200px";
+
   return (
     <div
       className="py-3 flex flex-col justify-between bg-gray-100 w-full lineBackground relative"
@@ -276,7 +277,7 @@ const KirtanArea = () => {
         height: "calc(100vh)",
       }}
     >
-      <Box className="flex flex-col w-full justify-center items-center">
+      <Box className="flex flex-col w-full justify-center items-center absolute">
         <Box className="flex w-full justify-between px-3">
           <Box className="flex w-full overflow-x-auto overflow-y-hidden pb-2 items-center gap-3">
             {Object.keys(kirtanData).map((key, index) => {
@@ -334,10 +335,14 @@ const KirtanArea = () => {
               <i className="fa-solid fa-gear fa-lg"></i>
             </Box>
           </Box>
+          {/* {open && (
+            )} */}
           <SettingModal open={open} handleModalToggle={handleModalToggle} />
         </Box>
 
-        <Box className="flex w-full justify-between gap-10 px-3 h-[95vh] max-h-[calc(100vh-170px)]">
+        <Box
+          className={`flex w-full justify-between gap-10 px-3 h-[calc(95vh-${kirtanHeight})] max-h-[calc(100vh-170px)]`}
+        >
           <div
             className="container flex items-center flex-col text-center py-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4]  w-1/2"
             style={{ fontFamily: fontFamily }}

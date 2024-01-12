@@ -73,6 +73,7 @@ const AddKirtanStepper = () => {
         textShadowColor:
           getKirtanById()?.settings?.textShadowColor || "#ffffff",
         textShadowWidth: getKirtanById()?.settings?.textShadowWidth || "0px",
+        isDualLineMode: getKirtanById()?.settings?.isDualLineMode || false,
       },
       favLines: getKirtanById()?.favLines || [],
       lineHistory: getKirtanById()?.lineHistory || [],

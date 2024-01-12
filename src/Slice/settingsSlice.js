@@ -10,6 +10,7 @@ const initialState = {
   textShadowColor: "#FFF",
   textShadowWidth: "0px",
   open: false,
+  isDualLineMode: false,
 };
 
 export const settingsSlice = createSlice({
@@ -40,9 +41,11 @@ export const settingsSlice = createSlice({
     setTextShadowWidth: (state, action) => {
       state.textShadowWidth = action.payload;
     },
-
     setSettingsOpen: (state, action) => {
       state.open = action.payload;
+    },
+    setIsDualLineMode: (state, action) => {
+      state.isDualLineMode = action.payload;
     },
   },
 });
@@ -57,6 +60,7 @@ export const {
   setTextShadowColor,
   setTextShadowWidth,
   setSettingsOpen,
+  setIsDualLineMode,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

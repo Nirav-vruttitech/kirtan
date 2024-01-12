@@ -19,12 +19,14 @@ import {
   setFontSize,
   setFontWeight,
   setHeight,
+  setIsDualLineMode,
   setTextShadowColor,
   setTextShadowWidth,
 } from "../Slice/settingsSlice";
 import IndexedDBService from "../Utils/DBConfig";
 import FontList from "../Utils/FontsList.json";
 import ColorPicker from "./ColorPicker";
+import SwitchComp from "./Switch";
 
 const style = {
   position: "absolute",
@@ -44,6 +46,8 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
+  const [isDualMode, setIsDualMode] = useState(false);
+
   const [kirtanData, setKirtanData] = useState({});
 
   const [initialSettings, setInitialSettings] = useState({});
@@ -53,6 +57,18 @@ const SettingModal = ({ open, handleModalToggle }) => {
     overlayChannelId: "",
     inputId: "",
   });
+
+  const handleDualModeToggle = (x) => {
+    setIsDualMode(x);
+
+    let obj = { ...kirtanData };
+
+    if (kirtanData.settings) obj.settings.isDualLineMode = x;
+
+    updateSettings(obj);
+
+    dispatch(setIsDualLineMode(x));
+  };
 
   const handleVmixSettingsChange = (event) => {
     event.preventDefault();
@@ -76,7 +92,6 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
   useEffect(() => {
     let styles = kirtanData && kirtanData.settings;
-
     if (styles && Object.keys(styles).length > 0) {
       dispatch(setColor(styles.color));
       dispatch(setBgColor(styles.backgroundColor));
@@ -86,8 +101,11 @@ const SettingModal = ({ open, handleModalToggle }) => {
       dispatch(setFontFamily(styles.fontFamily));
       dispatch(setTextShadowColor(styles.textShadowColor));
       dispatch(setTextShadowWidth(styles.textShadowWidth));
+      dispatch(setIsDualLineMode(styles.isDualLineMode));
 
       setInitialSettings(styles);
+
+      setIsDualMode(styles.isDualLineMode);
     }
   }, [kirtanData, kirtanId]);
 
@@ -445,7 +463,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                   onChange={handleViewPortHeightSliderChange}
                   marks
                   min={30}
-                  max={130}
+                  max={200}
                 />
               </Box>
             </Box>
@@ -546,6 +564,30 @@ const SettingModal = ({ open, handleModalToggle }) => {
                   max={5}
                 />
               </Box>
+            </Box>
+            <Box className="flex justify-start items-center w-full gap-6">
+              <Typography
+                className="font-semibold w-1/3"
+                sx={{
+                  fontSize: "17px",
+                  fontWeight: "600",
+                }}
+              >
+                Dual Line Mode
+              </Typography>
+              <Typography
+                className="font-semibold"
+                sx={{
+                  fontSize: "17px",
+                  fontWeight: "600",
+                }}
+              >
+                :
+              </Typography>
+              <SwitchComp
+                checked={isDualMode}
+                handleChange={handleDualModeToggle}
+              />
             </Box>
           </Box>
         )}

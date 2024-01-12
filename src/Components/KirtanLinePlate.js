@@ -8,6 +8,8 @@ const KirtanLinePlate = () => {
 
   const [currLine, setCurrLine] = useState("");
 
+  const [nextLine, setNextLine] = useState("");
+
   const [kirtanData, setKirtanData] = useState({});
 
   const color = useSelector((state) => state.settings.color);
@@ -23,6 +25,8 @@ const KirtanLinePlate = () => {
   const fontWeight = useSelector((state) => state.settings.fontWeight);
 
   const currIndex = useSelector((state) => state.kirtanIndex.currIndex);
+
+  const isDualLineMode = useSelector((state) => state.settings.isDualLineMode);
 
   const shortcutIndex = useSelector((state) => state.kirtanIndex.shortcutIndex);
 
@@ -72,9 +76,18 @@ const KirtanLinePlate = () => {
         index
       ];
 
+    const nextLine =
+      kirtanData.length > 0 &&
+      isDualLineMode &&
+      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[
+        index + 1
+      ];
+
+    if (nextLine) setNextLine(nextLine);
+
     if (currLine) setCurrLine(currLine);
     else setCurrLine("");
-  }, [currIndex, kirtanId, kirtanData, shortcutIndex]);
+  }, [currIndex, kirtanId, kirtanData, shortcutIndex, isDualLineMode]);
 
   useEffect(() => {
     isDbInitialized &&
@@ -85,12 +98,15 @@ const KirtanLinePlate = () => {
     <div className="w-full">
       <div className="text-center  border-black border flex items-center w-full">
         <div
-          className="text-center w-full flex justify-center items-center"
+          className="text-center w-full flex justify-center items-center flex-col"
           style={{
             ...styles,
           }}
         >
           <Markdown className={`h-[${styles.height}]`}>{currLine}</Markdown>
+          {isDualLineMode && (
+            <Markdown className={`h-[${styles.height}]`}>{nextLine}</Markdown>
+          )}
         </div>
       </div>
     </div>
