@@ -28,7 +28,7 @@ const AddKirtanStepper = () => {
 
   const [kirtanLines, setKirtanLines] = useState("");
 
-  const [fontFamily, setFontFamily] = useState("Guj_Simple_Normal");
+  const [fontFamily, setFontFamily] = useState("Guj_Gopika_Two");
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -73,8 +73,10 @@ const AddKirtanStepper = () => {
         textShadowColor:
           getKirtanById()?.settings?.textShadowColor || "#ffffff",
         textShadowWidth: getKirtanById()?.settings?.textShadowWidth || "0px",
+        isDualLineMode: getKirtanById()?.settings?.isDualLineMode || false,
       },
       favLines: getKirtanById()?.favLines || [],
+      lineHistory: getKirtanById()?.lineHistory || [],
     };
 
     if (isDbInitialized)
@@ -88,7 +90,6 @@ const AddKirtanStepper = () => {
       } else {
         IndexedDBService.updateItem(DbData)
           .then(() => {
-            dispatch(setKirtanIndex(kirtanId));
             navigate("/");
           })
           .catch((error) => console.error(error));
@@ -108,8 +109,14 @@ const AddKirtanStepper = () => {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
-      if (event.key === "Delete") handleShowDeleteConfirm(true);
+    if (
+      event.key !== "ArrowUp" &&
+      event.key !== "ArrowDown" &&
+      event.key !== "ArrowLeft" &&
+      event.key !== "ArrowRight" &&
+      event.key !== "q"
+    ) {
+      if (isEdit && event.key === "Delete") handleShowDeleteConfirm(true);
     }
     // else if (event.key === "Enter")
     //   if (showDeleteConfirm) {
@@ -152,10 +159,10 @@ const AddKirtanStepper = () => {
   }, [isEdit, kirtanLines, kirtanData]);
 
   return (
-    <div className="w-full h-screen bg-gray-100">
+    <div className="w-full h-full bg-gray-50 overflow-hidden">
       <div className="container pt-3">
-        <Box sx={{ width: "100%" }}>
-          <Box className="flex justify-between item-center w-full gap-3 pb-2">
+        <Box sx={{ width: "100%" }} className="relative">
+          <Box className="flex justify-between item-center w-full gap-3 pb-2 absolute top-0 z-50">
             <TextField
               id="outlined-basic"
               variant="filled"
@@ -180,7 +187,7 @@ const AddKirtanStepper = () => {
                 variant="outlined"
                 color="inherit"
                 onClick={() => {
-                  dispatch(setKirtanIndex(isEdit ? kirtanId : 0));
+                  // dispatch(setKirtanIndex(isEdit ? kirtanId : 0));
                   navigate("/");
                 }}
               >
@@ -196,7 +203,7 @@ const AddKirtanStepper = () => {
               </Button>
             </Box>
           </Box>
-          <div className="mt-2 mb-1">
+          <div className="pt-16">
             <CkEditorTextArea
               getEditorContent={getEditorContent}
               getEditorFont={getEditorFont}

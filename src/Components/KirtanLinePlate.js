@@ -1,5 +1,5 @@
+import Box from "@mui/material/Box";
 import React, { useEffect, useState } from "react";
-import Markdown from "react-markdown";
 import { useSelector } from "react-redux";
 import IndexedDBService from "../Utils/DBConfig";
 
@@ -7,6 +7,8 @@ const KirtanLinePlate = () => {
   const [styles, setStyles] = useState({});
 
   const [currLine, setCurrLine] = useState("");
+
+  const [nextLine, setNextLine] = useState("");
 
   const [kirtanData, setKirtanData] = useState({});
 
@@ -23,6 +25,10 @@ const KirtanLinePlate = () => {
   const fontWeight = useSelector((state) => state.settings.fontWeight);
 
   const currIndex = useSelector((state) => state.kirtanIndex.currIndex);
+
+  const isDualLineMode = useSelector((state) => state.settings.isDualLineMode);
+
+  const shortcutIndex = useSelector((state) => state.kirtanIndex.shortcutIndex);
 
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
@@ -60,15 +66,28 @@ const KirtanLinePlate = () => {
   ]);
 
   useEffect(() => {
+    let index = currIndex;
+
+    if (shortcutIndex !== null) index = shortcutIndex;
+
     const currLine =
       kirtanData.length > 0 &&
       kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[
-        currIndex
+        index
       ];
+
+    const nextLine =
+      kirtanData.length > 0 &&
+      isDualLineMode &&
+      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[
+        index + 1
+      ];
+
+    if (nextLine) setNextLine(nextLine);
 
     if (currLine) setCurrLine(currLine);
     else setCurrLine("");
-  }, [currIndex, kirtanId, kirtanData]);
+  }, [currIndex, kirtanId, kirtanData, shortcutIndex, isDualLineMode]);
 
   useEffect(() => {
     isDbInitialized &&
@@ -76,15 +95,20 @@ const KirtanLinePlate = () => {
   }, [isDbInitialized]);
 
   return (
-    <div className="fixed inset-x-0 bottom-0">
+    <div className="w-full">
       <div className="text-center  border-black border flex items-center w-full">
         <div
-          className="text-center w-full flex justify-center items-center"
+          className="text-center w-full flex justify-center items-center flex-col"
           style={{
             ...styles,
           }}
         >
-          <Markdown className={`h-[${styles.height}]`}>{currLine}</Markdown>
+          <Box className={`h-[${styles.height}] leading-none`}>{currLine}</Box>
+          {isDualLineMode && (
+            <Box className={`h-[${styles.height}] leading-none`}>
+              {nextLine}
+            </Box>
+          )}
         </div>
       </div>
     </div>

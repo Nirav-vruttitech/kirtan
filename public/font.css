@@ -1,275 +1,83 @@
 @font-face {
-    font-family: 'G_BEJOD_4';
-    src: url("./G_BEJOD_4.ttf") format('truetype');
-    font-weight: 100;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Bejod';
-    src: url("./Guj_Bejod.TTF") format('truetype');
+    font-family: 'Hin_Dev_3';
+    src: url("./fonts/H-dev_3-.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Boldy';
-    src: url("./Guj_Boldy.TTF") format('truetype');
+    font-family: 'Hin_DevB_1';
+    src: url("./fonts/H-devb_1.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
- 
 @font-face {
-    font-family: 'Guj_Diamond';
-    src: url("./Guj_Diamond.TTF") format('truetype');
+    font-family: 'Hin_SimplB_0';
+    src: url("./fonts/H-simplb_0.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Favorite_Bold';
-    src: url("./Guj_Favorite_Bold.TTF") format('truetype');
+    font-family: 'GHH-BOLD_0';
+    src: url("./fonts/GHH-BOLD_0.TTF") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Favoutite';
-    src: url("./Guj_Favoutite.TTF") format('truetype');
+    font-family: 'GJJ-XBOL';
+    src: url("./fonts/GJJ-XBOL.TTF") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Hastalikhit';
-    src: url("./Guj_Hastalikhit.TTF") format('truetype');
+    font-family: 'Guj_Gopika_Two_Bold';
+    src: url("./fonts/Guj_Gopika_Two_Bold.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Heading';
-    src: url("./Guj_Heading.TTF") format('truetype');
+    font-family: 'Guj_Gopika_Two';
+    src: url("./fonts/Guj_Gopika_Two.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_HeadLine';
-    src: url("./Guj_HeadLine.TTF") format('truetype');
+    font-family: 'Guj_074_1123';
+    src: url("./fonts/074_1123.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Khoobsurat';
-    src: url("./Guj_Khoobsurat.TTF") format('truetype');
+    font-family: 'Guj_260_3315';
+    src: url("./fonts/260_3315.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Komal';
-    src: url("./Guj_Komal.TTF") format('truetype');
+    font-family: 'Guj_294_3349';
+    src: url("./fonts/294_3349.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Najuk';
-    src: url("./Guj_Najuk.TTF") format('truetype');
+    font-family: 'Guj_427_BADARSHB';
+    src: url("./fonts/427_BADARSHB.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
 
-
 @font-face {
-    font-family: 'Guj_Regular';
-    src: url("./Guj_Regular.TTF") format('truetype');
+    font-family: 'Guj_442_BMAB';
+    src: url("./fonts/442_BMAB.ttf") format('truetype');
     font-weight: 15;
     font-style: normal;
 }
-
-
-@font-face {
-    font-family: 'Guj_Regular_BOLD';
-    src: url("./Guj_Regular_BOLD.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Saral_Bold';
-    src: url("./Guj_Saral_Bold.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Saral_Normal';
-    src: url("./Guj_Saral_Normal.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Script';
-    src: url("./Guj_Script.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Simple_Bold';
-    src: url("./Guj_Simple_Bold.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Simple_Normal';
-    src: url("./Guj_Simple_Normal.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Squarish';
-    src: url("./Guj_Squarish.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Sulikhit';
-    src: url("./Guj_Sulikhit.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Guj_Unique';
-    src: url("./Guj_Unique.TTF") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Devnagari_Bold';
-    src: url("./Hin_Devnagari_Bold.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Devnagari_Normal';
-    src: url("./Hin_Devnagari_Normal.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Hastalikhit';
-    src: url("./Hin_Hastalikhit.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Khoobsurat';
-    src: url("./Hin_Khoobsurat.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Saras';
-    src: url("./Hin_Saras.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Script';
-    src: url("./Hin_Script.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Simple_Bold';
-    src: url("./Hin_Simple_Bold.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Simple_Normal';
-    src: url("./Hin_Simple_Normal.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Sundar';
-    src: url("./Hin_Sundar.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Tital';
-    src: url("./Hin_Tital.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Vaidik';
-    src: url("./Hin_Vaidik.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'Hin_Vankachuka';
-    src: url("./Hin_Vankachuka.ttf") format('truetype');
-    font-weight: 15;
-    font-style: normal;
-}
-
-
-
-
-

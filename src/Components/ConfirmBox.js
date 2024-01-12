@@ -15,7 +15,6 @@ const style = {
 
 const ConfirmBox = ({ open, handleClose, handleConfirm }) => {
   const handleKeyPress = (event) => {
-    console.log("event: ", event);
     if (open && event.key === "Enter") {
       handleConfirm();
       handleClose(false);
