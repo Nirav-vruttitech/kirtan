@@ -15,21 +15,33 @@ import {
 import IndexedDBService from "../Utils/DBConfig";
 import { ReactSortable } from "react-sortablejs";
 import KirtanLinePlate from "./KirtanLinePlate";
+import { useNavigate } from "react-router-dom";
+import { setSettingsOpen } from "../Slice/settingsSlice";
+import SettingModal from "./SettingModal";
+import SwitchComp from "./Switch";
 
 const KirtanArea = () => {
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+
+  const [isLive, setIsLive] = useState(false);
+
   const [favLines, setFavLines] = useState([]);
 
-  const [lineHistory, setLineHistory] = useState([]);
-
   const [kirtanData, setKirtanData] = useState({});
+
+  const [lineHistory, setLineHistory] = useState([]);
 
   const [currLineIndex, setCurrLineIndex] = useState(0);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [usedShortcut, setUsedShortcut] = useState(null);
+
+  const [hoverKirtanIndex, setHoverKirtanIndex] = useState(null);
 
   const [hoveredFavLineIndex, setHoveredFavLineIndex] = useState(null);
 
@@ -45,21 +57,49 @@ const KirtanArea = () => {
 
   const isSettingsOpen = useSelector((state) => state.settings.open);
 
-  const shortcutIndex = useSelector((state) => state.kirtanIndex.shortcutIndex);
-
   const handleRegularLineHover = (index) => setHoveredRegularLineIndex(index);
 
   const handleFavLineHover = (index) => setHoveredFavLineIndex(index);
+
+  const handleModalToggle = (value) => {
+    dispatch(setSettingsOpen(value));
+    setOpen(value);
+  };
 
   const handleCurrLineIndex = (index) => {
     setCurrLineIndex(index);
     dispatch(setCurrKirtanIndex(index));
   };
 
+  const handleChange = async (x) => {
+    console.log(x);
+    const res = await handleVMixInput(x);
+    res && setIsLive(x);
+    res && localStorage.setItem("isLive", JSON.stringify(x));
+  };
+
+  const handleVMixInput = async (flag) => {
+    let vmixSettings = localStorage.getItem("vmixSettings");
+    if (vmixSettings) {
+      vmixSettings = JSON.parse(vmixSettings);
+      let func = "OverlayInput";
+
+      if (flag) func = func + vmixSettings.overlayChannelId + "In";
+      else func = func + vmixSettings.overlayChannelId + "Out";
+
+      let url = `${vmixSettings.webControllerUrl}/api/?Function=${func}&input=${vmixSettings.inputId}`;
+      try {
+        await fetch(url, { mode: "no-cors" });
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+  };
+
   const handleLineHistory = (line) => {
     let history = lineHistory.length > 0 ? [...lineHistory] : [];
 
-    // Remove the existing entry if the line is already in the history
     const existingIndex = history.indexOf(line);
     if (existingIndex !== -1) {
       history.splice(existingIndex, 1);
@@ -147,29 +187,6 @@ const KirtanArea = () => {
   useEffect(() => {
     const handleKeyPress = (event) => {
       event.preventDefault();
-
-      // enable this if shortcut assigned line have to be highlighted in the main lines
-      // if (
-      //   event.key !== "ArrowUp" &&
-      //   event.key !== "ArrowDown" &&
-      //   event.key !== "ArrowLeft" &&
-      //   event.key !== "ArrowRight" &&
-      //   event.key !== "q" &&
-      //   event.key !== "1" &&
-      //   event.key !== "2" &&
-      //   event.key !== "3" &&
-      //   event.key !== "4" &&
-      //   event.key !== "5" &&
-      //   event.key !== "6" &&
-      //   event.key !== "7" &&
-      //   event.key !== "8" &&
-      //   event.key !== "9"
-      // ) {
-      // const favId = favLines[Number(event.key) - 1];
-      // if (favId !== undefined) handleCurrLineIndex(favId);
-      //   return;
-      // }
-
       if (!isSettingsOpen) {
         const isShortcutPressed = !isNaN(Number(event.key));
 
@@ -245,8 +262,6 @@ const KirtanArea = () => {
   }, [selectedIndex, isDbInitialized]);
 
   useEffect(() => {
-    // get the body element and add add overflow hidden
-
     const body = document.querySelector("body");
 
     body.style.overflow = "hidden";
@@ -256,35 +271,73 @@ const KirtanArea = () => {
 
   return (
     <div
-      className="py-3 flex flex-col justify-between bg-gray-100 w-full lineBackground mt-16 relative"
+      className="py-3 flex flex-col justify-between bg-gray-100 w-full lineBackground relative"
       style={{
-        height: "calc(100vh - 64px)",
+        height: "calc(100vh)",
       }}
     >
       <Box className="flex flex-col w-full justify-center items-center">
-        <Box className="flex w-full overflow-x-auto overflow-y-hidden pb-2 items-center justify-center gap-3">
-          {Object.keys(kirtanData).map((key, index) => {
-            const id = kirtanData[key].id;
-            return (
-              <Box
-                key={index}
-                style={{
-                  backgroundColor: selectedIndex == id ? "#2196f3" : "#ffffff",
-                  color: selectedIndex == id ? "#ffffff" : "#000000",
-                }}
-                className="flex justify-center items-center text-xl cursor-pointer px-6 py-1.5 rounded-md shadow-md select-none font-medium capitalize transition-all duration-300 ease-in-out"
-                onClick={() => {
-                  setSelectedIndex(id);
-                  dispatch(setKirtanIndex(id));
-                }}
-              >
-                {kirtanData[key].title}
-              </Box>
-            );
-          })}
+        <Box className="flex w-full justify-between px-3">
+          <Box className="flex w-full overflow-x-auto overflow-y-hidden pb-2 items-center gap-3">
+            {Object.keys(kirtanData).map((key, index) => {
+              const id = kirtanData[key].id;
+              return (
+                <Box
+                  key={index}
+                  style={{
+                    backgroundColor:
+                      selectedIndex == id ? "#2196f3" : "#ffffff",
+                    color: selectedIndex == id ? "#ffffff" : "#000000",
+                  }}
+                  onMouseEnter={() => setHoverKirtanIndex(id)}
+                  onMouseLeave={() => setHoverKirtanIndex(null)}
+                  className="gap-2 flex justify-center items-center text-xl cursor-pointer px-3 py-1.5 rounded-md shadow-md select-none font-medium capitalize transition-all duration-300 ease-in-out"
+                  onClick={() => {
+                    setSelectedIndex(id);
+                    dispatch(setKirtanIndex(id));
+                  }}
+                >
+                  {kirtanData[key].title}
+                  <Box
+                    className={`text-base ${
+                      hoverKirtanIndex === id ? "opacity-100" : "opacity-0"
+                    } duration-300 ease-in-out transition-all`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dispatch(setKirtanIndex(id));
+                      navigate(`/edit/${id}`);
+                    }}
+                  >
+                    <i class="fa-solid fa-pencil"></i>
+                  </Box>
+                </Box>
+              );
+            })}
+            <Box
+              className="text-xl hover:bg-gray-300 p-2 h-10 flex items-center justify-center rounded-md duration-300 ease-in-out transition-all cursor-pointer"
+              onClick={() => {
+                navigate("/input");
+              }}
+            >
+              <i class="fa-solid fa-plus"></i>
+            </Box>
+          </Box>
+          <Box className="flex justify-center items-center gap-3">
+            <SwitchComp checked={isLive} handleChange={handleChange} />
+            <Box
+              className="flex items-center justify-center cursor-pointer hover:bg-gray-300 p-2 h-10 rounded-md duration-300 ease-in-out transition-all"
+              onClick={() => {
+                handleModalToggle(true);
+              }}
+              aria-label="open drawer"
+            >
+              <i className="fa-solid fa-gear fa-lg"></i>
+            </Box>
+          </Box>
+          <SettingModal open={open} handleModalToggle={handleModalToggle} />
         </Box>
 
-        <Box className="flex w-full justify-between gap-10 px-3 h-[70vh] max-h-[calc(100vh-200px)]">
+        <Box className="flex w-full justify-between gap-10 px-3 h-[95vh] max-h-[calc(100vh-170px)]">
           <div
             className="container flex items-center flex-col text-center py-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4]  w-1/2"
             style={{ fontFamily: fontFamily }}
@@ -294,7 +347,7 @@ const KirtanArea = () => {
               getKirtanById().content.map((line, index) => {
                 return (
                   <Stack
-                    className={`m-1 py-[1px] px-4 w-full flex justify-center items-center transition-all duration-300 ease-in-out cursor-pointer ${
+                    className={`px-4 w-full flex justify-center items-center transition-all duration-300 ease-in-out cursor-pointer ${
                       currLineIndex === index
                         ? "bg-slate-50 bg-opacity-70"
                         : "bg-inherit"
@@ -320,7 +373,7 @@ const KirtanArea = () => {
                         ></i>{" "}
                       </div>
                       <div
-                        className="m-1 text-3xl text-center"
+                        className="text-2xl text-center"
                         style={{ fontFamily: fontFamily }}
                         key={index + 1}
                         onClick={() => {
@@ -371,7 +424,7 @@ const KirtanArea = () => {
               {favLines.map((line, index) => {
                 return (
                   <Stack
-                    className={`m-1 py-[1px] w-full grid grid-cols-3 justify-between items-center transition-all duration-300 ease-in-out ${
+                    className={`w-full grid grid-cols-3 justify-between items-center transition-all duration-300 ease-in-out ${
                       usedShortcut - 1 === index
                         ? "bg-slate-50 bg-opacity-70"
                         : "bg-inherit"
@@ -384,7 +437,6 @@ const KirtanArea = () => {
                     onMouseEnter={() => handleFavLineHover(line)}
                     onMouseLeave={() => handleFavLineHover(null)}
                     onClick={() => {
-                      // handleCurrLineIndex(line);
                       setUsedShortcut(index + 1);
                       dispatch(setShortcutIndex(line));
                     }}
@@ -419,7 +471,7 @@ const KirtanArea = () => {
                       </Box>
                     </Box>
                     <div
-                      className="m-1 text-3xl text-center cursor-pointer"
+                      className="text-2xl text-center cursor-pointer"
                       style={{ fontFamily: fontFamily }}
                     >
                       <Markdown>{getKirtanById()?.content?.[line]}</Markdown>
