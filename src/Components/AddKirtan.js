@@ -28,7 +28,7 @@ const AddKirtanStepper = () => {
 
   const [kirtanLines, setKirtanLines] = useState("");
 
-  const [fontFamily, setFontFamily] = useState("Guj_Simple_Normal");
+  const [fontFamily, setFontFamily] = useState("GHH-Guj_Gopika_Two");
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -116,7 +116,7 @@ const AddKirtanStepper = () => {
       event.key !== "ArrowRight" &&
       event.key !== "q"
     ) {
-      if (event.key === "Delete") handleShowDeleteConfirm(true);
+      if (isEdit && event.key === "Delete") handleShowDeleteConfirm(true);
     }
     // else if (event.key === "Enter")
     //   if (showDeleteConfirm) {

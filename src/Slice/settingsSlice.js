@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   backgroundColor: "#000",
   color: "#FFF",
-  fontFamily: "Guj_Simple_Normal",
+  fontFamily: "Guj_Gopika_Two",
   fontSize: "40px",
   fontWeight: "500",
   height: "80px",
