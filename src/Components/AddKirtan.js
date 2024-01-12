@@ -28,7 +28,7 @@ const AddKirtanStepper = () => {
 
   const [kirtanLines, setKirtanLines] = useState("");
 
-  const [fontFamily, setFontFamily] = useState("GHH-Guj_Gopika_Two");
+  const [fontFamily, setFontFamily] = useState("Guj_Gopika_Two");
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 

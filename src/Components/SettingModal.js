@@ -53,7 +53,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
   const [initialSettings, setInitialSettings] = useState({});
 
   const [vmixSettings, setVmixSettings] = useState({
-    webControllerUrl: "http://http://127.0.0.1:8088",
+    webControllerUrl: "http://127.0.0.1:8088",
     overlayChannelId: "",
     inputId: "",
   });
