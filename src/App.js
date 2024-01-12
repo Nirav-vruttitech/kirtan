@@ -1,10 +1,10 @@
+import Box from "@mui/material/Box";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import AddKirtanStepper from "./Components/AddKirtan";
 import KirtanArea from "./Components/KirtanArea";
-import KirtanLinePlate from "./Components/KirtanLinePlate";
 import Navbar from "./Components/Navbar";
 import { setDbStatus } from "./Slice/dbSlice";
 import IndexedDBService from "./Utils/DBConfig";
@@ -26,11 +26,10 @@ function App() {
         <Route
           path="/"
           element={
-            <React.Fragment>
+            <Box className="flex flex-col w-full">
               <Navbar />
               <KirtanArea />
-              <KirtanLinePlate />
-            </React.Fragment>
+            </Box>
           }
         />
       </Routes>

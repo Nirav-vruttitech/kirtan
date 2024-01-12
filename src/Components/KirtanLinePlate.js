@@ -82,7 +82,7 @@ const KirtanLinePlate = () => {
   }, [isDbInitialized]);
 
   return (
-    <div className="fixed inset-x-0 bottom-0">
+    <div className="w-full">
       <div className="text-center  border-black border flex items-center w-full">
         <div
           className="text-center w-full flex justify-center items-center"
