@@ -189,6 +189,22 @@ const KirtanArea = () => {
     handleCurrLineIndex(nextLine);
   };
 
+  const handleKey = async (event) => {
+    if (!isSettingsOpen) {
+      let flag = isLive;
+      if (event.key === "Escape") flag = false;
+      else if (event.key === "Enter") flag = true;
+      else if (event.key === " ") flag = !flag;
+      else event.preventDefault();
+
+      const res = await handleVMixInput(flag);
+
+      localStorage.setItem("isLive", JSON.stringify(flag));
+
+      res && setIsLive(flag);
+    }
+  };
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       event.preventDefault();
@@ -198,6 +214,14 @@ const KirtanArea = () => {
         if (isShortcutPressed && favLines.length >= Number(event.key)) {
           setUsedShortcut(Number(event.key));
           dispatch(setShortcutIndex(favLines[Number(event.key) - 1]));
+        }
+
+        if (
+          event.key === "Escape" ||
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+          handleKey(event);
         }
 
         switch (event.key) {
