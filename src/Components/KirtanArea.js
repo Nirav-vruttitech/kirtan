@@ -307,7 +307,7 @@ const KirtanArea = () => {
                     className={`text-base ${
                       hoverKirtanIndex === id ? "opacity-100" : "opacity-0"
                     } duration-300 ease-in-out transition-all`}
-                    onClick={(e) => {
+                    onDoubleClick={(e) => {
                       e.stopPropagation();
                       dispatch(setKirtanIndex(id));
                       navigate(`/edit/${id}`);
