@@ -6,7 +6,6 @@ import Stack from "@mui/material/Stack";
 import React, { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
-import "../CSS/Page.css";
 import {
   setCurrKirtanIndex,
   setKirtanIndex,
@@ -47,6 +46,8 @@ const KirtanArea = () => {
 
   const [hoveredRegularLineIndex, setHoveredRegularLineIndex] = useState(null);
 
+  const isSettingsOpen = useSelector((state) => state.settings.open);
+
   const kirtanId = useSelector((state) => state.kirtanIndex.kirtanId);
 
   const fontFamily = useSelector((state) => state.settings.fontFamily);
@@ -55,7 +56,7 @@ const KirtanArea = () => {
 
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
-  const isSettingsOpen = useSelector((state) => state.settings.open);
+  const isDualLineMode = useSelector((state) => state.settings.isDualLineMode);
 
   const handleRegularLineHover = (index) => setHoveredRegularLineIndex(index);
 
@@ -79,8 +80,13 @@ const KirtanArea = () => {
 
   const handleVMixInput = async (flag) => {
     let vmixSettings = localStorage.getItem("vmixSettings");
+
     if (vmixSettings) {
       vmixSettings = JSON.parse(vmixSettings);
+      for (const key in vmixSettings)
+        if (vmixSettings.hasOwnProperty(key))
+          if (!vmixSettings[key]) return false;
+
       let func = "OverlayInput";
 
       if (flag) func = func + vmixSettings.overlayChannelId + "In";
@@ -268,8 +274,6 @@ const KirtanArea = () => {
     return () => (body.style.overflow = "auto");
   }, []);
 
-  const kirtanHeight = getKirtanById()?.settings?.height || "200px";
-
   return (
     <div
       className="py-3 flex flex-col justify-between bg-gray-100 w-full lineBackground relative"
@@ -335,13 +339,16 @@ const KirtanArea = () => {
               <i className="fa-solid fa-gear fa-lg"></i>
             </Box>
           </Box>
-          {/* {open && (
-            )} */}
+
           <SettingModal open={open} handleModalToggle={handleModalToggle} />
         </Box>
 
         <Box
-          className={`flex w-full justify-between gap-10 px-3 h-[calc(95vh-${kirtanHeight})] max-h-[calc(100vh-170px)]`}
+          className={`flex w-full justify-between gap-10 px-3 h-[90vh] ${
+            isDualLineMode
+              ? "max-h-[calc(100vh-250px)]"
+              : "max-h-[calc(100vh-200px)]"
+          } `}
         >
           <div
             className="container flex items-center flex-col text-center py-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4]  w-1/2"
