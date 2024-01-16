@@ -1,5 +1,5 @@
-import Box from "@mui/material/Box";
 import React, { useEffect, useState } from "react";
+import Markdown from "react-markdown";
 import { useSelector } from "react-redux";
 import IndexedDBService from "../Utils/DBConfig";
 
@@ -98,16 +98,18 @@ const KirtanLinePlate = () => {
     <div className="w-full">
       <div className="text-center  border-black border flex items-center w-full">
         <div
-          className="text-center w-full flex justify-center items-center flex-col"
+          className="text-center w-full flex justify-center items-center flex-col gap-3"
           style={{
             ...styles,
           }}
         >
-          <Box className={`h-[${styles.height}] leading-none`}>{currLine}</Box>
+          <Markdown className={`h-[${styles.height}] leading-none`}>
+            {currLine}
+          </Markdown>
           {isDualLineMode && (
-            <Box className={`h-[${styles.height}] leading-none`}>
+            <Markdown className={`h-[${styles.height}] leading-none`}>
               {nextLine}
-            </Box>
+            </Markdown>
           )}
         </div>
       </div>

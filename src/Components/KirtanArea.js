@@ -370,8 +370,8 @@ const KirtanArea = () => {
         <Box
           className={`flex w-full justify-between gap-10 px-3 h-[90vh] ${
             isDualLineMode
-              ? "max-h-[calc(100vh-250px)]"
-              : "max-h-[calc(100vh-200px)]"
+              ? "max-h-[calc(100vh-280px)]"
+              : "max-h-[calc(100vh-230px)]"
           } `}
         >
           <div

@@ -463,7 +463,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                   onChange={handleViewPortHeightSliderChange}
                   marks
                   min={30}
-                  max={200}
+                  max={240}
                 />
               </Box>
             </Box>
