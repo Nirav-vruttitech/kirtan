@@ -1,6 +1,7 @@
 const dbName = "MyDatabase";
-const storeName = "MyObjectStore";
 const dbVersion = 1;
+export const storeName = "MyObjectStore";
+export const tblPreSetting = "MyPreSetting";
 
 const IndexedDBService = {
   db: null,
@@ -11,7 +12,10 @@ const IndexedDBService = {
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
+        // main content data obj
         db.createObjectStore(storeName, { keyPath: "id" });
+        // pre settings data obj
+        db.createObjectStore(tblPreSetting, { keyPath: "id" });
       };
 
       request.onsuccess = (event) => {
@@ -25,22 +29,21 @@ const IndexedDBService = {
     });
   },
 
-  addItem(item) {
+  addItem(item, objName) {
     return new Promise((resolve, reject) => {
-      const transaction = this.db.transaction([storeName], "readwrite");
-      const store = transaction.objectStore(storeName);
+      const transaction = this.db.transaction([objName], "readwrite");
+      const store = transaction.objectStore(objName);
       const request = store.add(item);
 
       request.onsuccess = () => resolve();
-      request.onerror = (event) =>
-        reject("Error adding item: ", event.target.error);
+      request.onerror = (event) => reject("Error adding item: ", event.target.error);
     });
   },
 
-  getData(key) {
+  getData(key, objName) {
     return new Promise((resolve, reject) => {
-      const transaction = this.db.transaction([storeName], "readonly");
-      const store = transaction.objectStore(storeName);
+      const transaction = this.db.transaction([objName], "readonly");
+      const store = transaction.objectStore(objName);
       const request = store.get(key);
 
       request.onsuccess = (event) => {
@@ -87,15 +90,15 @@ const IndexedDBService = {
     }
   },
 
-  updateItem(item) {
+  updateItem(item, objName) {
     return new Promise((resolve, reject) => {
       if (!this.db) {
         reject("Database not initialized");
         return;
       }
 
-      const transaction = this.db.transaction([storeName], "readwrite");
-      const store = transaction.objectStore(storeName);
+      const transaction = this.db.transaction([objName], "readwrite");
+      const store = transaction.objectStore(objName);
       const request = store.put(item);
 
       request.onsuccess = () => {

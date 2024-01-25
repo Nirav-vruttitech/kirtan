@@ -92,6 +92,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
   useEffect(() => {
     let styles = kirtanData && kirtanData.settings;
+
     if (styles && Object.keys(styles).length > 0) {
       dispatch(setColor(styles.color));
       dispatch(setBgColor(styles.backgroundColor));
@@ -110,10 +111,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
   }, [kirtanData, kirtanId]);
 
   useEffect(() => {
-    isDbInitialized &&
-      IndexedDBService.getAllData().then((data) =>
-        setKirtanData(data[kirtanId])
-      );
+    isDbInitialized && IndexedDBService.getAllData().then((data) => setKirtanData(data[kirtanId]));
   }, [isDbInitialized, kirtanId]);
 
   const handleFontSliderChange = (event) => {
@@ -125,6 +123,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
     dispatch(setFontSize(`${event.target.value}px`));
 
     let obj = { ...kirtanData };
+    console.log("obj: ", obj);
 
     if (kirtanData.settings) obj.settings.fontSize = `${event.target.value}px`;
 
@@ -231,8 +230,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
     let obj = { ...kirtanData };
 
-    if (kirtanData.settings)
-      obj.settings.textShadowWidth = `${event.target.value}px`;
+    if (kirtanData.settings) obj.settings.textShadowWidth = `${event.target.value}px`;
 
     updateSettings(obj);
   };
@@ -255,25 +253,14 @@ const SettingModal = ({ open, handleModalToggle }) => {
 
   return (
     <Modal open={open} onClose={() => handleModalToggle(false)}>
-      <Box
-        sx={style}
-        className="rounded-2xl overflow-y-auto max-h-screen min-h-[600px]"
-      >
+      <Box sx={style} className="rounded-2xl overflow-y-auto max-h-screen min-h-[600px]">
         <Box className="flex items-center justify-between w-full bg-blue-500 px-4 py-3 rounded-t-xl">
           <p className="text-white font-medium text-xl">Setting</p>
-          <IconButton
-            className="text-white"
-            onClick={() => handleModalToggle(false)}
-          >
+          <IconButton className="text-white" onClick={() => handleModalToggle(false)}>
             <i className="fa-solid fa-circle-xmark"></i>
           </IconButton>
         </Box>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          centered
-          className="w-full pt-2"
-        >
+        <Tabs value={value} onChange={handleChange} centered className="w-full pt-2 ">
           <Tab
             style={{
               textTransform: "none",
@@ -347,10 +334,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                 :
               </Typography>
               <ColorPicker
-                color={
-                  Object.keys(initialSettings).length > 0 &&
-                  initialSettings.color
-                }
+                color={Object.keys(initialSettings).length > 0 && initialSettings.color}
                 handelColor={handleFontColorChange}
               />
             </Box>
@@ -365,7 +349,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                 Font Weight
               </Typography>
               <Typography
-                className="font-semibold"
+                className="font-semibold "
                 sx={{
                   fontSize: "17px",
                   fontWeight: "600",
@@ -375,10 +359,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
               </Typography>
               <div className="">
                 <ToggleButtonGroup
-                  value={
-                    Object.keys(initialSettings).length > 0 &&
-                    initialSettings.fontWeight
-                  }
+                  value={Object.keys(initialSettings).length > 0 && initialSettings.fontWeight}
                   exclusive
                   sx={{
                     height: "35px",
@@ -388,10 +369,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                   onChange={handleFontWeightToggle}
                   aria-label="viewPortFontWeight"
                 >
-                  <ToggleButton
-                    value="500"
-                    sx={{ textTransform: "none", fontWeight: 500 }}
-                  >
+                  <ToggleButton value="500" sx={{ textTransform: "none", fontWeight: 500 }}>
                     Thin
                   </ToggleButton>
                   <ToggleButton
@@ -424,10 +402,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                 :
               </Typography>
               <ColorPicker
-                color={
-                  Object.keys(initialSettings).length > 0 &&
-                  initialSettings.backgroundColor
-                }
+                color={Object.keys(initialSettings).length > 0 && initialSettings.backgroundColor}
                 handelColor={handleViewPortBgColorChange}
               />
             </Box>
@@ -488,17 +463,16 @@ const SettingModal = ({ open, handleModalToggle }) => {
               </Typography>
 
               <Select
-                value={
-                  Object.keys(initialSettings).length > 0 &&
-                  initialSettings.fontFamily
-                }
+                value={Object.keys(initialSettings).length > 0 && initialSettings.fontFamily}
                 onChange={handleSelectFontFamilyChange}
                 className="text-[15px] font-[600]"
                 size="small"
                 sx={{ ":focus": { outline: "none" }, outline: "none" }}
               >
                 {FontList.map((font) => (
-                  <MenuItem value={font.value}>{font.text}</MenuItem>
+                  <MenuItem key={font.value} value={font.value}>
+                    {font.text}
+                  </MenuItem>
                 ))}
               </Select>
             </Box>
@@ -522,10 +496,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
                 :
               </Typography>
               <ColorPicker
-                color={
-                  Object.keys(initialSettings).length > 0 &&
-                  initialSettings.textShadowColor
-                }
+                color={Object.keys(initialSettings).length > 0 && initialSettings.textShadowColor}
                 handelColor={handleTextShadowColorChange}
               />
             </Box>
@@ -584,10 +555,7 @@ const SettingModal = ({ open, handleModalToggle }) => {
               >
                 :
               </Typography>
-              <SwitchComp
-                checked={isDualMode}
-                handleChange={handleDualModeToggle}
-              />
+              <SwitchComp checked={isDualMode} handleChange={handleDualModeToggle} />
             </Box>
           </Box>
         )}

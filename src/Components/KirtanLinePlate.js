@@ -32,17 +32,15 @@ const KirtanLinePlate = () => {
 
   const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
 
-  const backgroundColor = useSelector(
-    (state) => state.settings.backgroundColor
-  );
+  const backgroundColor = useSelector((state) => state.settings.backgroundColor);
 
-  const textShadowColor = useSelector(
-    (state) => state.settings.textShadowColor
-  );
+  const textShadowColor = useSelector((state) => state.settings.textShadowColor);
 
-  const textShadowWidth = useSelector(
-    (state) => state.settings.textShadowWidth
-  );
+  const textShadowWidth = useSelector((state) => state.settings.textShadowWidth);
+
+  const preSettings = useSelector((state) => state.settings.preSettings);
+
+  const selectedId = useSelector((state) => state.settings.selectedId);
 
   useEffect(() => {
     setStyles({
@@ -72,16 +70,12 @@ const KirtanLinePlate = () => {
 
     const currLine =
       kirtanData.length > 0 &&
-      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[
-        index
-      ];
+      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[index];
 
     const nextLine =
       kirtanData.length > 0 &&
       isDualLineMode &&
-      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[
-        index + 1
-      ];
+      kirtanData.find((kirtan) => kirtan.id === Number(kirtanId))?.content[index + 1];
 
     if (nextLine) setNextLine(nextLine);
 
@@ -90,29 +84,38 @@ const KirtanLinePlate = () => {
   }, [currIndex, kirtanId, kirtanData, shortcutIndex, isDualLineMode]);
 
   useEffect(() => {
-    isDbInitialized &&
-      IndexedDBService.getAllData().then((data) => setKirtanData(data));
+    isDbInitialized && IndexedDBService.getAllData().then((data) => setKirtanData(data));
   }, [isDbInitialized]);
 
   return (
     <div className="w-full">
-      <div className="text-center  border-black border flex items-center w-full">
-        <div
-          className="text-center w-full flex justify-center items-center flex-col gap-3"
-          style={{
-            ...styles,
-          }}
-        >
-          <Markdown className={`h-[${styles.height}] leading-none`}>
-            {currLine}
-          </Markdown>
-          {isDualLineMode && (
-            <Markdown className={`h-[${styles.height}] leading-none`}>
-              {nextLine}
-            </Markdown>
-          )}
-        </div>
-      </div>
+      {preSettings?.map((setting) => {
+        return (
+          <div key={setting.id}>
+            {setting.id === selectedId && (
+              <div className="text-center border-black border flex items-center w-full">
+                <div
+                  className="text-center w-full flex justify-center items-center flex-col gap-3 "
+                  style={{
+                    backgroundColor: setting.backgroundColor,
+                    color: setting.color,
+                    fontFamily: setting.fontFamily,
+                    fontSize: setting.fontSize,
+                    fontWeight: setting.fontWeight,
+                    height: setting.height,
+                    WebkitTextStroke: `${setting.textShadowWidth} ${setting.textShadowColor}`,
+                  }}
+                >
+                  <Markdown className={`h-[${setting.height}] leading-none`}>{currLine}</Markdown>
+                  {isDualLineMode && (
+                    <Markdown className={`h-[${setting.height}] leading-none`}>{nextLine}</Markdown>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

@@ -1,0 +1,122 @@
+[
+          {
+                    "id": 1,
+                    "backgroundColor": "#000000",
+                    "color": "#00ff00",
+                    "fontFamily": "Guj_Gopika_Two",
+                    "fontSize": "50px",
+                    "fontWeight": "500",
+                    "height": "100px",
+                    "isDualLineMode": false,
+                    "textShadowColor": "#ffffff",
+                    "textShadowWidth": "0px"
+          },
+          {
+                    "id": 2,
+                    "backgroundColor": "#111111",
+                    "color": "#ff9900",
+                    "fontFamily": "Guj_Gopika_Two_Bold",
+                    "fontSize": "40px",
+                    "fontWeight": "700",
+                    "height": "80px",
+                    "isDualLineMode": true,
+                    "textShadowColor": "#cccccc",
+                    "textShadowWidth": "2px"
+          },
+          {
+                    "id": 3,
+                    "backgroundColor": "#222222",
+                    "color": "#3366cc",
+                    "fontFamily": "Guj_074_1123",
+                    "fontSize": "60px",
+                    "fontWeight": "600",
+                    "height": "120px",
+                    "isDualLineMode": false,
+                    "textShadowColor": "#ff0000",
+                    "textShadowWidth": "4px"
+          },
+          {
+                    "id": 4,
+                    "backgroundColor": "#333333",
+                    "color": "#993366",
+                    "fontFamily": "Guj_260_3315",
+                    "fontSize": "45px",
+                    "fontWeight": "400",
+                    "height": "90px",
+                    "isDualLineMode": true,
+                    "textShadowColor": "#99cc00",
+                    "textShadowWidth": "1px"
+          },
+          {
+                    "id": 5,
+                    "backgroundColor": "#444444",
+                    "color": "#660000",
+                    "fontFamily": "Guj_294_3349",
+                    "fontSize": "55px",
+                    "fontWeight": "800",
+                    "height": "110px",
+                    "isDualLineMode": false,
+                    "textShadowColor": "#dddddd",
+                    "textShadowWidth": "3px"
+          },
+          {
+                    "id": 6,
+                    "backgroundColor": "#555555",
+                    "color": "#ffcc00",
+                    "fontFamily": "Guj_427_BADARSHB",
+                    "fontSize": "70px",
+                    "fontWeight": "700",
+                    "height": "140px",
+                    "isDualLineMode": true,
+                    "textShadowColor": "#666666",
+                    "textShadowWidth": "2px"
+          },
+          {
+                    "id": 7,
+                    "backgroundColor": "#666666",
+                    "color": "#9900cc",
+                    "fontFamily": "Guj_442_BMAB",
+                    "fontSize": "48px",
+                    "fontWeight": "500",
+                    "height": "96px",
+                    "isDualLineMode": false,
+                    "textShadowColor": "#ffcc00",
+                    "textShadowWidth": "1px"
+          },
+          {
+                    "id": 8,
+                    "backgroundColor": "#777777",
+                    "color": "#ff6600",
+                    "fontFamily": "GHH-BOLD_0",
+                    "fontSize": "65px",
+                    "fontWeight": "600",
+                    "height": "130px",
+                    "isDualLineMode": true,
+                    "textShadowColor": "#cccccc",
+                    "textShadowWidth": "4px"
+          },
+          {
+                    "id": 9,
+                    "backgroundColor": "#888888",
+                    "color": "#003366",
+                    "fontFamily": "Hin_Dev_3",
+                    "fontSize": "35px",
+                    "fontWeight": "300",
+                    "height": "70px",
+                    "isDualLineMode": false,
+                    "textShadowColor": "#ff00ff",
+                    "textShadowWidth": "2px"
+          },
+          {
+                    "id": 10,
+                    "backgroundColor": "#999999",
+                    "color": "#cc6600",
+                    "fontFamily": "Hin_DevB_1",
+                    "fontSize": "50px",
+                    "fontWeight": "500",
+                    "height": "100px",
+                    "isDualLineMode": true,
+                    "textShadowColor": "#999999",
+                    "textShadowWidth": "3px"
+          }
+]

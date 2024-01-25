@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import IndexedDBService from "../Utils/DBConfig";
+import IndexedDBService, { storeName, tblPreSetting } from "../Utils/DBConfig";
 import CkEditorTextArea from "./CkEditorTextArea";
 import { setKirtanIndex } from "../Slice/KirtanIndexSlice";
 import ConfirmBox from "./ConfirmBox";
@@ -38,8 +38,7 @@ const AddKirtanStepper = () => {
 
   const handleShowDeleteConfirm = (x) => setShowDeleteConfirm(x);
 
-  const getKirtanById = () =>
-    kirtanData.find((kirtan) => kirtan.id == kirtanId);
+  const getKirtanById = () => kirtanData.find((kirtan) => kirtan.id == kirtanId);
 
   const handleSubmit = async () => {
     const DbData = {
@@ -67,11 +66,9 @@ const AddKirtanStepper = () => {
         fontSize: getKirtanById()?.settings?.fontSize || "50px",
         fontWeight: getKirtanById()?.settings?.fontWeight || "500",
         color: getKirtanById()?.settings?.color || "#ffffff",
-        backgroundColor:
-          getKirtanById()?.settings?.backgroundColor || "#000000",
+        backgroundColor: getKirtanById()?.settings?.backgroundColor || "#000000",
         height: getKirtanById()?.settings?.height || "100px",
-        textShadowColor:
-          getKirtanById()?.settings?.textShadowColor || "#ffffff",
+        textShadowColor: getKirtanById()?.settings?.textShadowColor || "#ffffff",
         textShadowWidth: getKirtanById()?.settings?.textShadowWidth || "0px",
         isDualLineMode: getKirtanById()?.settings?.isDualLineMode || false,
       },
@@ -81,14 +78,14 @@ const AddKirtanStepper = () => {
 
     if (isDbInitialized)
       if (!isEdit) {
-        IndexedDBService.addItem(DbData)
+        IndexedDBService.addItem(DbData, storeName)
           .then(() => {
             dispatch(setKirtanIndex(DbData.id));
             navigate("/");
           })
           .catch((error) => console.error(error));
       } else {
-        IndexedDBService.updateItem(DbData)
+        IndexedDBService.updateItem(DbData, storeName)
           .then(() => {
             navigate("/");
           })
@@ -132,14 +129,11 @@ const AddKirtanStepper = () => {
   }, []);
 
   useEffect(() => {
-    setIsValid(
-      kirtanLines.trim() !== "" && kirtanLines !== "fgg" && kirtanTitle !== ""
-    );
+    setIsValid(kirtanLines.trim() !== "" && kirtanLines !== "fgg" && kirtanTitle !== "");
   }, [kirtanLines, kirtanTitle]);
 
   useEffect(() => {
-    isDbInitialized &&
-      IndexedDBService.getAllData().then((data) => setKirtanData(data));
+    isDbInitialized && IndexedDBService.getAllData().then((data) => setKirtanData(data));
   }, [isDbInitialized]);
 
   useEffect(() => {
@@ -153,8 +147,7 @@ const AddKirtanStepper = () => {
 
   useEffect(() => {
     if (isEdit)
-      if (kirtanData[kirtanId]?.originalContent === kirtanLines)
-        setIsValid(false);
+      if (kirtanData[kirtanId]?.originalContent === kirtanLines) setIsValid(false);
       else setIsValid(true);
   }, [isEdit, kirtanLines, kirtanData]);
 

@@ -40,9 +40,7 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
   useEffect(() => {
     isDbInitialized &&
       IndexedDBService.getAllData().then((data) =>
-        setKirtanData(
-          Object.values(data).find((kirtan) => kirtan.id === Number(kirtanId))
-        )
+        setKirtanData(Object.values(data).find((kirtan) => kirtan.id === Number(kirtanId)))
       );
   }, [isDbInitialized, kirtanId]);
 
@@ -68,29 +66,20 @@ const CkEditorTextArea = ({ getEditorContent, getEditorFont, kirtanId }) => {
           }}
         >
           {FontList.map((font) => (
-            <MenuItem value={font.value}>{font.text}</MenuItem>
+            <MenuItem key={font.value} value={font.value}>
+              {font.text}
+            </MenuItem>
           ))}
         </Select>
       </div>
-      <div
-        className="ckeditor"
-        style={{ fontFamily: selectFontFamily, fontSize: "40px" }}
-      >
+      <div className="ckeditor" style={{ fontFamily: selectFontFamily, fontSize: "40px" }}>
         <CKEditor
           editor={ClassicEditor}
           data={editorData}
           onInit={(editor) => {
             editor.editing.view.change((writer) => {
-              writer.setStyle(
-                "height",
-                "500px",
-                editor.editing.view.document.getRoot()
-              );
-              writer.setStyle(
-                "overflow",
-                "auto",
-                editor.editing.view.document.getRoot()
-              );
+              writer.setStyle("height", "500px", editor.editing.view.document.getRoot());
+              writer.setStyle("overflow", "auto", editor.editing.view.document.getRoot());
             });
           }}
           config={{

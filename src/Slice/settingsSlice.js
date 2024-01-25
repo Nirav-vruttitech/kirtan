@@ -11,12 +11,20 @@ const initialState = {
   textShadowWidth: "0px",
   open: false,
   isDualLineMode: false,
+  preSettings: [],
+  selectedId: 1,
 };
 
 export const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
+    setPreSettings: (state, action) => {
+      state.preSettings = action.payload;
+    },
+    setSelectedId: (state, action) => {
+      state.selectedId = action.payload;
+    },
     setBgColor: (state, action) => {
       state.backgroundColor = action.payload;
     },
@@ -51,6 +59,9 @@ export const settingsSlice = createSlice({
 });
 
 export const {
+  setPreSettings,
+  updatePreSettings,
+  setSelectedId,
   setBgColor,
   setColor,
   setFontFamily,

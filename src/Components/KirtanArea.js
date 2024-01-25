@@ -6,18 +6,20 @@ import Stack from "@mui/material/Stack";
 import React, { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setCurrKirtanIndex,
-  setKirtanIndex,
-  setShortcutIndex,
-} from "../Slice/KirtanIndexSlice";
-import IndexedDBService from "../Utils/DBConfig";
-import { ReactSortable } from "react-sortablejs";
-import KirtanLinePlate from "./KirtanLinePlate";
 import { useNavigate } from "react-router-dom";
-import { setSettingsOpen } from "../Slice/settingsSlice";
+import { ReactSortable } from "react-sortablejs";
+import { setCurrKirtanIndex, setKirtanIndex, setShortcutIndex } from "../Slice/KirtanIndexSlice";
+import {
+  setPreSettings,
+  setSelectedId,
+  setSettingsOpen,
+  updatePreSettings,
+} from "../Slice/settingsSlice";
+import IndexedDBService, { storeName, tblPreSetting } from "../Utils/DBConfig";
+import KirtanLinePlate from "./KirtanLinePlate";
 import SettingModal from "./SettingModal";
 import SwitchComp from "./Switch";
+import PreSettingModal from "./PreSettingModal";
 
 const KirtanArea = () => {
   const dispatch = useDispatch();
@@ -25,6 +27,7 @@ const KirtanArea = () => {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+  const [preSettingModalOpen, setPreSettingsModalOpen] = useState(false);
 
   const [isLive, setIsLive] = useState(false);
 
@@ -58,6 +61,10 @@ const KirtanArea = () => {
 
   const isDualLineMode = useSelector((state) => state.settings.isDualLineMode);
 
+  // pre setting data
+  const preSettings = useSelector((state) => state.settings.preSettings);
+  const selectedId = useSelector((state) => state.settings.selectedId);
+
   const handleRegularLineHover = (index) => setHoveredRegularLineIndex(index);
 
   const handleFavLineHover = (index) => setHoveredFavLineIndex(index);
@@ -65,6 +72,10 @@ const KirtanArea = () => {
   const handleModalToggle = (value) => {
     dispatch(setSettingsOpen(value));
     setOpen(value);
+  };
+
+  const handlePreSettingModalToggle = (value) => {
+    setPreSettingsModalOpen(value);
   };
 
   const handleCurrLineIndex = (index) => {
@@ -84,8 +95,7 @@ const KirtanArea = () => {
     if (vmixSettings) {
       vmixSettings = JSON.parse(vmixSettings);
       for (const key in vmixSettings)
-        if (vmixSettings.hasOwnProperty(key))
-          if (!vmixSettings[key]) return false;
+        if (vmixSettings.hasOwnProperty(key)) if (!vmixSettings[key]) return false;
 
       let func = "OverlayInput";
 
@@ -102,10 +112,12 @@ const KirtanArea = () => {
     }
   };
 
+  // Line History
   const handleLineHistory = (line) => {
     let history = lineHistory.length > 0 ? [...lineHistory] : [];
 
     const existingIndex = history.indexOf(line);
+
     if (existingIndex !== -1) {
       history.splice(existingIndex, 1);
     }
@@ -120,16 +132,16 @@ const KirtanArea = () => {
     setLineHistory(history);
 
     if (isDbInitialized) {
-      IndexedDBService.updateItem(kirtanData)
+      IndexedDBService.updateItem(kirtanData, storeName)
         .then(() => {})
         .catch((error) => console.error(error));
     }
   };
 
+  // Favrorite Lines
   const handleFavLines = (id) => {
     let favoriteLines = favLines.length > 0 ? [...favLines] : [];
-    if (favoriteLines.includes(id))
-      favoriteLines = favLines.filter((lineId) => lineId !== id);
+    if (favoriteLines.includes(id)) favoriteLines = favLines.filter((lineId) => lineId !== id);
     else favoriteLines = [...favLines, id];
 
     setFavLines(favoriteLines);
@@ -144,11 +156,9 @@ const KirtanArea = () => {
         .catch((error) => console.error(error));
   };
 
+  // Get Kirtan By Id
   const getKirtanById = () => {
-    return (
-      kirtanData.length > 0 &&
-      kirtanData.find((kirtan) => kirtan.id === kirtanId)
-    );
+    return kirtanData.length > 0 && kirtanData.find((kirtan) => kirtan.id === kirtanId);
   };
 
   const getUpdatedList = (data) => {
@@ -156,8 +166,8 @@ const KirtanArea = () => {
       delete ele.chosen;
       return Number(ele);
     });
-    setFavLines(filteredIds);
 
+    setFavLines(filteredIds);
     let currKirtanData = { ...getKirtanById() };
 
     currKirtanData.favLines = filteredIds;
@@ -216,11 +226,7 @@ const KirtanArea = () => {
           dispatch(setShortcutIndex(favLines[Number(event.key) - 1]));
         }
 
-        if (
-          event.key === "Escape" ||
-          event.key === "Enter" ||
-          event.key === " "
-        ) {
+        if (event.key === "Escape" || event.key === "Enter" || event.key === " ") {
           handleKey(event);
         }
 
@@ -269,8 +275,7 @@ const KirtanArea = () => {
   }, [favLines, isSettingsOpen, currLineIndex]);
 
   useEffect(() => {
-    if (kirtanId && kirtanId != selectedIndex)
-      setSelectedIndex(Number(kirtanId));
+    if (kirtanId && kirtanId != selectedIndex) setSelectedIndex(Number(kirtanId));
   }, [kirtanId]);
 
   useEffect(() => {
@@ -278,13 +283,12 @@ const KirtanArea = () => {
   }, [kirtanLineId]);
 
   useEffect(() => {
-    isDbInitialized &&
-      IndexedDBService.getAllData().then((data) => setKirtanData(data));
+    isDbInitialized && IndexedDBService.getAllData().then((data) => setKirtanData(data));
   }, [isDbInitialized]);
 
   useEffect(() => {
     isDbInitialized &&
-      IndexedDBService.getData(Number(selectedIndex)).then((data) => {
+      IndexedDBService.getData(Number(selectedIndex), storeName).then((data) => {
         setFavLines(data.favLines);
         setLineHistory(data.lineHistory);
       });
@@ -298,6 +302,27 @@ const KirtanArea = () => {
     return () => (body.style.overflow = "auto");
   }, []);
 
+  // get pre setting data
+  useEffect(() => {
+    isDbInitialized &&
+      IndexedDBService.getData(1, tblPreSetting)
+        .then((data) => {
+          // console.log(`data`, data.settings);
+          dispatch(setPreSettings(data.settings));
+        })
+        .catch((error) => console.error(error));
+  }, [isDbInitialized]);
+
+  // Pre Setting
+  const handlePreSetting = (event) => {
+    dispatch(setSelectedId(Number(event.target.innerText)));
+    console.log("e: ", event.target.innerText);
+    if (event.type === "dblclick") {
+      console.log("e: ", event);
+
+      handlePreSettingModalToggle(true);
+    }
+  };
   return (
     <div
       className="py-3 flex flex-col justify-between bg-gray-100 w-full lineBackground relative"
@@ -314,8 +339,7 @@ const KirtanArea = () => {
                 <Box
                   key={index}
                   style={{
-                    backgroundColor:
-                      selectedIndex == id ? "#2196f3" : "#ffffff",
+                    backgroundColor: selectedIndex == id ? "#2196f3" : "#ffffff",
                     color: selectedIndex == id ? "#ffffff" : "#000000",
                   }}
                   onMouseEnter={() => setHoverKirtanIndex(id)}
@@ -337,7 +361,7 @@ const KirtanArea = () => {
                       navigate(`/edit/${id}`);
                     }}
                   >
-                    <i class="fa-solid fa-pencil"></i>
+                    <i className="fa-solid fa-pencil"></i>
                   </Box>
                 </Box>
               );
@@ -348,7 +372,7 @@ const KirtanArea = () => {
                 navigate("/input");
               }}
             >
-              <i class="fa-solid fa-plus"></i>
+              <i className="fa-solid fa-plus"></i>
             </Box>
           </Box>
           <Box className="flex justify-center items-center gap-3">
@@ -364,19 +388,40 @@ const KirtanArea = () => {
             </Box>
           </Box>
 
+          <PreSettingModal
+            open={preSettingModalOpen}
+            handlePreSettingModal={handlePreSettingModalToggle}
+          />
           <SettingModal open={open} handleModalToggle={handleModalToggle} />
         </Box>
-
         <Box
-          className={`flex w-full justify-between gap-10 px-3 h-[90vh] ${
-            isDualLineMode
-              ? "max-h-[calc(100vh-280px)]"
-              : "max-h-[calc(100vh-230px)]"
+          className={`flex w-full justify-between gap-10 px-4 h-[90vh] mt-3  ${
+            isDualLineMode ? "max-h-[calc(100vh-280px)]" : "max-h-[calc(100vh-230px)]"
           } `}
         >
+          <div className="flex flex-col gap-y-5">
+            {preSettings?.map((item, index) => {
+              return (
+                <Button
+                  key={index}
+                  style={{
+                    color: item.color,
+                    fontFamily: item.fontFamily,
+                    backgroundColor: item.backgroundColor,
+                    border: item.id === selectedId ? `2px solid ${item.color}` : "none",
+                  }}
+                  onClick={handlePreSetting}
+                  onDoubleClick={handlePreSetting}
+                >
+                  {index + 1}
+                </Button>
+              );
+            })}
+          </div>
+          {/* left part */}
           <div
-            className="container flex items-center flex-col text-center py-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4]  w-1/2"
             style={{ fontFamily: fontFamily }}
+            className="container flex flex-col  text-center py-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4]  w-1/2 "
           >
             {getKirtanById() &&
               getKirtanById().content.length > 0 &&
@@ -384,9 +429,7 @@ const KirtanArea = () => {
                 return (
                   <Stack
                     className={`px-4 w-full flex justify-center items-center transition-all duration-300 ease-in-out cursor-pointer ${
-                      currLineIndex === index
-                        ? "bg-slate-50 bg-opacity-70"
-                        : "bg-inherit"
+                      currLineIndex === index ? "bg-slate-50 bg-opacity-70" : "bg-inherit"
                     }`}
                     direction={{ xs: "column", sm: "row" }}
                     spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -424,9 +467,7 @@ const KirtanArea = () => {
 
                       <div
                         className={`text-xl font-semibold ${
-                          hoveredRegularLineIndex === index
-                            ? "opacity-100"
-                            : "opacity-0"
+                          hoveredRegularLineIndex === index ? "opacity-100" : "opacity-0"
                         }`}
                       >
                         {hoveredRegularLineIndex === index &&
@@ -446,7 +487,7 @@ const KirtanArea = () => {
                 );
               })}
           </div>
-
+          {/* right part */}
           <div
             className="container flex items-center flex-col text-center p-4 text-4xl shadow overflow-y-auto overflow-x-hidden bg-[#ede5d4]  w-1/2"
             style={{ fontFamily: fontFamily }}
@@ -457,13 +498,11 @@ const KirtanArea = () => {
               className="w-full"
               handle=".drag-handle"
             >
-              {favLines.map((line, index) => {
+              {favLines?.map((line, index) => {
                 return (
                   <Stack
                     className={`w-full grid grid-cols-3 justify-between items-center transition-all duration-300 ease-in-out ${
-                      usedShortcut - 1 === index
-                        ? "bg-slate-50 bg-opacity-70"
-                        : "bg-inherit"
+                      usedShortcut - 1 === index ? "bg-slate-50 bg-opacity-70" : "bg-inherit"
                     }`}
                     style={{
                       gridTemplateColumns: "1fr 1fr 1fr",
@@ -479,11 +518,7 @@ const KirtanArea = () => {
                     key={index}
                   >
                     <Box className="flex items-center justify-center">
-                      <Box
-                        className={`${
-                          index < 9 ? "opacity-100" : "opacity-0"
-                        } w-20`}
-                      >
+                      <Box className={`${index < 9 ? "opacity-100" : "opacity-0"} w-20`}>
                         <Button
                           sx={{
                             height: "30px",
@@ -498,9 +533,7 @@ const KirtanArea = () => {
 
                       <Box
                         className={`text-sm drag-handle cursor-grab bg-inherit hover:bg-inherit ${
-                          hoveredFavLineIndex === line
-                            ? "opacity-100"
-                            : "opacity-0"
+                          hoveredFavLineIndex === line ? "opacity-100" : "opacity-0"
                         }`}
                       >
                         <i className="fa-solid fa-grip-vertical text-base"></i>
@@ -515,13 +548,10 @@ const KirtanArea = () => {
 
                     <div
                       className={`text-xl font-semibold ${
-                        hoveredFavLineIndex === line
-                          ? "opacity-100"
-                          : "opacity-0"
+                        hoveredFavLineIndex === line ? "opacity-100" : "opacity-0"
                       }`}
                     >
-                      {hoveredFavLineIndex === line &&
-                      !favLines.includes(line) ? (
+                      {hoveredFavLineIndex === line && !favLines.includes(line) ? (
                         <IconButton onClick={() => handleFavLines(line)}>
                           <i className="fa-solid fa-plus"></i>
                         </IconButton>
