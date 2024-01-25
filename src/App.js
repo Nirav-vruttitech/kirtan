@@ -7,6 +7,7 @@ import KirtanArea from "./Components/KirtanArea";
 import { setDbStatus } from "./Slice/dbSlice";
 import IndexedDBService, { tblPreSetting } from "./Utils/DBConfig";
 import PreSetting from "./Utils/PreSetting.json";
+import { setPreSettings } from "./Slice/settingsSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,10 +25,12 @@ function App() {
           const count = countRequest.result;
           if (count === 0 && preSetting) {
             IndexedDBService.addItem(preSetting, tblPreSetting)
-              .then(() => console.log("add pre setting data success"))
+              .then(() => {
+                dispatch(setPreSettings(preSetting));
+                console.log("add pre setting data success");
+              })
               .catch((error) => console.error(error));
           } else {
-            // dispatch(setPreSettings(PreSetting));
             console.log(`${tblPreSetting} is not empty. Total : ${count}`);
           }
         };

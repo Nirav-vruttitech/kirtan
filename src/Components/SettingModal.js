@@ -123,7 +123,6 @@ const SettingModal = ({ open, handleModalToggle }) => {
     dispatch(setFontSize(`${event.target.value}px`));
 
     let obj = { ...kirtanData };
-    console.log("obj: ", obj);
 
     if (kirtanData.settings) obj.settings.fontSize = `${event.target.value}px`;
 

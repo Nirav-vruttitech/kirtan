@@ -9,17 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ReactSortable } from "react-sortablejs";
 import { setCurrKirtanIndex, setKirtanIndex, setShortcutIndex } from "../Slice/KirtanIndexSlice";
-import {
-  setPreSettings,
-  setSelectedId,
-  setSettingsOpen,
-  updatePreSettings,
-} from "../Slice/settingsSlice";
+import { setPreSettings, setSelectedId, setSettingsOpen } from "../Slice/settingsSlice";
 import IndexedDBService, { storeName, tblPreSetting } from "../Utils/DBConfig";
 import KirtanLinePlate from "./KirtanLinePlate";
+import PreSettingModal from "./PreSettingModal";
 import SettingModal from "./SettingModal";
 import SwitchComp from "./Switch";
-import PreSettingModal from "./PreSettingModal";
 
 const KirtanArea = () => {
   const dispatch = useDispatch();

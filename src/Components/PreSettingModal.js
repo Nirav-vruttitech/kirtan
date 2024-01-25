@@ -14,6 +14,7 @@ import ColorPicker from "./ColorPicker";
 import { useSelector } from "react-redux";
 import FontList from "../Utils/FontsList.json";
 import SwitchComp from "./Switch";
+import IndexedDBService, { tblPreSetting } from "../Utils/DBConfig";
 const style = {
   position: "absolute",
   top: "50%",
@@ -27,7 +28,9 @@ const style = {
 const PreSettingModal = ({ open, handlePreSettingModal }) => {
   const preSettings = useSelector((state) => state.settings.preSettings);
   const selectedId = useSelector((state) => state.settings.selectedId);
+  const isDbInitialized = useSelector((state) => state.db.isDbInitialized);
   const [initialSettings, setInitialSettings] = useState({});
+  console.log("initialSettings: ", initialSettings);
 
   const handleDualModeToggle = (x) => {
     // setIsDualMode(x);
@@ -37,40 +40,77 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
     // dispatch(setIsDualLineMode(x));
   };
 
-  const handleFontSliderChange = (event) => {
+  const updateSettings = (obj) => {
+    isDbInitialized &&
+      IndexedDBService.updateItem(obj, tblPreSetting)
+        .then((data) => {})
+        .catch((error) => {});
+  };
+
+  const handleFontSliderChange = (event, selectedId) => {
     setInitialSettings({
       ...initialSettings,
+      id: selectedId,
       fontSize: `${event.target.value}px`,
     });
   };
 
-  const handleFontColorChange = (color) => {
+  const handleFontColorChange = (color, selectedId) => {
     setInitialSettings({
       ...initialSettings,
+      id: selectedId,
       color,
     });
   };
 
-  const handleFontWeightToggle = (event, value) => {
+  const handleFontWeightToggle = (event, value, selectedId) => {
     setInitialSettings({
       ...initialSettings,
+      id: selectedId,
       fontWeight: value,
     });
   };
 
-  const handleViewPortBgColorChange = (color) => {
+  const handleViewPortBgColorChange = (color, selectedId) => {
     setInitialSettings({
       ...initialSettings,
+      id: selectedId,
       backgroundColor: color,
     });
   };
 
-  const handleViewPortHeightSliderChange = (event) => {
+  const handleViewPortHeightSliderChange = (event, selectedId) => {
     setInitialSettings({
       ...initialSettings,
+      id: selectedId,
       height: `${event.target.value}px`,
     });
   };
+
+  const handleSelectFontFamilyChange = (event, selectedId) => {
+    setInitialSettings({
+      ...initialSettings,
+      id: selectedId,
+      fontFamily: event.target.value,
+    });
+  };
+
+  const handleTextShadowColorChange = (color, selectedId) => {
+    setInitialSettings({
+      ...initialSettings,
+      id: selectedId,
+      textShadowColor: color,
+    });
+  };
+
+  const handleTextShadowWidthChange = (event, selectedId) => {
+    setInitialSettings({
+      ...initialSettings,
+      id: selectedId,
+      textShadowWidth: `${event.target.value}px`,
+    });
+  };
+
   return (
     <>
       {preSettings?.map((setting) => (
@@ -111,7 +151,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
                         valueLabelDisplay="auto"
                         step={2}
                         value={setting.fontSize.slice(0, -2) || 30}
-                        onChange={handleFontSliderChange}
+                        onChange={(e) => handleFontSliderChange(e, setting.id)}
                         marks
                         min={30}
                         max={130}
@@ -139,7 +179,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
                     </Typography>
                     <ColorPicker
                       // color={Object.keys(initialSettings).length > 0 && initialSettings.color}
-                      handelColor={handleFontColorChange}
+                      handelColor={(e) => handleFontColorChange(e, setting.id)}
                       color={setting.color}
                     />
                   </Box>
@@ -171,7 +211,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
                           display: "flex",
                           justifyContent: "center",
                         }}
-                        onChange={handleFontWeightToggle}
+                        onChange={(e) => handleFontWeightToggle(e, setting.id)}
                         aria-label="viewPortFontWeight"
                       >
                         <ToggleButton value="500" sx={{ textTransform: "none", fontWeight: 500 }}>
@@ -210,7 +250,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
                       color={setting.backgroundColor}
                       //   handelColor={handleViewPortBgColorChange}
 
-                      handelColor={handleViewPortBgColorChange}
+                      handelColor={(e) => handleViewPortBgColorChange(e, setting.id)}
                     />
                   </Box>
                   <Box className="flex justify-start items-center w-full gap-6">
@@ -238,7 +278,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
                         valueLabelDisplay="auto"
                         step={2}
                         value={setting.height.slice(0, -2) || 40}
-                        // onChange={handleViewPortHeightSliderChange}
+                        onChange={(e) => handleViewPortHeightSliderChange(e, setting.id)}
                         marks
                         min={30}
                         max={240}
@@ -267,7 +307,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
 
                     <Select
                       value={setting.fontFamily}
-                      //       onChange={handleSelectFontFamilyChange}
+                      onChange={(e) => handleSelectFontFamilyChange(e, setting.id)}
                       className="text-[15px] font-[600]"
                       size="small"
                       sx={{ ":focus": { outline: "none" }, outline: "none" }}
@@ -300,7 +340,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
                     </Typography>
                     <ColorPicker
                       color={setting.textShadowColor}
-                      // handelColor={handleTextShadowColorChange}
+                      handelColor={(e) => handleTextShadowColorChange(e, setting.id)}
                     />
                   </Box>
                   <Box className="flex justify-start items-center w-full gap-6">
@@ -328,7 +368,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
                         valueLabelDisplay="auto"
                         step={0.1}
                         value={setting.textShadowWidth.slice(0, -2) || 0}
-                        //         onChange={handleTextShadowWidthChange}
+                        onChange={(e) => handleTextShadowWidthChange(e, setting.id)}
                         marks
                         min={0}
                         max={5}
@@ -356,7 +396,7 @@ const PreSettingModal = ({ open, handlePreSettingModal }) => {
                     </Typography>
                     <SwitchComp
                       checked={setting.isDualLineMode}
-                      handleChange={handleDualModeToggle}
+                      handleChange={(e) => handleDualModeToggle(e, setting.id)}
                     />
                   </Box>
                 </Box>
